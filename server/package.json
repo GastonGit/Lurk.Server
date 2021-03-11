@@ -1,0 +1,24 @@
+{
+  "name": "server",
+  "main": "app.js",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node bin/www",
+    "start:watch": "node_modules/.bin/nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:init": "node database/init.js",
+    "db:pop": "node database/pop.js"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.6"
+  }
+}

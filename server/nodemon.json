@@ -1,0 +1,9 @@
+{
+  "watch": ["./"],
+  "ext": "js,json",
+  "ignore": [
+    "package.json",
+    "package-lock.json"
+  ],
+  "exec": "node ./bin/www"
+}

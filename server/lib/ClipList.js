@@ -37,5 +37,4 @@ function isTwitchClipUrl(string){
     return false;
 }
 
-let cl = new ClipList();
-module.exports = cl;
+module.exports = ClipList;

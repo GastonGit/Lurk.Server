@@ -1,15 +1,18 @@
 const assert = require('chai').assert;
 const expect = require('chai').expect
 
-let ClipList = require('../lib/ClipList');
+let ClipListClass = require('../lib/ClipList');
+
 
 describe('ClipList methods', function() {
     describe('Getting the list', function() {
+        let ClipList = new ClipListClass();
         it('should return an array', function() {
             assert.isArray(ClipList.getList());
         });
     });
     describe('Adding clips', function(){
+        let ClipList = new ClipListClass();
         it('should return true when adding a string containing a twitch clip url', function() {
             expect(ClipList.addClip("https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride")).to.be.true;
         });

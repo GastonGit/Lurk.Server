@@ -21,6 +21,10 @@ class ClipList {
 
         return false;
     }
+
+    removeClip(){
+        this.currentList.shift();
+    }
 }
 
 function isTwitchClipUrl(string){

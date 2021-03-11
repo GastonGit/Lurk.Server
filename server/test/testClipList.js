@@ -2,9 +2,12 @@ const assert = require('chai').assert;
 const expect = require('chai').expect
 
 let ClipListClass = require('../lib/ClipList');
-
+let ClipList
 
 describe('ClipList methods', function() {
+    before(function (){
+        ClipList = new ClipListClass();
+    })
     describe('Getting the list', function() {
         let ClipList = new ClipListClass();
         it('should return an array', function() {
@@ -48,4 +51,27 @@ describe('ClipList methods', function() {
             expect(ClipList.getList()).to.include(string1);
         });
     })
+    describe('Removing clips', function() {
+        it('should remove a clip from the clipList', function() {
+            expect(ClipList.getList()).to.be.empty;
+
+            const string1 = "https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride";
+            expect(ClipList.addClip(string1)).to.be.true;
+
+            expect(ClipList.getList()).to.not.be.empty;
+
+            ClipList.removeClip();
+            expect(ClipList.getList()).to.be.empty;
+        });
+        it('should remove the oldest added clip', function() {
+            const string1 = "https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride";
+            expect(ClipList.addClip(string1)).to.be.true;
+
+            expect(ClipList.addClip("https://clips.twitch.tv/Kappa")).to.be.true;
+            expect(ClipList.addClip("https://clips.twitch.tv/PogChamp")).to.be.true;
+
+            ClipList.removeClip();
+            expect(ClipList.getList()).to.not.include(string1);
+        });
+    });
 });

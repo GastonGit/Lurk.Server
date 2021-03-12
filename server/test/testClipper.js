@@ -8,9 +8,12 @@ describe('Clipper methods', function() {
     before(function (){
         Clipper = new ClipperClass();
     })
-    describe('...', function() {
-        it('should...', function() {
-
+    describe('Get clip', function() {
+        it('should throw without an argument', function() {
+            expect(Clipper.getClip).to.throw();
+        });
+        it('should return an object', function() {
+            expect(Clipper.getClip("KappaPogChamp")).to.be.an('object');
         });
     });
 });

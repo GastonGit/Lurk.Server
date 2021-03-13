@@ -5,16 +5,16 @@ class Clipper{
 
     }
 
-    createClip(broadcasterId){
-        if (typeof broadcasterId === "undefined"){
+    createClip(broadcaster_id){
+        if (typeof broadcaster_id === "undefined"){
             throw new Error("Argument is undefined");
         }
 
         return {};
     }
 
-    getClip(clipId){
-        if (typeof clipId === "undefined"){
+    getClip(clip_id){
+        if (typeof clip_id === "undefined"){
             throw new Error("Argument is undefined");
         }
 

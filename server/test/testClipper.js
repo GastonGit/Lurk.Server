@@ -16,4 +16,12 @@ describe('Clipper methods', function() {
             expect(Clipper.getClip("KappaPogChamp")).to.be.an('object');
         });
     });
+    describe('Create clip', function() {
+        it('should throw without an argument', function() {
+            expect(Clipper.createClip).to.throw();
+        });
+        it('should return an object', function() {
+            expect(Clipper.createClip("MoonMoon")).to.be.an('object');
+        });
+    });
 });

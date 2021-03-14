@@ -1,8 +1,13 @@
+require('dotenv').config();
 
 class Clipper{
 
-    constructor() {
+    authorization;
+    client_id;
 
+    constructor() {
+        this.authorization = process.env.CLIPPER_AUTH;
+        this.client_id = process.env.CLIPPER_CLIENT_ID;
     }
 
     createClip(broadcaster_id){

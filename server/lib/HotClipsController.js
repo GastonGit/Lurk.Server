@@ -1,8 +1,16 @@
 
+let ClipList = require("./ClipList");
+
 class HotClipsController{
 
-    constructor() {
+    clipList;
 
+    constructor() {
+        this.clipList = new ClipList();
+    }
+
+    getList(){
+        return this.clipList.getList();
     }
 }
 

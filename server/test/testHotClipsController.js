@@ -8,4 +8,9 @@ describe('HotClipsController methods', function() {
     before(function (){
         HotClipsController = new HotClipsControllerClass();
     })
+    describe('Get list', function() {
+        it('should return an array', function() {
+            assert.isArray(HotClipsController.getList());
+        });
+    });
 });

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node bin/www",
     "start:watch": "node_modules/.bin/nodemon",
-    "test": "mocha"
+    "test": "mocha",
+    "test-with-coverage": "nyc --reporter=text mocha"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -15,10 +16,11 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
+    "chai": "^4.3.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
-    "nodemon": "^2.0.6",
     "mocha": "^8.3.1",
-    "chai": "^4.3.3"
+    "nodemon": "^2.0.6",
+    "nyc": "^15.1.0"
   }
 }

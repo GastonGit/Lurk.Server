@@ -158,4 +158,44 @@ describe('MonitorTwitchChat methods', function() {
             })
         });
     });
+    describe('resetStreamer', function() {
+        it('should reset a channels hits to 0', async function() {
+            await MonitorTwitchChat.updateStreamList();
+            for (let i = 0; i < 565; i++){
+                MonitorTwitchChat.onMessageHandler('NymN', {}, 'LULW', false);
+            }
+
+            MonitorTwitchChat.resetStreamer("Nymn");
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"nymn", viewer_count:3532, hits:0
+            })
+        });
+        it('should not reset every channels hits to 0', async function() {
+            await MonitorTwitchChat.updateStreamList();
+            for (let i = 0; i < 565; i++){
+                MonitorTwitchChat.onMessageHandler('NymN', {}, 'LULW', false);
+            }
+            const hitCount = 200;
+            for (let i = 0; i < hitCount; i++){
+                MonitorTwitchChat.onMessageHandler('saiiren', {}, 'LULW', false);
+            }
+
+            MonitorTwitchChat.resetStreamer("Nymn");
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"nymn", viewer_count:3532, hits:0
+            })
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"saiiren", viewer_count:2175, hits:hitCount
+            })
+        });
+    });
+    describe('getStreamerIndex', function() {
+        it('should return a streamers index in streamList', async function() {
+            await MonitorTwitchChat.updateStreamList();
+
+            expect(MonitorTwitchChat.getStreamerIndex("AsmongolD")).to.equal(0);
+            expect(MonitorTwitchChat.getStreamerIndex("cloakzy")).to.equal(9);
+            expect(MonitorTwitchChat.getStreamerIndex("BarbarOUSKing")).to.equal(98);
+        });
+    });
 });

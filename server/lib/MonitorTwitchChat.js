@@ -24,14 +24,20 @@ class MonitorTwitchChat{
             return;
         }
 
-        let userObject = this.streamList.find(streamer => streamer.user_name === channel.toLowerCase())
-        let userIndex = this.streamList.indexOf(userObject);
-
-        this.streamList[userIndex].hits += 1;
+        this.streamList[this.getStreamerIndex(channel)].hits += 1;
     }
 
     getStreamList(){
         return this.streamList;
+    }
+
+    resetStreamer(channel){
+        this.streamList[this.getStreamerIndex(channel)].hits = 0;
+    }
+
+    getStreamerIndex(channel){
+        let userObject = this.streamList.find(streamer => streamer.user_name === channel.toLowerCase())
+        return this.streamList.indexOf(userObject);
     }
 
     async updateStreamList(){

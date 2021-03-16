@@ -16,6 +16,19 @@ describe('MonitorTwitchChat methods', function() {
             requestCount: 2
         });
     })
+    describe('constructor', function() {
+        it('should set requestCount to specified when specified', function() {
+            const count = 5;
+            MonitorTwitchChat = new MonitorTwitchChatClass({
+                requestCount: count
+            });
+            expect(MonitorTwitchChat.requestCount).to.equal(count);
+        });
+        it('should set requestCount to 2 when not specified', function() {
+            MonitorTwitchChat = new MonitorTwitchChatClass({});
+            expect(MonitorTwitchChat.requestCount).to.equal(2);
+        });
+    });
     describe('getStreamList', function() {
         it('should return an array', function() {
             assert.isArray(MonitorTwitchChat.getStreamList());

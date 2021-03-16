@@ -1,5 +1,5 @@
 
-const fetchStub =  function (url, options){
+const fetchStub = function (url, options){
     // https://dev.twitch.tv/docs/api/reference#get-streams
     if (url === "https://api.twitch.tv/helix/streams?first=100"){
         if (options.method === "get"){
@@ -7,6 +7,8 @@ const fetchStub =  function (url, options){
             return Promise.resolve({
                 json: () => Promise.resolve(result)
             })
+        } else{
+            throw new Error("Unexpected method");
         }
     }
     if (url === "https://api.twitch.tv/helix/streams?first=100&after=eyJiIjp7IkN1cnNvciI6ImV5SnpJam8wT1RJM05p" +
@@ -18,7 +20,12 @@ const fetchStub =  function (url, options){
                 json: () => Promise.resolve(result)
             })
         }
+        else{
+            throw new Error("Unexpected method");
+        }
     }
+
+    throw new Error("Unexpected url");
 };
 
 module.exports = fetchStub;

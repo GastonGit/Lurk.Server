@@ -4,9 +4,10 @@ const fetch = require('node-fetch');
 class MonitorTwitchChat{
 
     streamList;
+    requestCount;
 
-    constructor() {
-
+    constructor(options) {
+        this.requestCount = options.requestCount || 2;
         this.streamList = [];
     }
 
@@ -29,12 +30,37 @@ class MonitorTwitchChat{
         })
     }
 
-    requestStreams(){
-        return {};
+    async requestStreams(){
+
+        let streams = [];
+        let pagination = undefined;
+
+        for (let i = 0; i < this.requestCount; i++){
+            const fetchedStreams = await this.request100Streams(pagination);
+
+            fetchedStreams.data.forEach(function(streamer){
+                streams.push({
+                    user_name: streamer.user_name.toLowerCase(),
+                    viewer_count: parseInt(streamer.viewer_count),
+                    hits: 0
+                })
+            })
+
+            pagination = fetchedStreams.pagination.cursor;
+        }
+
+        return streams;
     }
 
-    async request20Streams(){
-        const response = await fetch('https://api.twitch.tv/helix/streams', {
+    async request100Streams(pagination){
+
+        let url = "https://api.twitch.tv/helix/streams?first=100"
+
+        if (pagination){
+            url += '&after=' + pagination;
+        }
+
+        const response = await fetch(url, {
             method: 'get',
             headers: {
                 'Client-ID': process.env.MTC_CLIENT_ID,

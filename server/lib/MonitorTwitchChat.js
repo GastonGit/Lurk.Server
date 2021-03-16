@@ -1,4 +1,5 @@
 const tmi = require('tmi.js');
+const fetch = require('node-fetch');
 
 class MonitorTwitchChat{
 
@@ -30,6 +31,18 @@ class MonitorTwitchChat{
 
     requestStreams(){
         return {};
+    }
+
+    async request20Streams(){
+        const response = await fetch('https://api.twitch.tv/helix/streams', {
+            method: 'get',
+            headers: {
+                'Client-ID': process.env.MTC_CLIENT_ID,
+                'Authorization': ' Bearer ' + process.env.MTC_AUTH
+            },
+        })
+
+        return await response.json();
     }
 }
 

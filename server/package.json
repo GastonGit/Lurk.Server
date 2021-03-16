@@ -7,7 +7,7 @@
     "start": "node bin/www",
     "start:watch": "node_modules/.bin/nodemon",
     "test": "mocha",
-    "test-with-coverage": "nyc --reporter=text mocha"
+    "test-with-coverage": "nyc mocha"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

@@ -15,19 +15,8 @@ class MonitorTwitchChat{
         return this.streamList;
     }
 
-    updateStreamList(response){
-        if (typeof response === "undefined"){
-            throw new Error("Argument is undefined");
-        }
-
-        let streamList = this.streamList;
-
-        response["data"].forEach(function(channel){
-            streamList.push({
-                user_name: channel.user_name,
-                viewer_count: channel.viewer_count
-            })
-        })
+    async updateStreamList(){
+        this.streamList = await this.requestStreams();
     }
 
     async requestStreams(){

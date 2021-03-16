@@ -98,47 +98,28 @@ describe('MonitorTwitchChat methods', function() {
         });
     });
     describe('updateStreamList', function() {
-        it('should throw if used with undefined argument', function() {
-            expect(MonitorTwitchChat.updateStreamList).to.throw();
-        });
-        it('should throw if used with an empty object argument', function() {
-            expect(function(){MonitorTwitchChat.updateStreamList({})}).to.throw();
-        });
-        it('should throw if object argument does not contain a data key', function() {
-            expect(function(){MonitorTwitchChat.updateStreamList({"test":[{}]})}).to.throw();
-        });
-        it('should not throw if used with an object argument that contains a data key', function() {
-            expect(function(){MonitorTwitchChat.updateStreamList({"data":[{}]})}).to.not.throw();
-        });
-        it('should not throw if used with valid object argument', function() {
-            expect(function(){MonitorTwitchChat.updateStreamList({
-                "data": [
-                    {
-                        "user_name": "moonmoon",
-                        "viewer_count": 69
-                    }
-                ]
-            })}).to.not.throw();
-        });
-        it('should update streamList if used with valid object argument', function() {
+        it('should update streamList', async function() {
             expect(MonitorTwitchChat.getStreamList()).to.be.empty;
-
-            MonitorTwitchChat.updateStreamList({
-                "data": [
-                    {
-                        "user_name": "moonmoon",
-                        "viewer_count": 69
-                    }
-                ]
-            })
-
-            expect(MonitorTwitchChat.getStreamList()).to.deep.include(
-                {
-                "user_name": "moonmoon",
-                "viewer_count": 69
-                }
-            )
+            await MonitorTwitchChat.updateStreamList();
+            expect(MonitorTwitchChat.getStreamList()).to.not.be.empty;
         });
-
+        it('should update streamList to an array that contains objects of user_name, viewer_count and hits', async function() {
+            expect(MonitorTwitchChat.getStreamList()).to.be.empty;
+            await MonitorTwitchChat.updateStreamList();
+            expect(MonitorTwitchChat.getStreamList()).to.be.an('array');
+            expect(MonitorTwitchChat.getStreamList()[0]).to.be.an('object').that.includes.all.keys('user_name','viewer_count','hits');
+        });
+        it('should return with data from helix-stream', async function() {
+            await MonitorTwitchChat.updateStreamList();
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"kyle", viewer_count:7851, hits:0
+            })
+        });
+        it('should return with data from helix-stream-pagination', async function() {
+            await MonitorTwitchChat.updateStreamList();
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"saiiren", viewer_count:2175, hits:0
+            })
+        });
     });
 });

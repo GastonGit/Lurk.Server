@@ -1,6 +1,7 @@
 {
   "reporter": [
-    "text"
+    "text",
+    "html"
   ],
   "check-coverage": true,
     "branches": 100,

@@ -5,10 +5,29 @@ class MonitorTwitchChat{
 
     streamList;
     requestCount;
+    validMessages;
 
     constructor(options) {
         this.requestCount = options.requestCount || 2;
         this.streamList = [];
+        this.validMessages = [
+            'LUL',
+            'LULW',
+            'OMEGALUL',
+            'LuL'
+        ]
+    }
+
+    onMessageHandler(channel, context, message, self){
+
+        if (!this.validMessages.includes(message)){
+            return;
+        }
+
+        let userObject = this.streamList.find(streamer => streamer.user_name === channel.toLowerCase())
+        let userIndex = this.streamList.indexOf(userObject);
+
+        this.streamList[userIndex].hits += 1;
     }
 
     getStreamList(){

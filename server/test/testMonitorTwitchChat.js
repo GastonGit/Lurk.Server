@@ -122,4 +122,40 @@ describe('MonitorTwitchChat methods', function() {
             })
         });
     });
+    describe('onMessageHandler', function() {
+        it('should increase the specified channels hits by 1 when called once', async function() {
+            await MonitorTwitchChat.updateStreamList();
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"kyle", viewer_count:7851, hits:0
+            })
+            MonitorTwitchChat.onMessageHandler('KYLE', {}, 'LULW', false);
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"kyle", viewer_count:7851, hits:1
+            })
+        });
+        it('should not increase the specified channels hits by 1 when message is not valid', async function() {
+            await MonitorTwitchChat.updateStreamList();
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"kyle", viewer_count:7851, hits:0
+            })
+            MonitorTwitchChat.onMessageHandler('KYLE', {}, 'Kappa', false);
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"kyle", viewer_count:7851, hits:0
+            })
+        });
+        it('should increase the specified channels hits by 1 every time it is called', async function() {
+            await MonitorTwitchChat.updateStreamList();
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"saiiren", viewer_count:2175, hits:0
+            })
+
+            const hitCount = 200;
+            for (let i = 0; i < hitCount; i++){
+                MonitorTwitchChat.onMessageHandler('Saiiren', {}, 'OMEGALUL', false);
+            }
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"saiiren", viewer_count:2175, hits:hitCount
+            })
+        });
+    });
 });

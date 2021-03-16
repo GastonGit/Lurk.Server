@@ -3,17 +3,9 @@ const spies = require('chai-spies');
 chai.use(spies);
 const assert = chai.assert;
 const expect = chai.expect
-const should = chai.should()
 
-const proxyquire = require('proxyquire')
-const fetchStub =  function (){
-    return Promise.resolve({
-        json: () => Promise.resolve({
-            data:[],
-            pagination: {}
-        })
-    })
-};
+const proxyquire = require('proxyquire');
+const fetchStub = require('../stubs/fetchStub');
 
 let MonitorTwitchChatClass = proxyquire('../lib/MonitorTwitchChat', {'node-fetch':fetchStub});
 let MonitorTwitchChat;

@@ -6,33 +6,33 @@ const expect = chai.expect
 
 const proxyquire = require('proxyquire');
 const fetchStub = require('../stubs/fetchStub');
-const tmiStub = require('../stubs/tmiStub');
+const twitchClientClass = require('../stubs/twitchClientStub');
+let twitchClient
 
-let MonitorTwitchChatClass = proxyquire('../lib/MonitorTwitchChat', {'node-fetch':fetchStub, 'tmi.js':tmiStub});
+let MonitorTwitchChatClass = proxyquire('../lib/MonitorTwitchChat', {'node-fetch':fetchStub});
 let MonitorTwitchChat;
 
 describe('MonitorTwitchChat methods', function() {
     beforeEach(function (){
-        MonitorTwitchChat = new MonitorTwitchChatClass({
+        twitchClient = new twitchClientClass();
+        MonitorTwitchChat = new MonitorTwitchChatClass(
+            twitchClient, {
             requestCount: 2
         });
     })
     describe('constructor', function() {
         it('should set requestCount to specified when specified', function() {
             const count = 5;
-            MonitorTwitchChat = new MonitorTwitchChatClass({
+            MonitorTwitchChat = new MonitorTwitchChatClass(
+                twitchClient, {
                 requestCount: count
             });
             expect(MonitorTwitchChat.requestCount).to.equal(count);
         });
         it('should set requestCount to 2 when not specified', function() {
-            MonitorTwitchChat = new MonitorTwitchChatClass({});
+            MonitorTwitchChat = new MonitorTwitchChatClass(
+                twitchClient, {});
             expect(MonitorTwitchChat.requestCount).to.equal(2);
-        });
-        it('should catch error if thrown when setting up client', function() {
-            let MonitorTwitchChatClass = proxyquire('../lib/MonitorTwitchChat', {'node-fetch':fetchStub, 'tmi.js':tmiStub});
-            MonitorTwitchChat = new MonitorTwitchChatClass({});
-
         });
     });
     describe('getStreamList', function() {
@@ -238,18 +238,11 @@ describe('MonitorTwitchChat methods', function() {
         });
     });
     describe('joinChannels', function() {
-        it('should join channels included in compactStreamList', async function() {
+        it('should not throw', async function() {
             await MonitorTwitchChat.updateStreamList();
             MonitorTwitchChat.setCompactStreamList();
-
-            let channel1 = MonitorTwitchChat.getCompactStreamList()[0];
-            let channel2 = MonitorTwitchChat.getCompactStreamList()[50];
-            let channel3 = MonitorTwitchChat.getCompactStreamList()[20];
-
-            await MonitorTwitchChat.joinChannels();
-            expect(MonitorTwitchChat.client.joinedChannels()).to.include(channel1);
-            expect(MonitorTwitchChat.client.joinedChannels()).to.include(channel2);
-            expect(MonitorTwitchChat.client.joinedChannels()).to.include(channel3);
+            const list = MonitorTwitchChat.getCompactStreamList();
+            expect(MonitorTwitchChat.joinChannels(list)).to.not.throw;
         });
     });
 });

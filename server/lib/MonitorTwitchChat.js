@@ -1,4 +1,3 @@
-const tmi = require('tmi.js');
 const fetch = require('node-fetch');
 
 class MonitorTwitchChat{
@@ -9,7 +8,7 @@ class MonitorTwitchChat{
     client;
     compactStreamList;
 
-    constructor(options) {
+    constructor(client, options) {
         this.requestCount = options.requestCount || 2;
         this.streamList = [];
         this.validMessages = [
@@ -19,27 +18,12 @@ class MonitorTwitchChat{
             'LuL'
         ]
         this.compactStreamList = [];
-        try{
-            this.client = new tmi.client({
-                identity:{
-                    username: process.env.BOT_NAME,
-                    password: process.env.BOT_AUTH
-                }
-            })
-            this.client.on('message', this.onMessageHandler);
-            this.client.connect();
-        }catch (e) {
-            console.error(e);
-        }
+        this.client = client;
+        this.client.setMessageHandler(this.onMessageHandler);
     }
 
     async joinChannels(){
-        const client = this.client;
-        const list = this.getCompactStreamList();
-
-        list.forEach(function(channel){
-            client.join(channel)
-        })
+        this.client.joinChannels(this.getCompactStreamList())
     }
 
     setCompactStreamList(){

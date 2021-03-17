@@ -6,6 +6,8 @@ class MonitorTwitchChat{
     streamList;
     requestCount;
     validMessages;
+    client;
+    compactStreamList;
 
     constructor(options) {
         this.requestCount = options.requestCount || 2;
@@ -16,6 +18,39 @@ class MonitorTwitchChat{
             'OMEGALUL',
             'LuL'
         ]
+        this.compactStreamList = [];
+        try{
+            this.client = new tmi.client({
+                identity:{
+                    username: process.env.BOT_NAME,
+                    password: process.env.BOT_AUTH
+                }
+            })
+            this.client.on('message', this.onMessageHandler);
+            this.client.connect();
+        }catch (e) {
+            console.error(e);
+        }
+    }
+
+    async joinChannels(){
+        const client = this.client;
+        const list = this.getCompactStreamList();
+
+        list.forEach(function(channel){
+            client.join(channel)
+        })
+    }
+
+    setCompactStreamList(){
+        let compactStreamList = this.compactStreamList;
+        this.streamList.forEach(function(streamer){
+            compactStreamList.push(streamer.user_name);
+        })
+    }
+
+    getCompactStreamList(){
+        return this.compactStreamList;
     }
 
     onMessageHandler(channel, context, message, self){

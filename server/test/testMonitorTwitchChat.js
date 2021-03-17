@@ -6,8 +6,9 @@ const expect = chai.expect
 
 const proxyquire = require('proxyquire');
 const fetchStub = require('../stubs/fetchStub');
+const tmiStub = require('../stubs/tmiStub');
 
-let MonitorTwitchChatClass = proxyquire('../lib/MonitorTwitchChat', {'node-fetch':fetchStub});
+let MonitorTwitchChatClass = proxyquire('../lib/MonitorTwitchChat', {'node-fetch':fetchStub, 'tmi.js':tmiStub});
 let MonitorTwitchChat;
 
 describe('MonitorTwitchChat methods', function() {
@@ -27,6 +28,11 @@ describe('MonitorTwitchChat methods', function() {
         it('should set requestCount to 2 when not specified', function() {
             MonitorTwitchChat = new MonitorTwitchChatClass({});
             expect(MonitorTwitchChat.requestCount).to.equal(2);
+        });
+        it('should catch error if thrown when setting up client', function() {
+            let MonitorTwitchChatClass = proxyquire('../lib/MonitorTwitchChat', {'node-fetch':fetchStub, 'tmi.js':tmiStub});
+            MonitorTwitchChat = new MonitorTwitchChatClass({});
+
         });
     });
     describe('getStreamList', function() {
@@ -221,6 +227,38 @@ describe('MonitorTwitchChat methods', function() {
             expect(MonitorTwitchChat.getStreamerIndex("AsmongolD")).to.equal(0);
             expect(MonitorTwitchChat.getStreamerIndex("cloakzy")).to.equal(9);
             expect(MonitorTwitchChat.getStreamerIndex("BarbarOUSKing")).to.equal(98);
+        });
+    });
+    describe('getCompactStreamList', function() {
+        it('should return an array', async function() {
+            expect(MonitorTwitchChat.getCompactStreamList()).to.be.an('array');
+        });
+    });
+    describe('setCompactStreamList', function() {
+        it('should set compactStreamList to contain channel user names', async function() {
+            await MonitorTwitchChat.updateStreamList();
+
+            MonitorTwitchChat.setCompactStreamList();
+            const list = MonitorTwitchChat.getCompactStreamList();
+
+            expect(list).to.include('asmongold');
+            expect(list).to.include('cloakzy');
+            expect(list).to.include('saiiren');
+        });
+    });
+    describe('joinChannels', function() {
+        it('should join channels included in compactStreamList', async function() {
+            await MonitorTwitchChat.updateStreamList();
+            MonitorTwitchChat.setCompactStreamList();
+
+            let channel1 = MonitorTwitchChat.getCompactStreamList()[0];
+            let channel2 = MonitorTwitchChat.getCompactStreamList()[50];
+            let channel3 = MonitorTwitchChat.getCompactStreamList()[20];
+
+            await MonitorTwitchChat.joinChannels();
+            expect(MonitorTwitchChat.client.joinedChannels()).to.include(channel1);
+            expect(MonitorTwitchChat.client.joinedChannels()).to.include(channel2);
+            expect(MonitorTwitchChat.client.joinedChannels()).to.include(channel3);
         });
     });
 });

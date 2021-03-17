@@ -36,43 +36,33 @@ describe('MonitorTwitchChat methods', function() {
         });
     });
     describe('getStreamList', function() {
-        it('should return an array', function() {
-            assert.isArray(MonitorTwitchChat.getStreamList());
-        });
-        it('should be an empty on init', function() {
-            expect(MonitorTwitchChat.getStreamList()).to.be.empty;
+        it('should return an empty array', function() {
+            expect(MonitorTwitchChat.getStreamList()).to.be.an('array').that.is.empty;
         });
     });
-    describe('requestStreams', function() {
+    describe('requestStreams', async function() {
+        const result = await MonitorTwitchChat.requestStreams();
         it('should return an array that is not empty', async function() {
-            const result = await MonitorTwitchChat.requestStreams()
-            expect(result).to.be.an('array');
-            expect(result).to.not.be.empty;
+            expect(result).to.be.an('array').to.be.an('array').that.is.not.empty;
         });
-        it('should return an array that contains objects of user_name, viewer_count and hits', async function() {
-            const result = await MonitorTwitchChat.requestStreams();
+        it('should return an array that contains objects with the keys user_name, viewer_count and hits', async function() {
             expect(result[0]).to.be.an('object').that.includes.all.keys('user_name','viewer_count','hits');
         });
         it('should return an array that contain objects with string key user_name', async function() {
-            const result = await MonitorTwitchChat.requestStreams();
             assert.isString(result[0].user_name);
         });
         it('should return an array that contain objects with number key viewer_count', async function() {
-            const result = await MonitorTwitchChat.requestStreams();
             assert.isNumber(result[0].viewer_count);
         });
         it('should return an array that contain objects with number key hits', async function() {
-            const result = await MonitorTwitchChat.requestStreams();
             assert.isNumber(result[0].hits);
         });
         it('should return with data from helix-stream', async function() {
-            const result = await MonitorTwitchChat.requestStreams();
             expect(result).to.deep.include({
                 user_name:"kyle", viewer_count:7851, hits:0
             })
         });
         it('should return with data from helix-stream-pagination', async function() {
-            const result = await MonitorTwitchChat.requestStreams();
             expect(result).to.deep.include({
                 user_name:"saiiren", viewer_count:2175, hits:0
             })
@@ -86,7 +76,7 @@ describe('MonitorTwitchChat methods', function() {
             });
             it('should return an object with with a key called data that is an array', async function() {
                 const result = await MonitorTwitchChat.request100Streams();
-                expect(result).to.include.all.keys('data')
+                expect(result).to.include.keys('data')
                 expect(result.data).to.be.an('array');
             });
             it('should return an object with with a key called pagination that is an object', async function() {
@@ -104,13 +94,14 @@ describe('MonitorTwitchChat methods', function() {
         });
     });
     describe('updateStreamList', function() {
-        it('should update streamList', async function() {
+        beforeEach(function (){
             expect(MonitorTwitchChat.getStreamList()).to.be.empty;
+        })
+        it('should add elements to streamList', async function() {
             await MonitorTwitchChat.updateStreamList();
             expect(MonitorTwitchChat.getStreamList()).to.not.be.empty;
         });
         it('should update streamList to an array that contains objects of user_name, viewer_count and hits', async function() {
-            expect(MonitorTwitchChat.getStreamList()).to.be.empty;
             await MonitorTwitchChat.updateStreamList();
             expect(MonitorTwitchChat.getStreamList()).to.be.an('array');
             expect(MonitorTwitchChat.getStreamList()[0]).to.be.an('object').that.includes.all.keys('user_name','viewer_count','hits');
@@ -129,8 +120,10 @@ describe('MonitorTwitchChat methods', function() {
         });
     });
     describe('onMessageHandler', function() {
-        it('should increase the specified channels hits by 1 when called once', async function() {
+        beforeEach(async function(){
             await MonitorTwitchChat.updateStreamList();
+        })
+        it('should increase the specified channels hits by 1 when called once', async function() {
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
                 user_name:"kyle", viewer_count:7851, hits:0
             })
@@ -140,7 +133,6 @@ describe('MonitorTwitchChat methods', function() {
             })
         });
         it('should not increase the specified channels hits by 1 when message is not valid', async function() {
-            await MonitorTwitchChat.updateStreamList();
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
                 user_name:"kyle", viewer_count:7851, hits:0
             })
@@ -150,11 +142,9 @@ describe('MonitorTwitchChat methods', function() {
             })
         });
         it('should increase the specified channels hits by 1 every time it is called', async function() {
-            await MonitorTwitchChat.updateStreamList();
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
                 user_name:"saiiren", viewer_count:2175, hits:0
             })
-
             const hitCount = 200;
             for (let i = 0; i < hitCount; i++){
                 MonitorTwitchChat.onMessageHandler('Saiiren', {}, 'OMEGALUL', false);
@@ -165,8 +155,10 @@ describe('MonitorTwitchChat methods', function() {
         });
     });
     describe('resetStreamer', function() {
-        it('should reset a channels hits to 0', async function() {
+        beforeEach(async function(){
             await MonitorTwitchChat.updateStreamList();
+        })
+        it('should reset a channels hits to 0', async function() {
             for (let i = 0; i < 565; i++){
                 MonitorTwitchChat.onMessageHandler('NymN', {}, 'LULW', false);
             }
@@ -177,7 +169,6 @@ describe('MonitorTwitchChat methods', function() {
             })
         });
         it('should not reset every channels hits to 0', async function() {
-            await MonitorTwitchChat.updateStreamList();
             for (let i = 0; i < 565; i++){
                 MonitorTwitchChat.onMessageHandler('NymN', {}, 'LULW', false);
             }

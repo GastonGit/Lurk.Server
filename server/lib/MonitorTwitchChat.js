@@ -35,6 +35,12 @@ class MonitorTwitchChat{
         this.streamList[this.getStreamerIndex(channel)].hits = 0;
     }
 
+    resetAllStreamers(){
+        this.streamList.forEach(function(streamer){
+            streamer.hits = 0;
+        })
+    }
+
     getStreamerIndex(channel){
         let userObject = this.streamList.find(streamer => streamer.user_name === channel.toLowerCase())
         return this.streamList.indexOf(userObject);

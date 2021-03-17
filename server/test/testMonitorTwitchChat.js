@@ -189,6 +189,31 @@ describe('MonitorTwitchChat methods', function() {
             })
         });
     });
+    describe('resetAllStreamers', function() {
+        it('should reset every channels hits to 0', async function() {
+            await MonitorTwitchChat.updateStreamList();
+            for (let i = 0; i < 565; i++){
+                MonitorTwitchChat.onMessageHandler('NymN', {}, 'LULW', false);
+            }
+            for (let i = 0; i < 200; i++){
+                MonitorTwitchChat.onMessageHandler('saiiren', {}, 'LULW', false);
+            }
+            for (let i = 0; i < 5; i++){
+                MonitorTwitchChat.onMessageHandler('kyle', {}, 'OMEGALUL', false);
+            }
+
+            MonitorTwitchChat.resetAllStreamers();
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"nymn", viewer_count:3532, hits:0
+            })
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"saiiren", viewer_count:2175, hits:0
+            })
+            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
+                user_name:"kyle", viewer_count:7851, hits:0
+            })
+        });
+    });
     describe('getStreamerIndex', function() {
         it('should return a streamers index in streamList', async function() {
             await MonitorTwitchChat.updateStreamList();

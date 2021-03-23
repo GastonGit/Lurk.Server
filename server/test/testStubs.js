@@ -38,5 +38,16 @@ describe('fetchStub methods', function() {
                 )}).to.throw();
             });
         });
+        describe('with user login url', function() {
+            it('should throw if not used with the method option get', function() {
+                expect(function(){fetchStub("https://api.twitch.tv/helix/users?login=moonmoon")}).to.throw();
+                expect(function(){fetchStub(
+                    "https://api.twitch.tv/helix/users?login=moonmoon",
+                    {
+                        method: "post"
+                    }
+                )}).to.throw();
+            });
+        });
     });
 });

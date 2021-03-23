@@ -5,7 +5,8 @@ const fetchStub = function (url, options){
         if (options.method === "get"){
             const result = require("../stubs/data/helix-streams")
             return Promise.resolve({
-                json: () => Promise.resolve(result)
+                json: () => Promise.resolve(result),
+                status: 200
             })
         } else{
             throw new Error("Unexpected method");
@@ -17,7 +18,20 @@ const fetchStub = function (url, options){
         if (options.method === "get"){
             const result = require("../stubs/data/helix-streams-pagination")
             return Promise.resolve({
-                json: () => Promise.resolve(result)
+                json: () => Promise.resolve(result),
+                status: 200
+            })
+        }
+        else{
+            throw new Error("Unexpected method");
+        }
+    }
+    if (url === "https://api.twitch.tv/helix/users?login=moonmoon"){
+        if (options.method === "get"){
+            const result = {"data":[{"id": "121059319"}]}
+            return Promise.resolve({
+                json: () => Promise.resolve(result),
+                status: 200
             })
         }
         else{

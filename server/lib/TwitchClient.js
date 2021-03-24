@@ -1,3 +1,4 @@
+const helper = require('./helper');
 const tmi = require('tmi.js');
 const fetch = require('node-fetch');
 
@@ -26,9 +27,7 @@ class TwitchClient{
     }
 
     async getBroadcasterID(id){
-        if (typeof id === "undefined"){
-            throw new Error("Argument is undefined");
-        }
+        helper.ensureArgument(id, 'string');
 
         const user = await this.getUser(id);
 
@@ -36,9 +35,7 @@ class TwitchClient{
     }
 
     async getUser(name){
-        if (typeof name === "undefined"){
-            throw new Error("Argument is undefined");
-        }
+        helper.ensureArgument(name, 'string');
 
         const url = 'https://api.twitch.tv/helix/users?' + 'login=' + name
 

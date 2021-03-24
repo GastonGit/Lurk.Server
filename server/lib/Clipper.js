@@ -1,4 +1,5 @@
 require('dotenv').config();
+const helper = require('./helper');
 
 class Clipper{
 
@@ -11,17 +12,13 @@ class Clipper{
     }
 
     createClip(broadcaster_id){
-        if (typeof broadcaster_id === "undefined"){
-            throw new Error("Argument is undefined");
-        }
+        helper.ensureArgument(broadcaster_id)
 
         return {};
     }
 
     getClip(clip_id){
-        if (typeof clip_id === "undefined"){
-            throw new Error("Argument is undefined");
-        }
+        helper.ensureArgument(clip_id)
 
         return {};
     }

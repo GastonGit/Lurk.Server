@@ -1,3 +1,4 @@
+const helper = require('./helper');
 
 class ClipList {
 
@@ -12,11 +13,11 @@ class ClipList {
     }
 
     addClip(clip){
-        if (typeof clip === 'string'){
-            if (isTwitchClipUrl(clip)){
-                this.currentList.push(clip);
-                return true;
-            }
+        helper.ensureArgument(clip, 'string');
+
+        if (isTwitchClipUrl(clip)){
+            this.currentList.push(clip);
+            return true;
         }
 
         return false;

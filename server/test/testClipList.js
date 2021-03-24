@@ -16,6 +16,13 @@ describe('ClipList methods', function() {
     });
     describe('Adding clips', function(){
         let ClipList = new ClipListClass();
+        it('should not throw if argument is a string', function() {
+            expect(function (){ClipList.addClip("https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride")}).to.not.throw();
+        });
+        it('should throw if argument is not a string', function() {
+            expect(function (){ClipList.addClip(123)}).to.throw();
+            expect(function (){ClipList.addClip(false)}).to.throw();
+        });
         it('should return true when adding a string containing a twitch clip url', function() {
             expect(ClipList.addClip("https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride")).to.be.true;
         });
@@ -28,17 +35,6 @@ describe('ClipList methods', function() {
             expect(ClipList.addClip("https://www.clips.test.com/testing")).to.be.false;
             expect(ClipList.addClip("https://www.clips.twitch.tv/")).to.be.false;
             expect(ClipList.addClip("https://clips.twitch.tv/")).to.be.false;
-        });
-        it('should return false when adding an integer', function() {
-            expect(ClipList.addClip(20)).to.be.false;
-            expect(ClipList.addClip(0)).to.be.false;
-            expect(ClipList.addClip(-1)).to.be.false;
-            expect(ClipList.addClip(1000000000)).to.be.false;
-            expect(ClipList.addClip(94489098498020942)).to.be.false;
-            expect(ClipList.addClip(-94489098498020942)).to.be.false;
-        });
-        it('should return false when adding an undefined value', function() {
-            expect(ClipList.addClip(undefined)).to.be.false;
         });
         it('should not add clip to list when addClip returns false', function() {
             const string1 = "https://www.test.com/testing";

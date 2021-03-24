@@ -39,6 +39,21 @@ const fetchStub = function (url, options){
         }
     }
 
+    if (url.includes("https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=")){
+        if (options.method === "get"){
+            const result = {"access_token": "j9b1e59"}
+            return Promise.resolve({
+                json: () => Promise.resolve(result),
+                status: 200
+            })
+        }
+        else{
+            throw new Error("Unexpected method");
+        }
+    }
+
+
+
     throw new Error("Unexpected url");
 };
 

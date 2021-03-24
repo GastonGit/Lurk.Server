@@ -18,12 +18,32 @@ class TwitchClient{
             id: process.env.CLIENT_ID,
             secret: process.env.CLIENT_SECRET,
             code: process.env.CLIENT_CODE,
-            auth: process.env.CLIENT_AUTH
+            refresh: process.env.CLIENT_REFRESH
         }
     }
 
     connectToTwitch(){
         this.client.connect();
+    }
+
+    async getAccessToken(){
+        const url = 'https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token='
+        + this.credentials.refresh + '&client_id=' + this.credentials.id + '&client_secret=' +
+            this.credentials.secret;
+
+        const response = await fetch(url, {
+            method: 'get'
+        })
+
+        const status = await response.status;
+
+        if (status !== 200) {
+            throw new Error("Status code is: " + status);
+        }
+
+        const json = await response.json();
+
+        return json.access_token;
     }
 
     async getBroadcasterID(id){
@@ -38,12 +58,13 @@ class TwitchClient{
         helper.ensureArgument(name, 'string');
 
         const url = 'https://api.twitch.tv/helix/users?' + 'login=' + name
+        const accessToken = await this.getAccessToken()
 
         const response = await fetch(url, {
             method: 'get',
             headers: {
                 'Client-ID': this.credentials.id,
-                'Authorization': 'Bearer ' + this.credentials.auth
+                'Authorization': 'Bearer ' + accessToken
             },
         })
 

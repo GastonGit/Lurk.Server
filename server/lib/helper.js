@@ -10,10 +10,10 @@ module.exports = {
                 throw new TypeError("Argument is not a string");
             }
         } else if(type === 'number'){
-            if (typeof (parseInt(arg)) === 'number' && typeof arg !== 'number'){
+            if (typeof arg === 'string' && !isNaN(parseInt(arg))){
                 throw new TypeError("Argument is an unparsed number");
             }
-            if (typeof (parseInt(arg)) !== 'number'){
+            if (isNaN(parseInt(arg))){
                 throw new TypeError("Argument is not a number");
             }
         } else if(type === 'boolean'){

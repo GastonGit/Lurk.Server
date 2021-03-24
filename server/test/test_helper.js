@@ -39,11 +39,12 @@ describe('Helper functions', function() {
                 expect(comp).to.equal(arg);
             });
             it('should throw if type is string and argument is not a string', function() {
-                expect(function (){helper.ensureArgument(123, 'string')}).to.throw();
-                expect(function (){helper.ensureArgument(false, 'string')}).to.throw();
-                expect(function (){helper.ensureArgument(true, 'string')}).to.throw();
-                expect(function (){helper.ensureArgument({}, 'string')}).to.throw();
-                expect(function (){helper.ensureArgument([], 'string')}).to.throw();
+                const standardError = "Argument is not a string";
+                expect(function (){helper.ensureArgument(123, 'string')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument(false, 'string')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument(true, 'string')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument({}, 'string')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument([], 'string')}).to.throw(standardError);
             });
         });
         describe('Number type', function() {
@@ -68,11 +69,12 @@ describe('Helper functions', function() {
                 expect(function (){helper.ensureArgument('-1', 'number')}).to.throw(unparsedError);
                 expect(function (){helper.ensureArgument('12361', 'number')}).to.throw(unparsedError);
 
-                expect(function (){helper.ensureArgument('string', 'number')}).to.throw();
-                expect(function (){helper.ensureArgument(false, 'number')}).to.throw();
-                expect(function (){helper.ensureArgument(true, 'number')}).to.throw();
-                expect(function (){helper.ensureArgument({}, 'number')}).to.throw();
-                expect(function (){helper.ensureArgument([], 'number')}).to.throw();
+                const standardError = "Argument is not a number";
+                expect(function (){helper.ensureArgument('string', 'number')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument(false, 'number')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument(true, 'number')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument({}, 'number')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument([], 'number')}).to.throw(standardError);
             });
         });
         describe('Boolean type', function() {
@@ -91,10 +93,11 @@ describe('Helper functions', function() {
                 expect(function (){helper.ensureArgument('true', 'boolean')}).to.throw(booleanInString);
                 expect(function (){helper.ensureArgument('false', 'boolean')}).to.throw(booleanInString);
 
-                expect(function (){helper.ensureArgument(123, 'boolean')}).to.throw();
-                expect(function (){helper.ensureArgument('string', 'boolean')}).to.throw();
-                expect(function (){helper.ensureArgument({}, 'boolean')}).to.throw();
-                expect(function (){helper.ensureArgument([], 'boolean')}).to.throw();
+                const standardError = "Argument is not a boolean";
+                expect(function (){helper.ensureArgument(123, 'boolean')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument('string', 'boolean')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument({}, 'boolean')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument([], 'boolean')}).to.throw(standardError);
             });
         });
         describe('Array type', function() {
@@ -113,13 +116,14 @@ describe('Helper functions', function() {
                 expect(function (){helper.ensureArgument('[]', 'array')}).to.throw(arrayInString);
                 expect(function (){helper.ensureArgument('[123,234,"string"]', 'array')}).to.throw(arrayInString);
 
-                expect(function (){helper.ensureArgument(123, 'array')}).to.throw();
-                expect(function (){helper.ensureArgument('string', 'array')}).to.throw();
-                expect(function (){helper.ensureArgument({}, 'array')}).to.throw();
-                expect(function (){helper.ensureArgument({"data": []}, 'array')}).to.throw();
-                expect(function (){helper.ensureArgument({"data": [123]}, 'array')}).to.throw();
-                expect(function (){helper.ensureArgument(false, 'array')}).to.throw();
-                expect(function (){helper.ensureArgument(true, 'array')}).to.throw();
+                const standardError = "Argument is not an array";
+                expect(function (){helper.ensureArgument(123, 'array')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument('string', 'array')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument({}, 'array')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument({"data": []}, 'array')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument({"data": [123]}, 'array')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument(false, 'array')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument(true, 'array')}).to.throw(standardError);
             });
         });
         describe('Object type', function() {
@@ -138,12 +142,13 @@ describe('Helper functions', function() {
                 expect(function (){helper.ensureArgument('{}', 'object')}).to.throw(objectInString);
                 expect(function (){helper.ensureArgument('{"data":{"test":[]}}', 'object')}).to.throw(objectInString);
 
-                expect(function (){helper.ensureArgument(123, 'object')}).to.throw();
-                expect(function (){helper.ensureArgument('string', 'object')}).to.throw();
-                expect(function (){helper.ensureArgument([], 'object')}).to.throw();
-                expect(function (){helper.ensureArgument([123,234,'string'], 'object')}).to.throw();
-                expect(function (){helper.ensureArgument(false, 'object')}).to.throw();
-                expect(function (){helper.ensureArgument(true, 'object')}).to.throw();
+                const standardError = "Argument is not an object";
+                expect(function (){helper.ensureArgument(123, 'object')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument('string', 'object')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument([], 'object')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument([123,234,'string'], 'object')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument(false, 'object')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument(true, 'object')}).to.throw(standardError);
             });
         });
     });

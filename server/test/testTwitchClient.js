@@ -14,7 +14,7 @@ const fetchStub = require('../stubs/fetchStub');
 let TwitchClientClass = proxyquire('../lib/TwitchClient',{'tmi.js':tmiStub, 'node-fetch':fetchStub});
 let TwitchClient;
 
-describe('testTwitchClient methods', function() {
+describe('TwitchClient methods', function() {
     beforeEach(function (){
         TwitchClient = new TwitchClientClass();
     })

@@ -151,5 +151,26 @@ describe('Helper functions', function() {
                 expect(function (){helper.ensureArgument(true, 'object')}).to.throw(standardError);
             });
         });
+        describe('Function type', function() {
+            it('should not throw if type is function and argument is an function', function() {
+                expect(function (){helper.ensureArgument(function(){}, 'function')}).to.not.throw();
+                expect(function (){helper.ensureArgument(function(){return 'hey'}, 'function')}).to.not.throw();
+            });
+            it('should not change the value of the argument', function() {
+                let arg1 = function(){return 'hey'};
+                const comp1 = arg1;
+                helper.ensureArgument(arg1);
+                expect(comp1).to.equal(arg1);
+            });
+            it('should throw if type is function and argument is not an function', function() {
+                const standardError = "Argument is not a function";
+                expect(function (){helper.ensureArgument(123, 'function')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument('string', 'function')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument([], 'function')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument([123,234,'string'], 'function')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument(false, 'function')}).to.throw(standardError);
+                expect(function (){helper.ensureArgument(true, 'function')}).to.throw(standardError);
+            });
+        });
     });
 });

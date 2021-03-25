@@ -37,6 +37,10 @@ module.exports = {
             if (typeof arg !== 'object' || Array.isArray(arg)){
                 throw new TypeError("Argument is not an object");
             }
+        } else if(type === 'function'){
+            if (typeof arg !== 'function'){
+                throw new TypeError("Argument is not a function");
+            }
         }
     }
 }

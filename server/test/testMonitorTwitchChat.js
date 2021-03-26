@@ -270,4 +270,55 @@ describe('MonitorTwitchChat methods', function() {
             expect(MonitorTwitchChat.joinChannels(list)).to.not.throw;
         });
     });
+    describe('decreaseHits', function() {
+        it('should throw without an argument', function() {
+            expect(function(){MonitorTwitchChat.decreaseHits()}).to.throw();
+        });
+        it('should take a number as an argument', function() {
+            expect(function(){MonitorTwitchChat.decreaseHits(123)}).to.not.throw();
+            expect(function(){MonitorTwitchChat.decreaseHits('string')}).to.throw();
+            expect(function(){MonitorTwitchChat.decreaseHits(NaN)}).to.throw();
+        });
+        it('should reduce streamer hits by x when called', function() {
+            MonitorTwitchChat.streamList = [
+                {user_name: 'kyle', viewer_count: 123, hits: 50},
+                {user_name: 'moonmoon', viewer_count: 54, hits: 62},
+                {user_name: 'nymn', viewer_count: 78, hits: 13},
+                {user_name: 'forsen', viewer_count: 678, hits: 30},
+                {user_name: 'sodapoppin', viewer_count: 1233, hits: 10}
+            ]
+            MonitorTwitchChat.decreaseHits(1);
+            expect(MonitorTwitchChat.getStreamList()[0].hits).to.equal(49);
+            expect(MonitorTwitchChat.getStreamList()[1].hits).to.equal(61);
+            expect(MonitorTwitchChat.getStreamList()[2].hits).to.equal(12);
+            expect(MonitorTwitchChat.getStreamList()[3].hits).to.equal(29);
+            expect(MonitorTwitchChat.getStreamList()[4].hits).to.equal(9);
+
+            MonitorTwitchChat.decreaseHits(3);
+            expect(MonitorTwitchChat.getStreamList()[0].hits).to.equal(46);
+            expect(MonitorTwitchChat.getStreamList()[1].hits).to.equal(58);
+            expect(MonitorTwitchChat.getStreamList()[2].hits).to.equal(9);
+            expect(MonitorTwitchChat.getStreamList()[3].hits).to.equal(26);
+            expect(MonitorTwitchChat.getStreamList()[4].hits).to.equal(6);
+        });
+        it('should not reduce streamer hits below 0', function() {
+            MonitorTwitchChat.streamList = [
+                {user_name: 'kyle', viewer_count: 123, hits: 50},
+                {user_name: 'moonmoon', viewer_count: 54, hits: 62},
+                {user_name: 'nymn', viewer_count: 78, hits: 13},
+                {user_name: 'forsen', viewer_count: 678, hits: 30},
+                {user_name: 'sodapoppin', viewer_count: 1233, hits: 10}
+            ]
+
+            MonitorTwitchChat.decreaseHits(11);
+            expect(MonitorTwitchChat.getStreamList()[4].hits).to.equal(0);
+
+            MonitorTwitchChat.decreaseHits(100);
+            expect(MonitorTwitchChat.getStreamList()[0].hits).to.equal(0);
+            expect(MonitorTwitchChat.getStreamList()[1].hits).to.equal(0);
+            expect(MonitorTwitchChat.getStreamList()[2].hits).to.equal(0);
+            expect(MonitorTwitchChat.getStreamList()[3].hits).to.equal(0);
+            expect(MonitorTwitchChat.getStreamList()[4].hits).to.equal(0);
+        });
+    });
 });

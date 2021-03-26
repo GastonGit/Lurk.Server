@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const helper = require('./helper');
 
 class MonitorTwitchChat{
 
@@ -19,6 +20,18 @@ class MonitorTwitchChat{
 
     async joinChannels(){
         this.client.joinChannels(this.getCompactStreamList())
+    }
+
+    decreaseHits(amount){
+        helper.ensureArgument(amount, 'number');
+
+        this.streamList.forEach(function(streamer){
+            if ((streamer.hits - amount) >= 0){
+                streamer.hits = streamer.hits - amount;
+            } else {
+                streamer.hits = 0;
+            }
+        })
     }
 
     setCompactStreamList(){

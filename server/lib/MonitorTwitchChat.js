@@ -11,12 +11,7 @@ class MonitorTwitchChat{
     constructor(client, options) {
         this.requestCount = options.requestCount || 2;
         this.streamList = [];
-        this.validMessages = [
-            'LUL',
-            'LULW',
-            'OMEGALUL',
-            'LuL'
-        ]
+        this.validMessages = options.validMessages || ['OMEGALUL']
         this.compactStreamList = [];
         this.client = client;
         this.client.setMessageHandler(this.onMessageHandler);

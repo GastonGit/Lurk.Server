@@ -12,12 +12,20 @@ let twitchClient
 let MonitorTwitchChatClass = proxyquire('../lib/MonitorTwitchChat', {'node-fetch':fetchStub});
 let MonitorTwitchChat;
 
+const validMessages = [
+    'LUL',
+    'LULW',
+    'OMEGALUL',
+    'LuL'
+];
+
 describe('MonitorTwitchChat methods', function() {
     beforeEach(function (){
         twitchClient = new twitchClientClass();
         MonitorTwitchChat = new MonitorTwitchChatClass(
             twitchClient, {
-            requestCount: 2
+                requestCount: 2,
+                validMessages:validMessages
         });
     })
     describe('constructor', function() {
@@ -33,6 +41,23 @@ describe('MonitorTwitchChat methods', function() {
             MonitorTwitchChat = new MonitorTwitchChatClass(
                 twitchClient, {});
             expect(MonitorTwitchChat.requestCount).to.equal(2);
+        });
+        it('should set validMessages to specified when specified', function() {
+            const validMessages = [
+                'LUL',
+                'LULW',
+                'LuL'
+            ];
+            MonitorTwitchChat = new MonitorTwitchChatClass(
+                twitchClient, {
+                    validMessages: validMessages
+                });
+            expect(MonitorTwitchChat.validMessages).to.equal(validMessages);
+        });
+        it('should set validMessages to "OMEGALUL" when not specified', function() {
+            MonitorTwitchChat = new MonitorTwitchChatClass(
+                twitchClient, {});
+            expect(MonitorTwitchChat.validMessages).to.deep.equal(['OMEGALUL']);
         });
     });
     describe('getStreamList', function() {
@@ -127,7 +152,7 @@ describe('MonitorTwitchChat methods', function() {
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
                 user_name:"kyle", viewer_count:7851, hits:0
             })
-            MonitorTwitchChat.onMessageHandler('KYLE', {}, 'LULW', false);
+            MonitorTwitchChat.onMessageHandler('KYLE', {}, validMessages[1], false);
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
                 user_name:"kyle", viewer_count:7851, hits:1
             })
@@ -147,7 +172,7 @@ describe('MonitorTwitchChat methods', function() {
             })
             const hitCount = 200;
             for (let i = 0; i < hitCount; i++){
-                MonitorTwitchChat.onMessageHandler('Saiiren', {}, 'OMEGALUL', false);
+                MonitorTwitchChat.onMessageHandler('Saiiren', {}, validMessages[2], false);
             }
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
                 user_name:"saiiren", viewer_count:2175, hits:hitCount
@@ -160,7 +185,7 @@ describe('MonitorTwitchChat methods', function() {
         })
         it('should reset a channels hits to 0', async function() {
             for (let i = 0; i < 565; i++){
-                MonitorTwitchChat.onMessageHandler('NymN', {}, 'LULW', false);
+                MonitorTwitchChat.onMessageHandler('NymN', {}, validMessages[1], false);
             }
 
             MonitorTwitchChat.resetStreamer("Nymn");
@@ -170,11 +195,11 @@ describe('MonitorTwitchChat methods', function() {
         });
         it('should not reset every channels hits to 0', async function() {
             for (let i = 0; i < 565; i++){
-                MonitorTwitchChat.onMessageHandler('NymN', {}, 'LULW', false);
+                MonitorTwitchChat.onMessageHandler('NymN', {}, validMessages[1], false);
             }
             const hitCount = 200;
             for (let i = 0; i < hitCount; i++){
-                MonitorTwitchChat.onMessageHandler('saiiren', {}, 'LULW', false);
+                MonitorTwitchChat.onMessageHandler('saiiren', {}, validMessages[1], false);
             }
 
             MonitorTwitchChat.resetStreamer("Nymn");
@@ -190,13 +215,13 @@ describe('MonitorTwitchChat methods', function() {
         it('should reset every channels hits to 0', async function() {
             await MonitorTwitchChat.updateStreamList();
             for (let i = 0; i < 565; i++){
-                MonitorTwitchChat.onMessageHandler('NymN', {}, 'LULW', false);
+                MonitorTwitchChat.onMessageHandler('NymN', {}, validMessages[1], false);
             }
             for (let i = 0; i < 200; i++){
-                MonitorTwitchChat.onMessageHandler('saiiren', {}, 'LULW', false);
+                MonitorTwitchChat.onMessageHandler('saiiren', {}, validMessages[1], false);
             }
             for (let i = 0; i < 5; i++){
-                MonitorTwitchChat.onMessageHandler('kyle', {}, 'OMEGALUL', false);
+                MonitorTwitchChat.onMessageHandler('kyle', {}, validMessages[2], false);
             }
 
             MonitorTwitchChat.resetAllStreamers();

@@ -10,6 +10,9 @@ chai.should();
 let fetchStub = require('../stubs/fetchStub');
 let TwitchClientStubClass = require('../stubs/twitchClientStub');
 let TwitchClientStub = new TwitchClientStubClass();
+let MonitorTwitchChatStubClass = require('../stubs/monitorTwitchChatStub');
+let MonitorTwitchChatStub = new MonitorTwitchChatStubClass();
+
 describe('testStubs', function (){
     describe('fetchStub methods', function() {
         describe('unexpected arguments', function() {
@@ -111,6 +114,61 @@ describe('testStubs', function (){
                 expect(function(){TwitchClientStub.joinChannels('stringag')}).to.not.throw();
                 expect(function(){TwitchClientStub.joinChannels()}).to.throw();
                 expect(function(){TwitchClientStub.joinChannels(123)}).to.throw();
+            });
+        });
+    });
+    describe('monitorTwitchChatStub', function() {
+        describe('joinChannels', function() {
+            it('should resolve', function() {
+                return MonitorTwitchChatStub.joinChannels().should.be.fulfilled;
+            });
+        });
+        describe('decreaseHits', function() {
+            it('should not throw when called with a number argument', function() {
+                expect(function (){MonitorTwitchChatStub.decreaseHits()}).to.throw()
+                expect(function (){MonitorTwitchChatStub.decreaseHits(123)}).to.not.throw()
+            });
+        });
+        describe('setCompactStreamList', function() {
+            it('should not throw when called', function() {
+                expect(function (){MonitorTwitchChatStub.setCompactStreamList()}).to.not.throw();
+            });
+        });
+        describe('getCompactStreamList', function() {
+            it('should not throw when called', function() {
+                expect(function (){MonitorTwitchChatStub.getCompactStreamList()}).to.not.throw();
+            });
+        });
+        describe('onMessageHandler', function() {
+            it('should not throw when called', function() {
+                expect(function (){MonitorTwitchChatStub.onMessageHandler()}).to.not.throw();
+            });
+        });
+        describe('getStreamList', function() {
+            it('should not throw when called', function() {
+                expect(function (){MonitorTwitchChatStub.getStreamList()}).to.not.throw();
+            });
+        });
+        describe('resetStreamer', function() {
+            it('should not throw when called with a string argument', function() {
+                expect(function (){MonitorTwitchChatStub.resetStreamer()}).to.throw()
+                expect(function (){MonitorTwitchChatStub.resetStreamer('string')}).to.not.throw()
+            });
+        });
+        describe('resetAllStreamers', function() {
+            it('should not throw when called', function() {
+                expect(function (){MonitorTwitchChatStub.resetAllStreamers()}).to.not.throw();
+            });
+        });
+        describe('getStreamerIndex', function() {
+            it('should not throw when called with a string argument', function() {
+                expect(function (){MonitorTwitchChatStub.getStreamerIndex()}).to.throw()
+                expect(function (){MonitorTwitchChatStub.getStreamerIndex('string')}).to.not.throw()
+            });
+        });
+        describe('updateStreamList', function() {
+            it('should not throw when called', function() {
+                return MonitorTwitchChatStub.updateStreamList().should.be.fulfilled;
             });
         });
     });

@@ -18,8 +18,13 @@ class TwitchClient{
         })
     }
 
-    connectToTwitch(){
-        this.client.connect();
+    async connectToTwitch(){
+        return this.client.connect()
+            .then((data) => {
+                return data;
+            }).catch((err) => {
+                return 'Error: ' + err;
+            });
     }
 
     setMessageHandler(messageHandler){
@@ -34,6 +39,11 @@ class TwitchClient{
         const client = this.client
         channels.forEach(function(channel){
             client.join(channel)
+                .then((data) => {
+                    console.log(data);
+                }).catch((err) => {
+                    console.error('Error(' + channel + '): ' + err);
+            });
         })
     }
 }

@@ -22,10 +22,33 @@ describe('TwitchClient methods', function() {
         });
     });
     describe('connectToTwitch', function() {
-        it('should not throw', function() {
+        it('should not throw when called', function() {
             expect(function(){
                 TwitchClient.connectToTwitch()
             }).to.not.throw()
+        });
+        it('should return an array when resolved', async function() {
+            const result = await TwitchClient.connectToTwitch();
+            expect(result).to.deep.equal(['server', 'port']);
+        });
+        it('should return error message when rejected', async function() {
+            let client = function(options){
+                this.identity = options.identity;
+                return this;
+            }
+            client.prototype.connect = function connect(){
+                return Promise.reject('ERROR123');
+            }
+
+            const tmiStubInner = {
+                client,
+                Client: client
+            }
+            let TwitchClientClassInner = proxyquire('../lib/TwitchClient',{'tmi.js':tmiStubInner});
+            let TwitchClientInner = new TwitchClientClassInner();
+
+            const result = await TwitchClientInner.connectToTwitch();
+            expect(result).to.be.equal('Error: ERROR123');
         });
     });
     describe('setMessageHandler', function() {
@@ -51,6 +74,7 @@ describe('TwitchClient methods', function() {
         });
         it('should take an array as an argument', function() {
             expect(function(){TwitchClient.joinChannels([123,123,123])}).to.not.throw();
+
             expect(function(){TwitchClient.joinChannels('string')}).to.throw();
             expect(function(){TwitchClient.joinChannels(NaN)}).to.throw();
         });
@@ -58,6 +82,25 @@ describe('TwitchClient methods', function() {
             let channels = ['kappa','poggers','pogchamp','greyface']
             TwitchClient.joinChannels(channels);
             expect(TwitchClient.client.joinedChannels()).to.include.members(channels)
+        });
+        it('should not throw when rejected', async function() {
+            let client = function(options){
+                this.identity = options.identity;
+                return this;
+            }
+            client.prototype.join = function connect(){
+                return Promise.reject('ERROR123');
+            }
+
+            const tmiStubInner = {
+                client,
+                Client: client
+            }
+            let TwitchClientClassInner = proxyquire('../lib/TwitchClient',{'tmi.js':tmiStubInner});
+            let TwitchClientInner = new TwitchClientClassInner();
+
+            let channels = ['kappa','poggers','pogchamp','greyface']
+            expect(async function (){await TwitchClientInner.joinChannels(channels)}).to.not.throw();
         });
     });
 });

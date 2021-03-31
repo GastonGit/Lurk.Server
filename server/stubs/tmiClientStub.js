@@ -14,7 +14,7 @@ client.prototype.getMessageHandler = function getMessageHandler(){
 }
 
 client.prototype.connect = function connect(){
-
+    return Promise.resolve(['server','port']);
 }
 
 client.prototype.getIdentity = function getIdentity(){
@@ -24,7 +24,7 @@ client.prototype.getIdentity = function getIdentity(){
 client.prototype.join = function join(channel){
     list.push(channel);
 
-    return Promise.resolve({})
+    return Promise.resolve([channel])
 }
 
 client.prototype.joinedChannels = function joinedChannels(){

@@ -29,6 +29,16 @@ describe('TwitchClient methods', function() {
         });
     });
     describe('setMessageHandler', function() {
+        it('should throw without an argument', function() {
+            expect(function(){TwitchClient.setMessageHandler()}).to.throw();
+        });
+        it('should take a function as an argument', function() {
+            expect(function(){TwitchClient.setMessageHandler(function (){
+                return 0;
+            })}).to.not.throw();
+            expect(function(){TwitchClient.setMessageHandler('string')}).to.throw();
+            expect(function(){TwitchClient.setMessageHandler(NaN)}).to.throw();
+        });
         it('should set messageHandler to given function', function() {
             let testHandler = function(){return 0};
             TwitchClient.setMessageHandler(testHandler)
@@ -36,6 +46,14 @@ describe('TwitchClient methods', function() {
         });
     });
     describe('joinChannels', function() {
+        it('should throw without an argument', function() {
+            expect(function(){TwitchClient.joinChannels()}).to.throw();
+        });
+        it('should take an array as an argument', function() {
+            expect(function(){TwitchClient.joinChannels([123,123,123])}).to.not.throw();
+            expect(function(){TwitchClient.joinChannels('string')}).to.throw();
+            expect(function(){TwitchClient.joinChannels(NaN)}).to.throw();
+        });
         it('should join all channels given in an array', function() {
             let channels = ['kappa','poggers','pogchamp','greyface']
             TwitchClient.joinChannels(channels);

@@ -23,10 +23,14 @@ class TwitchClient{
     }
 
     setMessageHandler(messageHandler){
+        helper.ensureArgument(messageHandler, 'function');
+
         this.client.on('message', messageHandler);
     }
 
     joinChannels(channels){
+        helper.ensureArgument(channels, 'array');
+
         const client = this.client
         channels.forEach(function(channel){
             client.join(channel)

@@ -19,6 +19,7 @@ class MonitorTwitchChat{
     }
 
     async joinChannels(){
+        this.setCompactStreamList();
         this.client.joinChannels(this.getCompactStreamList())
     }
 

@@ -9,6 +9,10 @@ class TwitchClient{
 
     constructor() {
         this.client = new tmi.client({
+            connection:{
+                reconnect: true,
+                secure: true
+            },
             identity:{
                 username: process.env.BOT_NAME,
                 password: process.env.BOT_AUTH

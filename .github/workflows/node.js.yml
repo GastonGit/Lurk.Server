@@ -6,14 +6,34 @@ on:
   pull_request:
     branches: [ main ]
 
-defaults:
-  run:
-    working-directory: server
-
 jobs:
-  build:
-
+  client:
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: client
+
+    strategy:
+      matrix:
+        node-version: [14.x, 15.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
+  server:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: server
 
     strategy:
       matrix:

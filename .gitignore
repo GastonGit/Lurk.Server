@@ -123,3 +123,6 @@ typings/
 
 # SQLite3
 sqlite3
+
+# Client production
+client/build

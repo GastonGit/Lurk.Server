@@ -76,6 +76,14 @@ describe('HotClipsController methods', function() {
         it('should return an array', function() {
             expect(HotClipsController.getStreamList()).to.be.an('array');
         });
+        it('should call MonitorTwitchChat.getStreamList', function() {
+            chai.spy.on(HotClipsController.monitorTwitchChat, 'getStreamList');
+            expect(HotClipsController.monitorTwitchChat.getStreamList).to.be.spy;
+
+            HotClipsController.getStreamList();
+
+            expect(HotClipsController.monitorTwitchChat.getStreamList).to.have.been.called();
+        });
     });
     describe('clipIt', function() {
         it('should take a string argument', async function() {

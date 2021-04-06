@@ -114,6 +114,14 @@ describe('HotClipsController methods', function() {
             expect(function (){HotClipsController.addClip(123)}).to.throw();
             expect(function (){HotClipsController.addClip('test')}).to.not.throw();
         });
+        it('should call clipList.addClip', function() {
+            chai.spy.on(HotClipsController.clipList, 'addClip');
+            expect(HotClipsController.clipList.addClip).to.be.spy;
+
+            HotClipsController.addClip('twitchClip');
+
+            expect(HotClipsController.clipList.addClip).to.have.been.called();
+        });
     });
     describe('createClip', function() {
         it('should take a string argument', async function() {

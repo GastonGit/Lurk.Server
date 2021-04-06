@@ -12,6 +12,8 @@ let TwitchClientStubClass = require('../stubs/twitchClientStub');
 let TwitchClientStub = new TwitchClientStubClass();
 let MonitorTwitchChatStubClass = require('../stubs/monitorTwitchChatStub');
 let MonitorTwitchChatStub = new MonitorTwitchChatStubClass();
+let ClipListStubClass = require('../stubs/clipListStub');
+let ClipListStub = new ClipListStubClass();
 
 describe('testStubs', function (){
     describe('fetchStub methods', function() {
@@ -169,6 +171,23 @@ describe('testStubs', function (){
         describe('updateStreamList', function() {
             it('should not throw when called', function() {
                 return MonitorTwitchChatStub.updateStreamList().should.be.fulfilled;
+            });
+        });
+    });
+    describe('clipListStub', function() {
+        describe('getList', function() {
+            it('should return an array', function() {
+                expect(ClipListStub.getList()).to.be.an('array');
+            });
+        });
+        describe('addClip', function() {
+            it('should return true', function() {
+                expect(ClipListStub.addClip()).to.be.equal(true);
+            });
+        });
+        describe('removeClip', function() {
+            it('should not throw', function() {
+                expect(ClipListStub.removeClip).to.not.throw();
             });
         });
     });

@@ -18,6 +18,12 @@ class HotClipsController{
         this.clipList = new ClipList();
     }
 
+    async setupConnection(){
+        await this.monitorTwitchChat.updateStreamList();
+        await this.monitorTwitchChat.connectToTwitch();
+        await this.monitorTwitchChat.joinChannels();
+    }
+
     getList(){
         return this.clipList.getList();
     }

@@ -18,6 +18,10 @@ class MonitorTwitchChat{
         this.client.setMessageHandler(this.onMessageHandler);
     }
 
+    async connectToTwitch(){
+        await this.client.connectToTwitch();
+    }
+
     async joinChannels(){
         this.setCompactStreamList();
         this.client.joinChannels(this.getCompactStreamList())

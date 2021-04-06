@@ -11,6 +11,9 @@ class MonitorTwitchChat{
     constructor(client, options) {
 
     }
+    async connectToTwitch(){
+
+    }
 
     async joinChannels(){
 

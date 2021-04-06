@@ -5,8 +5,19 @@ chai.use(spies);
 chai.use(chai_as_promised);
 const assert = chai.assert;
 const expect = chai.expect;
+const should = chai.should;
 
-let HotClipsControllerClass = require('../lib/HotClipsController');
+const proxyquire = require('proxyquire');
+const clipListStub = require('../stubs/clipListStub');
+const monitorTwitchChatStub = require('../stubs/monitorTwitchChatStub');
+const twitchClientStub = require('../stubs/twitchClientStub');
+
+const HotClipsControllerClass = proxyquire('../lib/HotClipsController',{
+    './ClipList':clipListStub,
+    './MonitorTwitchChat':monitorTwitchChatStub,
+    './TwitchClient':twitchClientStub
+});
+
 let HotClipsController;
 let MonitorTwitchChatClass = require('../lib/MonitorTwitchChat');
 
@@ -16,7 +27,14 @@ describe('HotClipsController methods', function() {
     })
     describe('MonitorTwitchChat', function() {
         it('should be a MonitorTwitchChat class', function() {
-            expect(HotClipsController.monitorTwitchChat).to.be.an.instanceOf(MonitorTwitchChatClass);
+            const HotClipsControllerRealRequire = require('../lib/HotClipsController');
+            let HotClipsControllerInner = new HotClipsControllerRealRequire();
+            expect(HotClipsControllerInner.monitorTwitchChat).to.be.an.instanceOf(MonitorTwitchChatClass);
+        });
+    });
+    describe('setupConnection', function() {
+        it('should resolve', async function() {
+            return (HotClipsController.setupConnection()).should.be.fulfilled;
         });
     });
     describe('Get list', function() {

@@ -70,6 +70,8 @@ class HotClipsController{
 
     resetHits(streamer){
         helper.ensureArgument(streamer, 'string');
+
+        this.monitorTwitchChat.resetStreamer(streamer);
     }
 
     getList(){

@@ -148,6 +148,14 @@ describe('HotClipsController methods', function() {
             expect(function (){HotClipsController.resetHits(123)}).to.throw();
             expect(function (){HotClipsController.resetHits('test')}).to.not.throw();
         });
+        it('should call MonitorTwitchChat.resetStreamer', function() {
+            chai.spy.on(HotClipsController.monitorTwitchChat, 'resetStreamer');
+            expect(HotClipsController.monitorTwitchChat.resetStreamer).to.be.spy;
+
+            HotClipsController.resetHits('moonmoon');
+
+            expect(HotClipsController.monitorTwitchChat.resetStreamer).to.have.been.called();
+        });
     });
     describe('Get list', function() {
         it('should return an array', function() {

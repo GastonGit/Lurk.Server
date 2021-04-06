@@ -35,7 +35,7 @@ class MonitorTwitchChat{
     }
 
     getStreamList(){
-
+        return [];
     }
 
     resetStreamer(channel){

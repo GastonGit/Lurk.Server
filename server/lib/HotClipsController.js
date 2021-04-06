@@ -1,3 +1,4 @@
+const helper = require('./helper');
 
 let ClipList = require("./ClipList");
 let MonitorTwitchChat = require('./MonitorTwitchChat');
@@ -7,6 +8,7 @@ class HotClipsController{
 
     clipList;
     monitorTwitchChat;
+    timer;
 
     constructor() {
         this.monitorTwitchChat = new MonitorTwitchChat(
@@ -22,6 +24,48 @@ class HotClipsController{
         await this.monitorTwitchChat.updateStreamList();
         await this.monitorTwitchChat.connectToTwitch();
         await this.monitorTwitchChat.joinChannels();
+    }
+
+    start(){
+        this.startTimer(function (){this.checkForSpikes(5);}, 800);
+    }
+
+    startTimer(func, time){
+        this.timer = setInterval((func).bind(this),time);
+    }
+
+    endTimer(){
+        clearInterval(this.timer);
+    }
+
+    checkForSpikes(spike){
+        helper.ensureArgument(spike, 'number');
+
+        const list = this.getStreamList();
+    }
+
+    clipIt(){
+
+    }
+
+    getStreamList(){
+        return this.monitorTwitchChat.getStreamList();
+    }
+
+    addClip(clip){
+        helper.ensureArgument(clip, 'string');
+
+        this.clipList.addClip(clip);
+    }
+
+    async createClip(streamer){
+        helper.ensureArgument(streamer, 'string');
+
+        return 'twitchclip';
+    }
+
+    resetHits(streamer){
+        helper.ensureArgument(streamer, 'string');
     }
 
     getList(){

@@ -44,7 +44,15 @@ class HotClipsController{
     checkForSpikes(spike){
         helper.ensureArgument(spike, 'number');
 
-        const list = this.getStreamList();
+        const list = [...this.getStreamList()];
+
+        for (let i = 0; i < list.length; i++){
+            if (list[i].hits >= spike){
+                this.clipIt(list[i].user_name).catch((error) => {
+                    console.error('Error: ' + error);
+                });
+            }
+        }
     }
 
     async clipIt(streamer){

@@ -35,7 +35,12 @@ class MonitorTwitchChat{
     }
 
     getStreamList(){
-        return [];
+        return [
+            {user_name:"nymn", viewer_count:0, hits:5},
+            {user_name:"forsen", viewer_count:45, hits:50},
+            {user_name:"moonmoon", viewer_count:123, hits:100},
+            {user_name:"sodapoppin", viewer_count:50, hits:60},
+        ];
     }
 
     resetStreamer(channel){

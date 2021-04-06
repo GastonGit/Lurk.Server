@@ -24,7 +24,7 @@ let HotClipsController;
 let MonitorTwitchChatClass = require('../lib/MonitorTwitchChat');
 
 describe('HotClipsController methods', function() {
-    before(function (){
+    beforeEach(function (){
         HotClipsController = new HotClipsControllerClass();
     })
     describe('MonitorTwitchChat', function() {
@@ -72,6 +72,41 @@ describe('HotClipsController methods', function() {
             HotClipsController.checkForSpikes(3);
 
             expect(HotClipsController.getStreamList).to.have.been.called();
+        });
+        it('should call clipIt when a spike is found', function() {
+            chai.spy.on(HotClipsController, 'clipIt');
+            expect(HotClipsController.clipIt).to.be.spy;
+
+            HotClipsController.checkForSpikes(99);
+
+            expect(HotClipsController.clipIt).to.have.been.called();
+        });
+        it('should call clipIt when everytime a spike is found', function() {
+            chai.spy.on(HotClipsController, 'clipIt');
+            expect(HotClipsController.clipIt).to.be.spy;
+
+            HotClipsController.checkForSpikes(45);
+
+            expect(HotClipsController.clipIt).to.have.been.called.exactly(3);
+        });
+        it('should catch errors from clipIt', function() {
+            let clipperStubInner = class {
+                constructor(){
+
+                }
+                async createClip(){
+
+                }
+            }
+            const HotClipsControllerClassInner = proxyquire('../lib/HotClipsController',{
+                './ClipList':clipListStub,
+                './MonitorTwitchChat':monitorTwitchChatStub,
+                './TwitchClient':twitchClientStub,
+                './Clipper': clipperStubInner
+            });
+            let HotClipsControllerInner = new HotClipsControllerClassInner();
+
+            expect(function (){HotClipsControllerInner.checkForSpikes(35)}).to.not.throw();
         });
     });
     describe('getStreamList', function() {

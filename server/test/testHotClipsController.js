@@ -78,8 +78,34 @@ describe('HotClipsController methods', function() {
         });
     });
     describe('clipIt', function() {
-        it('should not throw', function() {
-            expect(function (){HotClipsController.clipIt()}).to.not.throw();
+        it('should take a string argument', async function() {
+            await expect(HotClipsController.clipIt()).to.be.rejectedWith('Argument is undefined');
+            await expect(HotClipsController.clipIt(123)).to.be.rejectedWith('Argument is not a string');
+            await expect(HotClipsController.clipIt('test')).to.be.fulfilled;
+        });
+        it('should call resetHits', function() {
+            chai.spy.on(HotClipsController, 'resetHits');
+            expect(HotClipsController.resetHits).to.be.spy;
+
+            HotClipsController.clipIt('moonmoon');
+
+            expect(HotClipsController.resetHits).to.have.been.called();
+        });
+        it('should call createClip', function() {
+            chai.spy.on(HotClipsController, 'createClip');
+            expect(HotClipsController.createClip).to.be.spy;
+
+            HotClipsController.clipIt('moonmoon');
+
+            expect(HotClipsController.createClip).to.have.been.called();
+        });
+        it('should call addClip', async function() {
+            chai.spy.on(HotClipsController, 'addClip');
+            expect(HotClipsController.addClip).to.be.spy;
+
+            await HotClipsController.clipIt('moonmoon');
+
+            expect(HotClipsController.addClip).to.have.been.called();
         });
     });
     describe('addClip', function() {

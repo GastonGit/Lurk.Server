@@ -44,8 +44,12 @@ class HotClipsController{
         const list = this.getStreamList();
     }
 
-    clipIt(){
+    async clipIt(streamer){
+        helper.ensureArgument(streamer, 'string');
 
+        this.resetHits(streamer);
+        const clip = await this.createClip(streamer);
+        this.addClip(clip);
     }
 
     getStreamList(){

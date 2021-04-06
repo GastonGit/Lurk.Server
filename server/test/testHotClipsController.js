@@ -11,11 +11,13 @@ const proxyquire = require('proxyquire');
 const clipListStub = require('../stubs/clipListStub');
 const monitorTwitchChatStub = require('../stubs/monitorTwitchChatStub');
 const twitchClientStub = require('../stubs/twitchClientStub');
+const clipperStub = require('../stubs/clipperStub');
 
 const HotClipsControllerClass = proxyquire('../lib/HotClipsController',{
     './ClipList':clipListStub,
     './MonitorTwitchChat':monitorTwitchChatStub,
-    './TwitchClient':twitchClientStub
+    './TwitchClient':twitchClientStub,
+    './Clipper': clipperStub
 });
 
 let HotClipsController;
@@ -140,6 +142,14 @@ describe('HotClipsController methods', function() {
         it('should return a string', async function() {
             const result = await HotClipsController.createClip('test');
             expect(result).to.be.a('string');
+        });
+        it('should call Clipper.createClip', async function() {
+            chai.spy.on(HotClipsController.clipper, 'createClip');
+            expect(HotClipsController.clipper.createClip).to.be.spy;
+
+            HotClipsController.createClip('twitchClip');
+
+            expect(HotClipsController.clipper.createClip).to.have.been.called();
         });
     });
     describe('resetHits', function() {

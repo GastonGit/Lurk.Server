@@ -3,12 +3,14 @@ const helper = require('./helper');
 let ClipList = require("./ClipList");
 let MonitorTwitchChat = require('./MonitorTwitchChat');
 let TwitchClient = require('./TwitchClient');
+let Clipper = require('./Clipper');
 
 class HotClipsController{
 
     clipList;
     monitorTwitchChat;
     timer;
+    clipper;
 
     constructor() {
         this.monitorTwitchChat = new MonitorTwitchChat(
@@ -18,6 +20,7 @@ class HotClipsController{
             validMessages: undefined
         });
         this.clipList = new ClipList();
+        this.clipper = new Clipper();
     }
 
     async setupConnection(){
@@ -65,7 +68,7 @@ class HotClipsController{
     async createClip(streamer){
         helper.ensureArgument(streamer, 'string');
 
-        return 'twitchclip';
+        return this.clipper.createClip(streamer);
     }
 
     resetHits(streamer){

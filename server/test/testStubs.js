@@ -14,6 +14,8 @@ let MonitorTwitchChatStubClass = require('../stubs/monitorTwitchChatStub');
 let MonitorTwitchChatStub = new MonitorTwitchChatStubClass();
 let ClipListStubClass = require('../stubs/clipListStub');
 let ClipListStub = new ClipListStubClass();
+let ClipperStubClass = require('../stubs/clipperStub');
+let ClipperStub = new ClipperStubClass();
 
 describe('testStubs', function (){
     describe('fetchStub methods', function() {
@@ -188,6 +190,18 @@ describe('testStubs', function (){
         describe('removeClip', function() {
             it('should not throw', function() {
                 expect(ClipListStub.removeClip).to.not.throw();
+            });
+        });
+    });
+    describe('clipperStub', function() {
+        describe('createClip', function() {
+            it('should return a string', function() {
+                expect(ClipperStub.createClip()).to.be.a('string');
+            });
+        });
+        describe('getClip', function() {
+            it('should return a string', function() {
+                expect(ClipperStub.getClip()).to.be.a('string');
             });
         });
     });

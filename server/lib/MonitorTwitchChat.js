@@ -10,7 +10,7 @@ class MonitorTwitchChat{
     compactStreamList;
 
     constructor(client, options) {
-        this.requestCount = options.requestCount || 2;
+        this.requestCount = options.requestCount || 1;
         this.streamList = [];
         this.validMessages = options.validMessages || ['OMEGALUL']
         this.compactStreamList = [];

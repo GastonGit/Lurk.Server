@@ -38,10 +38,10 @@ describe('MonitorTwitchChat methods', function() {
             });
             expect(MonitorTwitchChat.requestCount).to.equal(count);
         });
-        it('should set requestCount to 2 when not specified', function() {
+        it('should set requestCount to 1 when not specified', function() {
             MonitorTwitchChat = new MonitorTwitchChatClass(
                 twitchClient, {});
-            expect(MonitorTwitchChat.requestCount).to.equal(2);
+            expect(MonitorTwitchChat.requestCount).to.equal(1);
         });
         it('should set validMessages to specified when specified', function() {
             const validMessages = [

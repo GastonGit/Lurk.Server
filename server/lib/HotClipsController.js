@@ -13,17 +13,17 @@ class HotClipsController{
     reduceTimer;
     clipper;
 
-    spikeValue = 21;
-    spikeTime = 800;
-    reduceValue = 20;
-    reduceTime = 1800;
+    spikeValue = 4;
+    spikeTime = 400;
+    reduceValue = 60;
+    reduceTime = 3000;
 
     constructor() {
         this.monitorTwitchChat = new MonitorTwitchChat(
             new TwitchClient(),
             {
             requestCount: undefined,
-            validMessages: undefined
+            validMessages: ['OMEGALUL', 'LULW', 'LUL', 'KEKW']
         });
         this.clipList = new ClipList();
         this.clipper = new Clipper();
@@ -51,7 +51,7 @@ class HotClipsController{
         const list = [...this.getStreamList()];
 
         for (let i = 0; i < list.length; i++){
-            if (list[i].hits >= spike){
+            if (list[i].hits >= (spike + (parseInt(list[i].viewer_count)) / 5000)){
                 this.clipIt(list[i].user_name).catch((error) => {
                     console.error('Error: ' + error);
                 });

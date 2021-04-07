@@ -23,7 +23,7 @@ class Clipper{
         helper.ensureArgument(streamer, 'string');
 
         if (process.env.NODE_ENV === 'test_values'){
-            console.log(streamer);
+            console.log('CLIP CREATED FOR: ' + streamer);
             return 'https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride';
         }
 

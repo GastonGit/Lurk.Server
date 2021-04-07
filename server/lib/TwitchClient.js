@@ -4,6 +4,7 @@ const tmi = require('tmi.js');
 class TwitchClient{
 
     client;
+    joinTimeout;
 
     constructor() {
         this.client = new tmi.client({
@@ -16,6 +17,7 @@ class TwitchClient{
                 password: process.env.BOT_AUTH
             }
         })
+        this.joinTimeout = 200;
     }
 
     async connectToTwitch(){
@@ -37,14 +39,16 @@ class TwitchClient{
         helper.ensureArgument(channels, 'array');
 
         const client = this.client
-        channels.forEach(function(channel){
-            client.join(channel)
-                .then((data) => {
-                    console.log(data);
-                }).catch((err) => {
-                    console.error('Error(' + channel + '): ' + err);
-            });
-        })
+        for (let i = 0; i < channels.length; i++){
+            setTimeout(() => {
+                client.join(channels[i])
+                    .then((data) => {
+                        console.log(data);
+                    }).catch((err) => {
+                    console.error('JoinError(' + channels[i] + '): ' + err);
+                });
+            }, this.joinTimeout * (i+1));
+        }
     }
 }
 

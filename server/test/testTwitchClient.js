@@ -78,10 +78,17 @@ describe('TwitchClient methods', function() {
             expect(function(){TwitchClient.joinChannels('string')}).to.throw();
             expect(function(){TwitchClient.joinChannels(NaN)}).to.throw();
         });
-        it('should join all channels given in an array', function() {
+        it('should join all channels given in an array', function(done) {
+            TwitchClient.joinTimeout = 0;
             let channels = ['kappa','poggers','pogchamp','greyface']
             TwitchClient.joinChannels(channels);
-            expect(TwitchClient.client.joinedChannels()).to.include.members(channels)
+
+            let checkExpect = function(){
+                expect(TwitchClient.client.joinedChannels()).to.include.members(channels)
+                done();
+            }
+
+            setTimeout(checkExpect, 50);
         });
         it('should not throw when rejected', async function() {
             let client = function(options){

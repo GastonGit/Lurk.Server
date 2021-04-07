@@ -11,6 +11,7 @@ class HotClipsController{
     monitorTwitchChat;
     timer;
     clipper;
+    spikeValue = 50;
 
     constructor() {
         this.monitorTwitchChat = new MonitorTwitchChat(
@@ -30,7 +31,7 @@ class HotClipsController{
     }
 
     start(){
-        this.startTimer(function (){this.checkForSpikes(5);}, 800);
+        this.startTimer(function (){this.checkForSpikes(this.spikeValue);}, 800);
     }
 
     startTimer(func, time){

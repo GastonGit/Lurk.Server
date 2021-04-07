@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node bin/www",
-    "start:watch": "node_modules/.bin/nodemon",
+    "start:watch": "nodemon",
     "start:test_values": "export NODE_ENV=test_values node bin/www",
     "test": "mocha",
     "test-with-coverage": "nyc mocha"

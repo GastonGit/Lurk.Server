@@ -9,9 +9,14 @@ class HotClipsController{
 
     clipList;
     monitorTwitchChat;
-    timer;
+    checkTimer;
+    reduceTimer;
     clipper;
-    spikeValue = 50;
+
+    spikeValue = 21;
+    spikeTime = 800;
+    reduceValue = 20;
+    reduceTime = 1800;
 
     constructor() {
         this.monitorTwitchChat = new MonitorTwitchChat(
@@ -31,15 +36,13 @@ class HotClipsController{
     }
 
     start(){
-        this.startTimer(function (){this.checkForSpikes(this.spikeValue);}, 800);
+        this.checkTimer = setInterval((function (){this.checkForSpikes(this.spikeValue);}).bind(this), this.spikeTime);
+        this.reduceTimer = setInterval((function (){this.monitorTwitchChat.decreaseHits(this.reduceValue)}).bind(this),this.reduceTime)
     }
 
-    startTimer(func, time){
-        this.timer = setInterval((func).bind(this),time);
-    }
-
-    endTimer(){
-        clearInterval(this.timer);
+    endAllTimers(){
+        clearInterval(this.checkTimer);
+        clearInterval(this.reduceTimer);
     }
 
     checkForSpikes(spike){

@@ -3,7 +3,7 @@ const spies = require('chai-spies');
 chai.use(spies);
 const assert = chai.assert;
 const expect = chai.expect;
-const should = chai.should;
+const should = chai.should();
 
 const proxyquire = require('proxyquire');
 const fetchStub = require('../stubs/fetchStub');

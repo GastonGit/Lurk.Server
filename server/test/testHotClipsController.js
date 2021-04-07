@@ -5,7 +5,7 @@ chai.use(spies);
 chai.use(chai_as_promised);
 const assert = chai.assert;
 const expect = chai.expect;
-const should = chai.should;
+const should = chai.should();
 
 const proxyquire = require('proxyquire');
 const clipListStub = require('../stubs/clipListStub');
@@ -42,21 +42,43 @@ describe('HotClipsController methods', function() {
     describe('start', function() {
         it('should not throw', function() {
             expect(function (){HotClipsController.start()}).to.not.throw();
-            HotClipsController.endTimer();
+            HotClipsController.endAllTimers();
         });
         it('should call checkForSpikes', function(done) {
             chai.spy.on(HotClipsController, 'checkForSpikes');
             expect(HotClipsController.checkForSpikes).to.be.spy;
 
+            // Set lower interval values for faster testing
+            HotClipsController.spikeTime = 20;
+            HotClipsController.reduceTime = 20;
+
             HotClipsController.start();
 
             let checkExpect = function(){
                 expect(HotClipsController.checkForSpikes).to.have.been.called();
-                HotClipsController.endTimer();
+                HotClipsController.endAllTimers();
                 done();
             }
 
-            setTimeout(checkExpect, 1000);
+            setTimeout(checkExpect, 200);
+        });
+        it('should call MonitorTwitchChat.decreaseHits', function(done) {
+            chai.spy.on(HotClipsController.monitorTwitchChat, 'decreaseHits');
+            expect(HotClipsController.monitorTwitchChat.decreaseHits).to.be.spy;
+
+            // Set lower interval values for faster testing
+            HotClipsController.spikeTime = 20;
+            HotClipsController.reduceTime = 20;
+
+            HotClipsController.start();
+
+            let checkExpect = function(){
+                expect(HotClipsController.monitorTwitchChat.decreaseHits).to.have.been.called();
+                HotClipsController.endAllTimers();
+                done();
+            }
+
+            setTimeout(checkExpect, 200);
         });
     });
     describe('checkForSpikes', function() {

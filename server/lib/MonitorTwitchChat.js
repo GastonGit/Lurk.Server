@@ -15,7 +15,7 @@ class MonitorTwitchChat{
         this.validMessages = options.validMessages || ['OMEGALUL']
         this.compactStreamList = [];
         this.client = client;
-        this.client.setMessageHandler(this.onMessageHandler);
+        this.client.setMessageHandler(this.onMessageHandler.bind(this));
     }
 
     async connectToTwitch(){

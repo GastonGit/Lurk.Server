@@ -56,6 +56,8 @@ class MonitorTwitchChat{
             return;
         }
 
+        channel = channel.substring(channel.indexOf('#') + 1)
+
         this.streamList[this.getStreamerIndex(channel)].hits += 1;
     }
 

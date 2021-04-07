@@ -28,8 +28,13 @@ describe('Clipper methods', function() {
         it('should throw without an argument', function() {
             expect(Clipper.createClip).to.throw();
         });
-        it('should return an object', function() {
-            expect(Clipper.createClip("MoonMoon")).to.be.an('object');
+        it('should return a string', function() {
+            expect(Clipper.createClip("MoonMoon")).to.be.an('string');
+        });
+        it('should return a string when NODE_ENV is set to test_values', function() {
+            process.env.NODE_ENV='test_values';
+            expect(Clipper.createClip("MoonMoon")).to.be.an('string');
+            delete process.env.NODE_ENV;
         });
     });
     describe('getBroadcasterID', function() {

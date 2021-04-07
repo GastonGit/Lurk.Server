@@ -19,10 +19,16 @@ class Clipper{
         }
     }
 
-    createClip(broadcaster_id){
-        helper.ensureArgument(broadcaster_id)
+    createClip(streamer){
+        helper.ensureArgument(streamer, 'string');
 
-        return {};
+        if (process.env.NODE_ENV === 'test_values'){
+            console.log(streamer);
+            return 'https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride';
+        }
+
+        // Actually create a clip etc...
+        return 'https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride';
     }
 
     getClip(clip_id){

@@ -135,13 +135,13 @@ describe('MonitorTwitchChat methods', function() {
         it('should return with data from helix-stream', async function() {
             await MonitorTwitchChat.updateStreamList();
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"kyle", viewer_count:7851, hits:0
+                user_name:"kyle", viewer_count:7851, hits:0, cooldown:false
             })
         });
         it('should return with data from helix-stream-pagination', async function() {
             await MonitorTwitchChat.updateStreamList();
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"saiiren", viewer_count:2175, hits:0
+                user_name:"saiiren", viewer_count:2175, hits:0, cooldown:false
             })
         });
     });
@@ -151,32 +151,32 @@ describe('MonitorTwitchChat methods', function() {
         })
         it('should increase the specified channels hits by 1 when called once', async function() {
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"kyle", viewer_count:7851, hits:0
+                user_name:"kyle", viewer_count:7851, hits:0, cooldown:false
             })
             MonitorTwitchChat.onMessageHandler('KYLE', {}, validMessages[1], false);
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"kyle", viewer_count:7851, hits:1
+                user_name:"kyle", viewer_count:7851, hits:1, cooldown:false
             })
         });
         it('should not increase the specified channels hits by 1 when message is not valid', async function() {
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"kyle", viewer_count:7851, hits:0
+                user_name:"kyle", viewer_count:7851, hits:0, cooldown:false
             })
             MonitorTwitchChat.onMessageHandler('KYLE', {}, 'Kappa', false);
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"kyle", viewer_count:7851, hits:0
+                user_name:"kyle", viewer_count:7851, hits:0, cooldown:false
             })
         });
         it('should increase the specified channels hits by 1 every time it is called', async function() {
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"saiiren", viewer_count:2175, hits:0
+                user_name:"saiiren", viewer_count:2175, hits:0, cooldown:false
             })
             const hitCount = 200;
             for (let i = 0; i < hitCount; i++){
                 MonitorTwitchChat.onMessageHandler('Saiiren', {}, validMessages[2], false);
             }
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"saiiren", viewer_count:2175, hits:hitCount
+                user_name:"saiiren", viewer_count:2175, hits:hitCount, cooldown:false
             })
         });
     });
@@ -191,7 +191,7 @@ describe('MonitorTwitchChat methods', function() {
 
             MonitorTwitchChat.resetStreamer("Nymn");
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"nymn", viewer_count:3532, hits:0
+                user_name:"nymn", viewer_count:3532, hits:0, cooldown:false
             })
         });
         it('should not reset every channels hits to 0', async function() {
@@ -205,10 +205,10 @@ describe('MonitorTwitchChat methods', function() {
 
             MonitorTwitchChat.resetStreamer("Nymn");
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"nymn", viewer_count:3532, hits:0
+                user_name:"nymn", viewer_count:3532, hits:0, cooldown:false
             })
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"saiiren", viewer_count:2175, hits:hitCount
+                user_name:"saiiren", viewer_count:2175, hits:hitCount, cooldown:false
             })
         });
     });
@@ -227,13 +227,13 @@ describe('MonitorTwitchChat methods', function() {
 
             MonitorTwitchChat.resetAllStreamers();
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"nymn", viewer_count:3532, hits:0
+                user_name:"nymn", viewer_count:3532, hits:0, cooldown:false
             })
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"saiiren", viewer_count:2175, hits:0
+                user_name:"saiiren", viewer_count:2175, hits:0, cooldown:false
             })
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"kyle", viewer_count:7851, hits:0
+                user_name:"kyle", viewer_count:7851, hits:0, cooldown:false
             })
         });
     });

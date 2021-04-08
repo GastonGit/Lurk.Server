@@ -34,12 +34,16 @@ class MonitorTwitchChat{
 
     }
 
+    cooldownStreamer(streamer, timeInSeconds){
+
+    }
+
     getStreamList(){
         return [
-            {user_name:"nymn", viewer_count:0, hits:5},
-            {user_name:"forsen", viewer_count:45, hits:50},
-            {user_name:"moonmoon", viewer_count:123, hits:100},
-            {user_name:"sodapoppin", viewer_count:50, hits:60},
+            {user_name:"nymn", viewer_count:0, hits:5, cooldown: false},
+            {user_name:"forsen", viewer_count:45, hits:50, cooldown: false},
+            {user_name:"moonmoon", viewer_count:123, hits:100, cooldown: false},
+            {user_name:"sodapoppin", viewer_count:50, hits:60, cooldown: false},
         ];
     }
 

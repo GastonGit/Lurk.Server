@@ -65,6 +65,20 @@ class MonitorTwitchChat{
         return this.streamList;
     }
 
+    cooldownStreamer(streamer, timeInSeconds){
+        helper.ensureArgument(streamer, 'string');
+        helper.ensureArgument(timeInSeconds, 'number');
+
+        this.streamList[this.getStreamerIndex(streamer)].cooldown = true;
+
+        setTimeout(function(){this.removeCooldownForStreamer(streamer)}.bind(this),timeInSeconds * 1000);
+    }
+
+    removeCooldownForStreamer(streamer){
+        helper.ensureArgument(streamer, 'string');
+        this.streamList[this.getStreamerIndex(streamer)].cooldown = false;
+    }
+
     resetStreamer(channel){
         this.streamList[this.getStreamerIndex(channel)].hits = 0;
     }

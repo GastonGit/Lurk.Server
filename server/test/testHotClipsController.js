@@ -87,6 +87,33 @@ describe('HotClipsController methods', function() {
             expect(function (){HotClipsController.checkForSpikes('test')}).to.throw();
             expect(function (){HotClipsController.checkForSpikes(123)}).to.not.throw();
         });
+        it('should not clip for streamers with a cooldown', function() {
+            let monitorTwitchChatStubInner = class {
+                constructor(){
+
+                }
+                getStreamList(){
+                    return [
+                        {user_name:"nymn", viewer_count:0, hits:5, cooldown: true},
+                        {user_name:"forsen", viewer_count:45, hits:50,  cooldown: true},
+                    ];
+                }
+            }
+            const HotClipsControllerClassInner = proxyquire('../lib/HotClipsController',{
+                './ClipList':clipListStub,
+                './MonitorTwitchChat':monitorTwitchChatStubInner,
+                './TwitchClient':twitchClientStub,
+                './Clipper': clipperStub
+            });
+            let HotClipsControllerInner = new HotClipsControllerClassInner();
+
+            chai.spy.on(HotClipsControllerInner, 'clipIt');
+            expect(HotClipsControllerInner.clipIt).to.be.spy;
+
+            HotClipsControllerInner.checkForSpikes(45);
+
+            expect(HotClipsControllerInner.clipIt).to.have.been.called.exactly(0);
+        });
         it('should call getStreamList', function() {
             chai.spy.on(HotClipsController, 'getStreamList');
             expect(HotClipsController.getStreamList).to.be.spy;
@@ -142,6 +169,13 @@ describe('HotClipsController methods', function() {
             HotClipsController.getStreamList();
 
             expect(HotClipsController.monitorTwitchChat.getStreamList).to.have.been.called();
+        });
+    });
+    describe('cooldownStreamer', function() {
+        it('should take a string argument', function() {
+            expect(function (){HotClipsController.cooldownStreamer()}).to.throw();
+            expect(function (){HotClipsController.cooldownStreamer(123)}).to.throw();
+            expect(function (){HotClipsController.cooldownStreamer('test')}).to.not.throw();
         });
     });
     describe('clipIt', function() {

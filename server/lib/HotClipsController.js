@@ -18,6 +18,8 @@ class HotClipsController{
     reduceValue = 60;
     reduceTime = 3000;
 
+    cooldownLengthInSeconds = 30;
+
     constructor() {
         this.monitorTwitchChat = new MonitorTwitchChat(
             new TwitchClient(),
@@ -51,10 +53,12 @@ class HotClipsController{
         const list = [...this.getStreamList()];
 
         for (let i = 0; i < list.length; i++){
-            if (list[i].hits >= (spike + (parseInt(list[i].viewer_count)) / 5000)){
-                this.clipIt(list[i].user_name).catch((error) => {
-                    console.error('Error: ' + error);
-                });
+            if (!list[i].cooldown){
+                if (list[i].hits >= (spike + (parseInt(list[i].viewer_count)) / 5000)){
+                    this.clipIt(list[i].user_name).catch((error) => {
+                        console.error('Error: ' + error);
+                    });
+                }
             }
         }
     }
@@ -62,9 +66,16 @@ class HotClipsController{
     async clipIt(streamer){
         helper.ensureArgument(streamer, 'string');
 
+        this.cooldownStreamer(streamer);
         this.resetHits(streamer);
         const clip = await this.createClip(streamer);
         this.addClip(clip);
+    }
+
+    cooldownStreamer(streamer){
+        helper.ensureArgument(streamer, 'string');
+
+        this.monitorTwitchChat.cooldownStreamer(streamer, this.cooldownLengthInSeconds);
     }
 
     getStreamList(){

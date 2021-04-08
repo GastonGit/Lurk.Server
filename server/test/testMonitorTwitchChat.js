@@ -251,6 +251,45 @@ describe('MonitorTwitchChat methods', function() {
             expect(MonitorTwitchChat.getCompactStreamList()).to.be.an('array');
         });
     });
+    describe('cooldownStreamer', function() {
+        it('should take a string and an int', async function() {
+            await MonitorTwitchChat.updateStreamList();
+
+            expect(function (){MonitorTwitchChat.cooldownStreamer()}).to.throw();
+            expect(function (){MonitorTwitchChat.cooldownStreamer('kyle')}).to.throw();
+            expect(function (){MonitorTwitchChat.cooldownStreamer(0)}).to.throw();
+            expect(function (){MonitorTwitchChat.cooldownStreamer('kyle', 'test')}).to.throw();
+            expect(function (){MonitorTwitchChat.cooldownStreamer(0, 0)}).to.throw();
+            expect(function (){MonitorTwitchChat.cooldownStreamer('kyle',0)}).to.not.throw();
+        });
+        it('should set the cooldown for the streamer to true', async function() {
+            await MonitorTwitchChat.updateStreamList();
+
+            const streamer = 'kyle'
+            MonitorTwitchChat.cooldownStreamer(streamer,0);
+
+            expect(MonitorTwitchChat.getStreamList()[MonitorTwitchChat.getStreamerIndex(streamer)].cooldown)
+                .to.equal(true);
+        });
+    });
+    describe('removeCooldownForStreamer', function() {
+        it('should take a string argument', async function() {
+            await MonitorTwitchChat.updateStreamList();
+
+            expect(function (){MonitorTwitchChat.removeCooldownForStreamer()}).to.throw();
+            expect(function (){MonitorTwitchChat.removeCooldownForStreamer(0)}).to.throw();
+            expect(function (){MonitorTwitchChat.removeCooldownForStreamer('kyle')}).to.not.throw();
+        });
+        it('should set the cooldown for the streamer to false', async function() {
+            await MonitorTwitchChat.updateStreamList();
+
+            const streamer = 'kyle'
+            MonitorTwitchChat.removeCooldownForStreamer(streamer);
+
+            expect(MonitorTwitchChat.getStreamList()[MonitorTwitchChat.getStreamerIndex(streamer)].cooldown)
+                .to.equal(false);
+        });
+    });
     describe('setCompactStreamList', function() {
         it('should set compactStreamList to contain channel user names', async function() {
             await MonitorTwitchChat.updateStreamList();

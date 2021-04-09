@@ -33,7 +33,7 @@ class Clipper{
         const accessToken = await this.getAccessToken();
 
         const response = await fetch(url, {
-            method: 'get',
+            method: 'post',
             headers: {
                 'Client-ID': this.credentials.id,
                 'Authorization': 'Bearer ' + accessToken

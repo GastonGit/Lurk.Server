@@ -53,7 +53,7 @@ const fetchStub = function (url, options){
     }
 
     if (url.includes("https://api.twitch.tv/helix/clips?broadcaster_id=")){
-        if (options.method === "get"){
+        if (options.method === "post"){
             const result = {
                 "data": [
                     {

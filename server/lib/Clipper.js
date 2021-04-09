@@ -64,7 +64,7 @@ class Clipper{
         const status = await response.status;
 
         if (status !== 200) {
-            throw new Error("Status code is: " + status);
+            throw new Error("Status code is: " + status + ' ::: getAccessToken');
         }
 
         const json = await response.json();
@@ -97,7 +97,7 @@ class Clipper{
         const status = await response.status;
 
         if (status !== 200) {
-            throw new Error("Status code is: " + status);
+            throw new Error("Status code is: " + status + ' ::: getUser');
         }
 
         return await response.json();

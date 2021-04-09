@@ -19,7 +19,7 @@ class Clipper{
         }
     }
 
-    createClip(streamer){
+    async createClip(streamer){
         helper.ensureArgument(streamer, 'string');
 
         if (process.env.NODE_ENV === 'test_values'){
@@ -27,8 +27,23 @@ class Clipper{
             return 'https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride';
         }
 
-        // Actually create a clip etc...
-        return 'https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride';
+        const broadcasterID = await this.getBroadcasterID(streamer);
+
+        const url = 'https://api.twitch.tv/helix/clips?broadcaster_id=' + broadcasterID.toLowerCase();
+        const accessToken = await this.getAccessToken();
+
+        const response = await fetch(url, {
+            method: 'get',
+            headers: {
+                'Client-ID': this.credentials.id,
+                'Authorization': 'Bearer ' + accessToken
+            },
+        })
+
+        const result = await response.json();
+        const slug = result.data[0].id;
+
+        return 'https://clips.twitch.tv/' + slug;
     }
 
     getClip(clip_id){
@@ -68,7 +83,7 @@ class Clipper{
     async getUser(name){
         helper.ensureArgument(name, 'string');
 
-        const url = 'https://api.twitch.tv/helix/users?' + 'login=' + name
+        const url = 'https://api.twitch.tv/helix/users?' + 'login=' + name.toLowerCase()
         const accessToken = await this.getAccessToken()
 
         const response = await fetch(url, {

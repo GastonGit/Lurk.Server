@@ -9,7 +9,7 @@ const fetchStub = function (url, options){
                 status: 200
             })
         } else{
-            throw new Error("Unexpected method");
+            throw new Error("(fetchStub): Unexpected method");
         }
     }
     if (url === "https://api.twitch.tv/helix/streams?first=100&after=eyJiIjp7IkN1cnNvciI6ImV5SnpJam8wT1RJM05p" +
@@ -23,7 +23,7 @@ const fetchStub = function (url, options){
             })
         }
         else{
-            throw new Error("Unexpected method");
+            throw new Error("(fetchStub): Unexpected method");
         }
     }
     if (url === "https://api.twitch.tv/helix/users?login=moonmoon"){
@@ -35,7 +35,7 @@ const fetchStub = function (url, options){
             })
         }
         else{
-            throw new Error("Unexpected method");
+            throw new Error("(fetchStub): Unexpected method");
         }
     }
 
@@ -48,13 +48,32 @@ const fetchStub = function (url, options){
             })
         }
         else{
-            throw new Error("Unexpected method");
+            throw new Error("(fetchStub): Unexpected method");
+        }
+    }
+
+    if (url.includes("https://api.twitch.tv/helix/clips?broadcaster_id=")){
+        if (options.method === "get"){
+            const result = {
+                "data": [
+                    {
+                        "id": "EphemeralClumsyCatKAPOW-SzCaOix1-olnn42x",
+                        "edit_url": "https://clips.twitch.tv/EphemeralClumsyCatKAPOW-SzCaOix1-olnn42x/edit"
+                    }
+                ]
+            }
+            return Promise.resolve({
+                json: () => Promise.resolve(result),
+                status: 200
+            })
+        }
+        else{
+            throw new Error("(fetchStub): Unexpected method");
         }
     }
 
 
-
-    throw new Error("Unexpected url");
+    throw new Error("(fetchStub): Unexpected url: " + url);
 };
 
 module.exports = fetchStub;

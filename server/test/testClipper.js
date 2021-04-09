@@ -25,15 +25,20 @@ describe('Clipper methods', function() {
         });
     });
     describe('Create clip', function() {
-        it('should throw without an argument', function() {
-            expect(Clipper.createClip).to.throw();
+        it('should take a string argument', async function() {
+            await expect(Clipper.createClip()).to.be.rejectedWith('Argument is undefined');
+            await expect(Clipper.createClip(123)).to.be.rejectedWith('Argument is not a string');
+            await expect(Clipper.createClip('moonmoon')).to.be.fulfilled;
         });
-        it('should return a string', function() {
-            expect(Clipper.createClip("MoonMoon")).to.be.an('string');
+        it('should return a a twitch clip url as a string', async function() {
+            const result = await Clipper.createClip("MoonMoon");
+            expect(result).to.be.an('string');
+            expect(result).to.equal('https://clips.twitch.tv/EphemeralClumsyCatKAPOW-SzCaOix1-olnn42x');
         });
-        it('should return a string when NODE_ENV is set to test_values', function() {
+        it('should return a string when NODE_ENV is set to test_values', async function() {
             process.env.NODE_ENV='test_values';
-            expect(Clipper.createClip("MoonMoon")).to.be.an('string');
+            const result = await Clipper.createClip("MoonMoon");
+            expect(result).to.be.an('string');
             delete process.env.NODE_ENV;
         });
     });

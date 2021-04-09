@@ -61,13 +61,13 @@ describe('testStubs', function (){
                     )}).to.throw();
                 });
             });
-            describe('with user login url', function() {
-                it('should throw if not used with the method option get', function() {
+            describe('with access token url', function() {
+                it('should throw if not used with the method option post', function() {
                     expect(function(){fetchStub('https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=123&client_id=0&client_secret=321')}).to.throw();
                     expect(function(){fetchStub(
                         'https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=123&client_id=0&client_secret=321',
                         {
-                            method: "post"
+                            method: "get"
                         }
                     )}).to.throw();
                 });

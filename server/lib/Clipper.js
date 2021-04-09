@@ -58,7 +58,7 @@ class Clipper{
             this.credentials.secret;
 
         const response = await fetch(url, {
-            method: 'get'
+            method: 'post',
         })
 
         const status = await response.status;

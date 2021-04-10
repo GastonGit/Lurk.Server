@@ -25,7 +25,7 @@ class TwitchClient{
             .then((data) => {
                 return data;
             }).catch((err) => {
-                return 'Error: ' + err;
+                return 'Error connecting to Twitch: ' + err;
             });
     }
 
@@ -45,7 +45,7 @@ class TwitchClient{
                     .then((data) => {
                         console.log(data);
                     }).catch((err) => {
-                    console.error('JoinError(' + channels[i] + '): ' + err);
+                    console.error('Error joining channel(' + channels[i] + '): ' + err);
                 });
             }, this.joinTimeout * (i+1));
         }

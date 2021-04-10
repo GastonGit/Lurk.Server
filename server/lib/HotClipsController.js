@@ -56,7 +56,7 @@ class HotClipsController{
             if (!list[i].cooldown){
                 if (list[i].hits >= (spike + (parseInt(list[i].viewer_count)) / 5000)){
                     this.clipIt(list[i].user_name).catch((error) => {
-                        console.error('Error: ' + error);
+                        console.error('Error during "clipIt": ' + error);
                     });
                 }
             }

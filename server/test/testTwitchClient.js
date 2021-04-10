@@ -48,7 +48,7 @@ describe('TwitchClient methods', function() {
             let TwitchClientInner = new TwitchClientClassInner();
 
             const result = await TwitchClientInner.connectToTwitch();
-            expect(result).to.be.equal('Error: ERROR123');
+            expect(result).to.be.equal('Error connecting to Twitch: ERROR123');
         });
     });
     describe('setMessageHandler', function() {

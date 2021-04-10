@@ -80,7 +80,7 @@ describe('Clipper methods', function() {
             let ClipperClassInner = proxyquire('../lib/Clipper',{'node-fetch':fetchStubInner});
             let ClipperInner = new ClipperClassInner();
 
-            await expect(ClipperInner.getUser("moonmoon")).to.be.rejectedWith('Status code is: 401');
+            await expect(ClipperInner.getUser("moonmoon")).to.be.rejectedWith('getUser - status code is: 401');
         });
         it('should not throw if status code is 200', async function() {
             await expect(Clipper.getUser("moonmoon")).to.eventually.have.property("data")
@@ -100,7 +100,7 @@ describe('Clipper methods', function() {
             let ClipperClassInner = proxyquire('../lib/Clipper',{'node-fetch':fetchStubInner});
             let ClipperInner = new ClipperClassInner();
 
-            await expect(ClipperInner.getAccessToken()).to.be.rejectedWith('Status code is: 401');
+            await expect(ClipperInner.getAccessToken()).to.be.rejectedWith('getAccessToken - status code is: 401');
         });
         it('should not throw if status code is 200', async function() {
             await expect(Clipper.getAccessToken()).to.eventually.be.a('string')

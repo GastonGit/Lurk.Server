@@ -9,6 +9,9 @@ Automatically clips exciting and funny moments from Twitch in real-time and then
 - Options for deciding both emotes to watch and sensitivity
 - Cycle the latest clipped clips on a minimalistic website
 
+# Development
+## [Milestones](https://github.com/GastonGit/Hot-Twitch-Clips/milestones)
+
 # FAQ
 ## APIs
 - [Twitch](https://dev.twitch.tv/docs/api/reference)

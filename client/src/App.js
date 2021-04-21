@@ -38,7 +38,7 @@ export default class App extends React.Component {
               title="clip1"
               className="clip-iframe"
               src={clip}
-              frameBorder="0" allowFullScreen="{true}" scrolling="no" height="400" width="620"
+              frameBorder="0" allowFullScreen="{true}" scrolling="no" height="720" width="1280"
           />
         </div>
     );

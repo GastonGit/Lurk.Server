@@ -1,0 +1,16 @@
+.Footer{
+    flex-shrink: 0;
+    text-align: center;
+    background-color: #19171a;
+    color: #70738a;
+    min-height: 50px;
+}
+
+.Footer a{
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    text-decoration: none;
+}

@@ -23,20 +23,23 @@ Automatically clips exciting and funny moments from Twitch in real-time and then
     - Will also be used to create clips
     
 ### Guide to server environment variables
+##### BOT_NAME
+The name of the Twitch account to be used when creating clips.
+
+##### BOT_AUTH
+Generate an OAuth password for tmi.js by going to https://twitchapps.com/tmi/. 
+Remember to remove "oauth:" from the string.
+
+##### CLIENT_ID & CLIENT_SECRET
 1. Authorize Twitch dev by logging in with Twitch at https://dev.twitch.tv
-2. Register an application at https://dev.twitch.tv/console and set OAuth Redirect URLS to http://localhost/
-    1. CLIENT_ID="Client ID"
-    2. CLIENT_SECRET="Client Secret" 
-3. Give the application the right to use the Twitch account to create clips by:
-    1. Going to https://id.twitch.tv/oauth2/authorize?client_id={{CLIENT_ID}}&redirect_uri=http://localhost/&response_type=code&scope=clips:edit
-    2. And getting the code fragment in the url you are redirected to.
-4. Use Client ID, Client Secret and Code to get the refresh code by:
-    1. Making a POST request to https://id.twitch.tv/oauth2/token?client_id={{CLIENT_ID}}&client_secret={{CLIENT_SECRET}}&code={{CODE}}&grant_type=authorization_code&redirect_uri=http://localhost/
-    2. CLIENT_REFRESH="refresh_token"
-5. Generate an OAuth password for tmi.js by going to https://twitchapps.com/tmi/
-    1. BOT_AUTH=(OAuth password without "oauth:")
-6. Get app access token by:
-    1. Making a POST request to https://id.twitch.tv/oauth2/token?client_id={{CLIENT_ID}}&client_secret={{CLIENT_SECRET}}&grant_type=client_credentials
-    2. CLIENT_APP_ACCESS_TOKEN=(access_token)
-### Additional environment variables
-- BOT_NAME="Your Twitch account name"
+2. Register an application at https://dev.twitch.tv/console and set OAuth Redirect URLS to http://localhost/.
+
+##### CLIENT_CODE
+Go to: https://id.twitch.tv/oauth2/authorize?client_id={{CLIENT_ID}}&redirect_uri=http://localhost/&response_type=code&scope=clips:edit. 
+
+The string is in the url.
+##### CLIENT_REFRESH
+Make a POST request to https://id.twitch.tv/oauth2/token?client_id={{CLIENT_ID}}&client_secret={{CLIENT_SECRET}}&code={{CODE}}&grant_type=authorization_code&redirect_uri=http://localhost/
+
+##### CLIENT_APP_ACCESS_TOKEN
+Make a POST request to https://id.twitch.tv/oauth2/token?client_id={{CLIENT_ID}}&client_secret={{CLIENT_SECRET}}&grant_type=client_credentials

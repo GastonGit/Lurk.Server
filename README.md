@@ -22,7 +22,7 @@ Automatically clips exciting and funny moments from Twitch in real-time and then
     - Required for creating an application
     - Will also be used to create clips
     
-### Guide to environment variables
+### Guide to server environment variables
 1. Authorize Twitch dev by logging in with Twitch at https://dev.twitch.tv
 2. Register an application at https://dev.twitch.tv/console and set OAuth Redirect URLS to http://localhost/
     1. CLIENT_ID="Client ID"
@@ -35,5 +35,8 @@ Automatically clips exciting and funny moments from Twitch in real-time and then
     2. CLIENT_REFRESH="refresh_token"
 5. Generate an OAuth password for tmi.js by going to https://twitchapps.com/tmi/
     1. BOT_AUTH=(OAuth password without "oauth:")
+6. Get app access token by:
+    1. Making a POST request to https://id.twitch.tv/oauth2/token?client_id={{CLIENT_ID}}&client_secret={{CLIENT_SECRET}}&grant_type=client_credentials
+    2. CLIENT_APP_ACCESS_TOKEN=(access_token)
 ### Additional environment variables
 - BOT_NAME="Your Twitch account name"

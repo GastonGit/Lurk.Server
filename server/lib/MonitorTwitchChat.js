@@ -132,8 +132,8 @@ class MonitorTwitchChat{
         const response = await fetch(url, {
             method: 'get',
             headers: {
-                'Client-ID': process.env.MTC_CLIENT_ID,
-                'Authorization': ' Bearer ' + process.env.MTC_AUTH
+                'Client-ID': process.env.CLIENT_ID,
+                'Authorization': ' Bearer ' + process.env.CLIENT_APP_ACCESS_TOKEN
             },
         })
 

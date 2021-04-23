@@ -4,13 +4,9 @@ const fetch = require('node-fetch');
 
 class Clipper{
 
-    authorization;
-    client_id;
     credentials;
 
     constructor() {
-        this.authorization = process.env.CLIPPER_AUTH;
-        this.client_id = process.env.CLIPPER_CLIENT_ID;
         this.credentials = {
             id: process.env.CLIENT_ID,
             secret: process.env.CLIENT_SECRET,

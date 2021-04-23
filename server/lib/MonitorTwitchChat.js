@@ -108,7 +108,7 @@ class MonitorTwitchChat{
 
             fetchedStreams.data.forEach(function(streamer){
                 streams.push({
-                    user_name: streamer.user_name.toLowerCase(),
+                    user_name: streamer.user_login.toLowerCase(),
                     viewer_count: parseInt(streamer.viewer_count),
                     hits: 0,
                     cooldown: false

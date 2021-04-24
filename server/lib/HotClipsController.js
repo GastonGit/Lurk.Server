@@ -69,7 +69,7 @@ class HotClipsController{
         this.cooldownStreamer(streamer);
         this.resetHits(streamer);
         const clip = await this.createClip(streamer);
-        this.addClip(clip);
+        this.addClip(clip.id);
     }
 
     cooldownStreamer(streamer){

@@ -230,9 +230,9 @@ describe('HotClipsController methods', function() {
             await expect(HotClipsController.createClip(123)).to.be.rejectedWith('Argument is not a string');
             await expect(HotClipsController.createClip('test')).to.be.fulfilled;
         });
-        it('should return a string', async function() {
+        it('should return an object', async function() {
             const result = await HotClipsController.createClip('test');
-            expect(result).to.be.a('string');
+            expect(result).to.be.an('object');
         });
         it('should call Clipper.createClip', async function() {
             chai.spy.on(HotClipsController.clipper, 'createClip');

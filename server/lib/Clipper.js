@@ -20,7 +20,7 @@ class Clipper{
 
         if (process.env.NODE_ENV === 'test_values'){
             console.log('CLIP CREATED FOR: ' + streamer);
-            return 'https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride';
+            return {id: 'HealthyDelightfulEchidnaKappaPride'};
         }
 
         const broadcasterID = await this.getBroadcasterID(streamer);
@@ -36,10 +36,15 @@ class Clipper{
             },
         })
 
-        const result = await response.json();
-        const slug = result.data[0].id;
+        const status = await response.status;
 
-        return 'https://clips.twitch.tv/' + slug;
+        if (status !== 200) {
+            throw new Error("createClip - status code is: " + status);
+        }
+
+        const json = await response.json();
+
+        return json.data[0];
     }
 
     async getClip(slug){

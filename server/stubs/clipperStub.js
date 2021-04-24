@@ -7,11 +7,11 @@ class Clipper{
 
     createClip(){
 
-        return 'twitch.clip'
+        return {id: 'SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl'};
     }
 
     getClip(){
-        return 'twitch.clip';
+        return {};
     }
 }
 

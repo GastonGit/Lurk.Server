@@ -36,16 +36,52 @@ describe('Clipper methods', function() {
             await expect(Clipper.createClip(123)).to.be.rejectedWith('Argument is not a string');
             await expect(Clipper.createClip('moonmoon')).to.be.fulfilled;
         });
-        it('should return a a twitch clip url as a string', async function() {
+        it('should return an object property id', async function() {
             const result = await Clipper.createClip("MoonMoon");
-            expect(result).to.be.an('string');
-            expect(result).to.equal('https://clips.twitch.tv/EphemeralClumsyCatKAPOW-SzCaOix1-olnn42x');
+            expect(result).to.be.an('object');
+            expect(result).to.have.property('id');
+            expect(result.id).to.equal('EphemeralClumsyCatKAPOW-SzCaOix1-olnn42x');
         });
-        it('should return a string when NODE_ENV is set to test_values', async function() {
+        it('should return an object when NODE_ENV is set to test_values', async function() {
             process.env.NODE_ENV='test_values';
             const result = await Clipper.createClip("MoonMoon");
-            expect(result).to.be.an('string');
+            expect(result).to.be.an('object');
             delete process.env.NODE_ENV;
+        });
+        it('should throw if status code is not 200', async function() {
+            const fetchStubInner = function(url){
+                console.log(url);
+                if (url.includes("broadcaster_id=")){
+                    const result = {
+                        "data": [
+                            {
+                                "id": "SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl",
+                                "thumbnail_url": "https://clips-media-assets2.twitch.tv/AT-cm%7C1140679825-preview-480x272.jpg",
+                            }
+                        ]
+                    }
+                    return Promise.resolve({
+                        json: () => Promise.resolve(result),
+                        status: 503
+                    })
+                } else if(url.includes("oauth2/token?grant_type=")){
+                    const result = {"access_token": "j9b1e59"}
+                    return Promise.resolve({
+                        json: () => Promise.resolve(result),
+                        status: 200
+                    })
+                } else if(url.includes("/helix/users?")){
+                    const result = {"data":[{"id": "121059319"}]}
+                    return Promise.resolve({
+                        json: () => Promise.resolve(result),
+                        status: 200
+                    })
+                }
+            };
+            let ClipperClassInner = proxyquire('../lib/Clipper',{'node-fetch':fetchStubInner});
+            let ClipperInner = new ClipperClassInner();
+
+            await expect(ClipperInner.createClip("MoonMoon")).to.be.rejectedWith('createClip - status code is: 503');
         });
     });
     describe('getVideoUrl', function() {

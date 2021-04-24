@@ -218,12 +218,12 @@ describe('testStubs', function (){
     describe('clipperStub', function() {
         describe('createClip', function() {
             it('should return a string', function() {
-                expect(ClipperStub.createClip()).to.be.a('string');
+                expect(ClipperStub.createClip()).to.be.an('object');
             });
         });
         describe('getClip', function() {
             it('should return a string', function() {
-                expect(ClipperStub.getClip()).to.be.a('string');
+                expect(ClipperStub.getClip()).to.be.an('object');
             });
         });
     });

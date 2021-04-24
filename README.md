@@ -9,10 +9,14 @@ Automatically clips exciting and funny moments from Twitch in real-time and then
 - Options for deciding both emotes to watch and sensitivity
 - Cycle the latest clipped clips on a minimalistic website
 
+# FAQ
+### Why do I have to manually unmute?
+Because Chrome does not allow websites to autoplay unmuted videos, for more details see https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
+### Why does X streamer never show up?
+They might have been manually  filtered for various reasons
+
 # Development
 ## [Milestones](https://github.com/GastonGit/Hot-Twitch-Clips/milestones)
-
-# FAQ
 ## APIs
 - [Twitch](https://dev.twitch.tv/docs/api/reference)
 - [TMI.JS](https://github.com/tmijs/docs/tree/gh-pages/_posts/v1.4.2)

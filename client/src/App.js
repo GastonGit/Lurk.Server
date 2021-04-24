@@ -16,10 +16,10 @@ export default class App extends React.Component {
         .then(data => {
           let clips = []
           data.forEach(function(clip){
-            clips.push('https://clips.twitch.tv/embed?clip=' + clip.substring(clip.indexOf('.tv')+4))
+            clips.push(clip);
           })
           this.setState({clips: clips});
-          this.setState({currentClip: this.state.clips[0] + '&autoplay=true&parent=localhost'});
+          this.setState({currentClip: this.state.clips[0]});
         })
         .catch(err => err);
   }
@@ -29,7 +29,7 @@ export default class App extends React.Component {
           this.setState((state) => {
               return {currentIt: state.currentIt + 1}
           });
-          this.setState({currentClip: this.state.clips[this.state.currentIt] + '&autoplay=true&parent=localhost'})
+          this.setState({currentClip: this.state.clips[this.state.currentIt]})
       }
   }
 
@@ -38,7 +38,7 @@ export default class App extends React.Component {
         this.setState((state) => {
             return {currentIt: state.currentIt - 1}
         });
-        this.setState({currentClip: this.state.clips[this.state.currentIt] + '&autoplay=true&parent=localhost'})
+        this.setState({currentClip: this.state.clips[this.state.currentIt]})
     }
   }
 
@@ -56,12 +56,9 @@ export default class App extends React.Component {
             <button className="navButton" onClick={this.prevClip}>
                 Previous
             </button>
-          <iframe
-              title="clip1"
-              className="clip-iframe"
-              src={this.state.currentClip}
-              frameBorder="0" allowFullScreen="{true}" scrolling="no" height="720" width="1280"
-          />
+            <video className="videoClip" src={this.state.currentClip} autoPlay={false}>
+
+            </video>
             <button className="navButton" onClick={this.nextClip}>
                 Next
             </button>

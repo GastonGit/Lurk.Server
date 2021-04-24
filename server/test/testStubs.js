@@ -217,12 +217,12 @@ describe('testStubs', function (){
     });
     describe('clipperStub', function() {
         describe('createClip', function() {
-            it('should return a string', function() {
+            it('should return an object', function() {
                 expect(ClipperStub.createClip()).to.be.an('object');
             });
         });
         describe('getClip', function() {
-            it('should return a string', function() {
+            it('should return an object', function() {
                 expect(ClipperStub.getClip()).to.be.an('object');
             });
         });

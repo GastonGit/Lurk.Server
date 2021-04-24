@@ -50,7 +50,6 @@ describe('Clipper methods', function() {
         });
         it('should throw if status code is not 200', async function() {
             const fetchStubInner = function(url){
-                console.log(url);
                 if (url.includes("broadcaster_id=")){
                     const result = {
                         "data": [

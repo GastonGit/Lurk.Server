@@ -26,6 +26,7 @@ let MonitorTwitchChatClass = require('../lib/MonitorTwitchChat');
 describe('HotClipsController methods', function() {
     beforeEach(function (){
         HotClipsController = new HotClipsControllerClass();
+        HotClipsController.addClipDelay = 1;
     })
     describe('MonitorTwitchChat', function() {
         it('should be a MonitorTwitchChat class', function() {
@@ -143,7 +144,7 @@ describe('HotClipsController methods', function() {
                 constructor(){
 
                 }
-                async createClip(){
+                createClip(){
 
                 }
             }
@@ -200,13 +201,13 @@ describe('HotClipsController methods', function() {
 
             expect(HotClipsController.createClip).to.have.been.called();
         });
-        it('should call addClip', async function() {
-            chai.spy.on(HotClipsController, 'addClip');
-            expect(HotClipsController.addClip).to.be.spy;
+        it('should call delayAddingClip', async function() {
+            chai.spy.on(HotClipsController, 'delayAddingClip');
+            expect(HotClipsController.delayAddingClip).to.be.spy;
 
             await HotClipsController.clipIt('moonmoon');
 
-            expect(HotClipsController.addClip).to.have.been.called();
+            expect(HotClipsController.delayAddingClip).to.have.been.called()
         });
     });
     describe('addClip', function() {

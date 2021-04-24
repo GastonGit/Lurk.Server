@@ -13,6 +13,10 @@ class Clipper{
     getClip(){
         return {};
     }
+
+    getVideoUrl(){
+        return 'url';
+    }
 }
 
 module.exports = Clipper;

@@ -27,7 +27,7 @@ describe('HotClipsController methods', function() {
     beforeEach(function (){
         HotClipsController = new HotClipsControllerClass();
         HotClipsController.addClipDelay = 1;
-        HotClipsController.removeClipTime = 1;
+        HotClipsController.removeClipTimeInMinutes = 0.01;
     })
     describe('MonitorTwitchChat', function() {
         it('should be a MonitorTwitchChat class', function() {

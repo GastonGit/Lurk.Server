@@ -23,27 +23,9 @@ describe('ClipList methods', function() {
             expect(function (){ClipList.addClip(123)}).to.throw();
             expect(function (){ClipList.addClip(false)}).to.throw();
         });
-        it('should return true when adding a string containing a twitch clip url', function() {
-            expect(ClipList.addClip("https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride")).to.be.true;
-        });
-        it('should return false when adding a string that is not a twitch clip url', function() {
-            expect(ClipList.addClip("https://www.test.com/testing")).to.be.false;
-            expect(ClipList.addClip("eb5+ 9uy349qyb5v97f15")).to.be.false;
-            expect(ClipList.addClip("https://byv04um3608406304/.com/.")).to.be.false;
-            expect(ClipList.addClip("https://www.test.com")).to.be.false;
-            expect(ClipList.addClip("www.test.com/testing")).to.be.false;
-            expect(ClipList.addClip("https://www.clips.test.com/testing")).to.be.false;
-            expect(ClipList.addClip("https://www.clips.twitch.tv/")).to.be.false;
-            expect(ClipList.addClip("https://clips.twitch.tv/")).to.be.false;
-        });
-        it('should not add clip to list when addClip returns false', function() {
-            const string1 = "https://www.test.com/testing";
-            expect(ClipList.addClip(string1)).to.be.false;
-            expect(ClipList.getList()).to.not.include(string1);
-        });
-        it('should add clip to list when addClip returns true', function() {
+        it('should add clip to list', function() {
             const string1 = "https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride";
-            expect(ClipList.addClip(string1)).to.be.true;
+            ClipList.addClip(string1)
             expect(ClipList.getList()).to.include(string1);
         });
     })
@@ -52,7 +34,7 @@ describe('ClipList methods', function() {
             expect(ClipList.getList()).to.be.empty;
 
             const string1 = "https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride";
-            expect(ClipList.addClip(string1)).to.be.true;
+            ClipList.addClip(string1)
 
             expect(ClipList.getList()).to.not.be.empty;
 
@@ -61,10 +43,10 @@ describe('ClipList methods', function() {
         });
         it('should remove the oldest added clip', function() {
             const string1 = "https://clips.twitch.tv/HealthyDelightfulEchidnaKappaPride";
-            expect(ClipList.addClip(string1)).to.be.true;
+            ClipList.addClip(string1)
 
-            expect(ClipList.addClip("https://clips.twitch.tv/Kappa")).to.be.true;
-            expect(ClipList.addClip("https://clips.twitch.tv/PogChamp")).to.be.true;
+            ClipList.addClip("https://clips.twitch.tv/Kappa")
+            ClipList.addClip("https://clips.twitch.tv/PogChamp")
 
             ClipList.removeClip();
             expect(ClipList.getList()).to.not.include(string1);

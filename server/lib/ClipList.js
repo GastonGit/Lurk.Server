@@ -15,31 +15,12 @@ class ClipList {
     addClip(clip){
         helper.ensureArgument(clip, 'string');
 
-        if (isTwitchClipUrl(clip)){
-            this.currentList.push(clip);
-            return true;
-        }
-
-        return false;
+        this.currentList.push(clip);
     }
 
     removeClip(){
         this.currentList.shift();
     }
-}
-
-function isTwitchClipUrl(string){
-
-    if (string.includes("https://clips.twitch.tv/") && string.indexOf("https://") === 0){
-
-        let url = new URL(string);
-
-        if (url.pathname.length > 1){
-            return true;
-        }
-    }
-
-    return false;
 }
 
 module.exports = ClipList;

@@ -61,6 +61,18 @@ class Clipper{
         return result.data[0];
     }
 
+    async getVideoUrl(slug){
+        helper.ensureArgument(slug, 'string');
+
+        const clip = await this.getClip(slug);
+        const videoID = clip.thumbnail_url.substring(
+            clip.thumbnail_url.indexOf('.tv/') + 4,
+            clip.thumbnail_url.indexOf('-preview')
+        );
+
+        return 'https://production.assets.clips.twitchcdn.net/' + videoID + '.mp4';
+    }
+
     async getAccessToken(){
         const url = 'https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token='
             + this.credentials.refresh + '&client_id=' + this.credentials.id + '&client_secret=' +

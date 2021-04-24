@@ -5,6 +5,7 @@ chai.use(spies);
 chai.use(chai_as_promised);
 const assert = chai.assert;
 const expect = chai.expect;
+const should = chai.should();
 
 const proxyquire = require('proxyquire');
 const fetchStub = require('../stubs/fetchStub');
@@ -45,6 +46,26 @@ describe('Clipper methods', function() {
             const result = await Clipper.createClip("MoonMoon");
             expect(result).to.be.an('string');
             delete process.env.NODE_ENV;
+        });
+    });
+    describe('getVideoUrl', function() {
+        it('should take a string argument', async function() {
+            await expect(Clipper.getVideoUrl()).to.be.rejectedWith('Argument is undefined');
+            await expect(Clipper.getVideoUrl(123)).to.be.rejectedWith('Argument is not a string');
+            await expect(Clipper.getVideoUrl('moonmoon')).to.be.fulfilled;
+        });
+        it('should call getClip', function() {
+            chai.spy.on(Clipper, 'getClip');
+            expect(Clipper.getClip).to.be.spy;
+
+            Clipper.getVideoUrl('SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl');
+
+            expect(Clipper.getClip).to.have.been.called();
+        });
+        it('should return a twitch clip mp4 url as a string', async function() {
+            const result = await Clipper.getVideoUrl("SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl");
+            expect(result).to.be.an('string');
+            expect(result).to.equal('https://production.assets.clips.twitchcdn.net/AT-cm%7C1140679825.mp4');
         });
     });
     describe('getBroadcasterID', function() {

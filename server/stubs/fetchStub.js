@@ -78,6 +78,7 @@ const fetchStub = function (url, options){
                 "data": [
                     {
                         "id": "SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl",
+                        "thumbnail_url": "https://clips-media-assets2.twitch.tv/AT-cm%7C1140679825-preview-480x272.jpg",
                     }
                 ]
             }

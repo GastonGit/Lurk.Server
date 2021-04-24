@@ -19,7 +19,7 @@ class HotClipsController{
     reduceTime = 3000;
 
     cooldownLengthInSeconds = 30;
-    addClipDelay = 1;
+    addClipDelay = 15000;
 
     constructor() {
         this.monitorTwitchChat = new MonitorTwitchChat(
@@ -70,9 +70,7 @@ class HotClipsController{
         this.cooldownStreamer(streamer);
         this.resetHits(streamer);
         const clip = await this.createClip(streamer);
-        const videoURL = await this.getVideoUrl(clip.id);
-
-        this.delayAddingClip(videoURL);
+        this.delayAddingClip(clip.id);
     }
 
     async getVideoUrl(slug){
@@ -81,9 +79,10 @@ class HotClipsController{
         return this.clipper.getVideoUrl(slug);
     }
 
-    delayAddingClip(url){
-        setTimeout(function(){
-            this.addClip(url);
+    delayAddingClip(id){
+        setTimeout(async function(){
+            const videoURL = await this.getVideoUrl(id);
+            this.addClip(videoURL);
         }.bind(this), this.addClipDelay);
     }
 

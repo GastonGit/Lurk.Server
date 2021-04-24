@@ -20,6 +20,8 @@ class HotClipsController{
 
     cooldownLengthInSeconds = 30;
     addClipDelay = 15000;
+    removeClipTimeInMinutes = 20;
+
 
     constructor() {
         this.monitorTwitchChat = new MonitorTwitchChat(
@@ -83,6 +85,10 @@ class HotClipsController{
         setTimeout(async function(){
             const videoURL = await this.getVideoUrl(id);
             this.addClip(videoURL);
+
+            setTimeout(function(){
+                this.clipList.removeClip();
+            }.bind(this), (this.removeClipTimeInMinutes * 60000))
         }.bind(this), this.addClipDelay);
     }
 

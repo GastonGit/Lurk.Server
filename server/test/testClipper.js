@@ -25,10 +25,8 @@ describe('Clipper methods', function() {
         it('should return an object with containing an array with id', async function() {
             const result = await Clipper.getClip("SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl");
             expect(result).to.be.an('object');
-            expect(result.data).to.be.an('array');
-            expect(result.data[0]).to.be.an('object');
-            expect(result.data[0]).to.have.property('id');
-            expect(result.data[0].id).to.equal('SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl');
+            expect(result).to.have.property('id');
+            expect(result.id).to.equal('SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl');
         });
     });
     describe('Create clip', function() {

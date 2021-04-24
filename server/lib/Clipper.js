@@ -43,7 +43,7 @@ class Clipper{
     }
 
     async getClip(slug){
-        helper.ensureArgument(slug, 'string')
+        helper.ensureArgument(slug, 'string');
 
         const url = 'https://api.twitch.tv/helix/clips?id=' + slug;
         const accessToken = await this.getAccessToken();
@@ -56,7 +56,9 @@ class Clipper{
             },
         })
 
-        return await response.json();
+        const result = await response.json();
+
+        return result.data[0];
     }
 
     async getAccessToken(){

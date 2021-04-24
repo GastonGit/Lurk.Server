@@ -1,8 +1,7 @@
 .Footer{
     flex-shrink: 0;
     text-align: center;
-    background-color: #19171a;
-    color: #70738a;
+    background-color: #0c030b;
     min-height: 50px;
 }
 
@@ -13,4 +12,28 @@
     margin-inline-start: 0;
     margin-inline-end: 0;
     text-decoration: none;
+}
+
+a:link {
+    color: #3f355c;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #3f355c;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #797db1;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+a:active {
+    color: #4c4e88;
+    background-color: transparent;
+    text-decoration: underline;
 }

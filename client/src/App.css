@@ -8,16 +8,6 @@
     flex-direction: row;
 }
 
-.navButton{
-    background-color: #1f1f1f;
-    border-color: #373737;
-    font-size: 30px;
-    color: #888888;
-
-    height: 720px;
-    width: 16%;
-}
-
 .videoClip{
     height: 720px;
     width: 1280px;

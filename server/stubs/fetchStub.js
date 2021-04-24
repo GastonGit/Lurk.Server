@@ -72,6 +72,25 @@ const fetchStub = function (url, options){
         }
     }
 
+    if (url.includes("https://api.twitch.tv/helix/clips?id=")){
+        if (options.method === "get"){
+            const result = {
+                "data": [
+                    {
+                        "id": "SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl",
+                    }
+                ]
+            }
+            return Promise.resolve({
+                json: () => Promise.resolve(result),
+                status: 200
+            })
+        }
+        else{
+            throw new Error("(fetchStub): Unexpected method");
+        }
+    }
+
 
     throw new Error("(fetchStub): Unexpected url: " + url);
 };

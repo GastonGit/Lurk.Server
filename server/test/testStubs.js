@@ -83,6 +83,17 @@ describe('testStubs', function (){
                     )}).to.throw();
                 });
             });
+            describe('with get clip url', function() {
+                it('should throw if not used with the method option get', function() {
+                    expect(function(){fetchStub('https://api.twitch.tv/helix/clips?id=')}).to.throw();
+                    expect(function(){fetchStub(
+                        'https://api.twitch.tv/helix/clips?id=',
+                        {
+                            method: "post"
+                        }
+                    )}).to.throw();
+                });
+            });
         });
     });
     describe('twitchClientStub', function() {

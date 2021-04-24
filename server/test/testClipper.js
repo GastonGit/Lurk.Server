@@ -17,11 +17,18 @@ describe('Clipper methods', function() {
         Clipper = new ClipperClass();
     })
     describe('Get clip', function() {
-        it('should throw without an argument', function() {
-            expect(Clipper.getClip).to.throw();
+        it('should take a string argument', async function() {
+            await expect(Clipper.getClip()).to.be.rejectedWith('Argument is undefined');
+            await expect(Clipper.getClip(123)).to.be.rejectedWith('Argument is not a string');
+            await expect(Clipper.getClip('moonmoon')).to.be.fulfilled;
         });
-        it('should return an object', function() {
-            expect(Clipper.getClip("KappaPogChamp")).to.be.an('object');
+        it('should return an object with containing an array with id', async function() {
+            const result = await Clipper.getClip("SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl");
+            expect(result).to.be.an('object');
+            expect(result.data).to.be.an('array');
+            expect(result.data[0]).to.be.an('object');
+            expect(result.data[0]).to.have.property('id');
+            expect(result.data[0].id).to.equal('SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl');
         });
     });
     describe('Create clip', function() {

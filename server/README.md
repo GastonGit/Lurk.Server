@@ -11,8 +11,9 @@
 The name of the Twitch account to be used when creating clips.
 
 ##### BOT_AUTH
-Generate an OAuth password for tmi.js by going to https://twitchapps.com/tmi/. 
-Remember to remove "oauth:" from the string.
+Generate an OAuth password for tmi.js by going to https://twitchapps.com/tmi/ while logged into the account set in BOT_NAME.
+
+Remember to remove "oauth:" from the string. 
 
 ##### CLIENT_ID & CLIENT_SECRET
 1. Authorize Twitch dev by logging in with Twitch at https://dev.twitch.tv

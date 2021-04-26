@@ -1,14 +1,43 @@
 .App{
+    height: 720px;
+    width: 1280px;
+
     flex: 1 0 auto;
     padding: 10px;
 
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .videoClip{
     height: 720px;
     width: 1280px;
+    display: none;
+}
+
+.unmuteButton{
+    height: 720px;
+    width: 1280px;
+    opacity: 0.95;
+
+    background-color: #797db1;
+    border: 0;
+    position: absolute;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    transition-duration: 0.4s;
+}
+
+.unmuteButton:hover {
+    background-color: #291f43;
+}
+
+.unmute-icon{
+    height: 100%;
 }

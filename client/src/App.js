@@ -1,5 +1,6 @@
 import React from "react";
 import './App.css';
+import unmuteIcon from './assets/unmute_icon.svg'
 
 export default class App extends React.Component {
 
@@ -58,6 +59,7 @@ export default class App extends React.Component {
 
     nextClip(){
       if (this.state.clips.length > 0){
+          document.querySelector('.videoClip').style.display = 'block'
           let updatedArray = [...this.state.clips];
           let currentClip = updatedArray.shift();
           this.setState({
@@ -65,6 +67,7 @@ export default class App extends React.Component {
               clips: updatedArray
           })
       } else {
+          document.querySelector('.videoClip').style.display = 'none'
           this.setState({noClips: true})
       }
     }
@@ -77,6 +80,13 @@ export default class App extends React.Component {
 
     let updateInterval = setInterval(this.updateList.bind(this), 5000)
     this.setState({updateInterval: updateInterval});
+
+
+    document.querySelector(".unmuteButton").addEventListener("click", function(){
+        const video = document.querySelector(".videoClip");
+        video.muted = false;
+        this.remove();
+    });
   }
 
   componentWillUnmount(){
@@ -90,9 +100,12 @@ export default class App extends React.Component {
 
     return (
         <div className="App">
-            <video className="videoClip" src={this.state.currentClip} autoPlay={true} muted>
+            <video className="videoClip" src={this.state.currentClip} autoPlay={true} controls muted>
 
             </video>
+            <button className="unmuteButton">
+                <img className="unmute-icon" src={unmuteIcon}  alt="unmute" draggable="false"/>
+            </button>
         </div>
     );
   }

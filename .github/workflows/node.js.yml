@@ -29,6 +29,8 @@ jobs:
     - run: npm test
   server:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV=test
     
     defaults:
       run:

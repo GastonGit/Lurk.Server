@@ -6,7 +6,7 @@ class TwitchClient{
     client;
     joinTimeout;
 
-    constructor() {
+    constructor(joinTimeout) {
         this.client = new tmi.client({
             connection:{
                 reconnect: true,
@@ -17,7 +17,7 @@ class TwitchClient{
                 password: process.env.BOT_AUTH
             }
         })
-        this.joinTimeout = 200;
+        this.joinTimeout = joinTimeout || 200;
     }
 
     async connectToTwitch(){

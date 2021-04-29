@@ -126,3 +126,6 @@ sqlite3
 
 # Client production
 client/build
+
+# Settings
+config.json

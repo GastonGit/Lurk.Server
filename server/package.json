@@ -7,8 +7,8 @@
     "start": "node bin/www",
     "start:watch": "nodemon",
     "start:test_values": "set NODE_ENV=test_values&& nodemon",
-    "test": "mocha",
-    "test-with-coverage": "nyc mocha"
+    "test": "set NODE_ENV=test&&mocha",
+    "test-with-coverage": "set NODE_ENV=test&&nyc mocha"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

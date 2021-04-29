@@ -1,0 +1,21 @@
+{
+  "requestCount": 2,
+  "validMessages": [
+    "LUL",
+    "LULW",
+    "OMEGALUL",
+    "LuL"
+  ],
+
+  "joinTimeout": 0,
+
+  "spikeValue": 4,
+  "spikeTime": 20,
+
+  "reduceValue": 60,
+  "reduceTime": 20,
+
+  "cooldownLengthInSeconds": 30,
+  "addClipDelay": 1,
+  "removeClipTimeInMinutes": 0.01
+}

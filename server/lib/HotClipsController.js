@@ -1,4 +1,14 @@
 const helper = require('./helper');
+let config;
+
+/* istanbul ignore else */
+if (process.env.NODE_ENV === 'test'){
+    console.log('Using settings from configTest.json')
+    config = require('./settings/configTest.json');
+} else {
+    console.log('Using settings from config.json')
+    config = require('./settings/config.json');
+}
 
 let ClipList = require("./ClipList");
 let MonitorTwitchChat = require('./MonitorTwitchChat');
@@ -13,22 +23,22 @@ class HotClipsController{
     reduceTimer;
     clipper;
 
-    spikeValue = 4;
-    spikeTime = 400;
-    reduceValue = 60;
-    reduceTime = 3000;
+    spikeValue = config.spikeValue;
+    spikeTime = config.spikeTime;
+    reduceValue = config.reduceValue;
+    reduceTime = config.reduceTime;
 
-    cooldownLengthInSeconds = 30;
-    addClipDelay = 15000;
-    removeClipTimeInMinutes = 20;
+    cooldownLengthInSeconds = config.cooldownLengthInSeconds;
+    addClipDelay = config.addClipDelay;
+    removeClipTimeInMinutes = config.removeClipTimeInMinutes;
 
 
     constructor() {
         this.monitorTwitchChat = new MonitorTwitchChat(
-            new TwitchClient(),
+            new TwitchClient(config.joinTimeout),
             {
-            requestCount: undefined,
-            validMessages: ['OMEGALUL', 'LULW', 'LUL', 'KEKW']
+                requestCount: config.requestCount,
+                validMessages: config.validMessages
         });
         this.clipList = new ClipList();
         this.clipper = new Clipper();

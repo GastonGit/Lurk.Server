@@ -1,0 +1,20 @@
+{
+  "requestCount": 0,
+  "validMessages": [
+    "OMEGALUL", "LULW", "LUL", "KEKW",
+    "PogO", "D:", "PogChamp", "PagMan",
+    "WutFace", "MegaLUL"
+  ],
+
+  "joinTimeout": 200,
+
+  "spikeValue": 4,
+  "spikeTime": 400,
+
+  "reduceValue": 60,
+  "reduceTime": 3000,
+
+  "cooldownLengthInSeconds": 30,
+  "addClipDelay": 15000,
+  "removeClipTimeInMinutes": 20
+}

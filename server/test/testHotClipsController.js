@@ -26,14 +26,14 @@ let MonitorTwitchChatClass = require('../lib/MonitorTwitchChat');
 describe('HotClipsController methods', function() {
     beforeEach(function (){
         HotClipsController = new HotClipsControllerClass();
-        HotClipsController.addClipDelay = 1;
-        HotClipsController.removeClipTimeInMinutes = 0.01;
     })
     describe('MonitorTwitchChat', function() {
         it('should be a MonitorTwitchChat class', function() {
+            process.env.NODE_ENV='test';
             const HotClipsControllerRealRequire = require('../lib/HotClipsController');
             let HotClipsControllerInner = new HotClipsControllerRealRequire();
             expect(HotClipsControllerInner.monitorTwitchChat).to.be.an.instanceOf(MonitorTwitchChatClass);
+            delete process.env.NODE_ENV;
         });
     });
     describe('setupConnection', function() {
@@ -50,10 +50,6 @@ describe('HotClipsController methods', function() {
             chai.spy.on(HotClipsController, 'checkForSpikes');
             expect(HotClipsController.checkForSpikes).to.be.spy;
 
-            // Set lower interval values for faster testing
-            HotClipsController.spikeTime = 20;
-            HotClipsController.reduceTime = 20;
-
             HotClipsController.start();
 
             let checkExpect = function(){
@@ -67,10 +63,6 @@ describe('HotClipsController methods', function() {
         it('should call MonitorTwitchChat.decreaseHits', function(done) {
             chai.spy.on(HotClipsController.monitorTwitchChat, 'decreaseHits');
             expect(HotClipsController.monitorTwitchChat.decreaseHits).to.be.spy;
-
-            // Set lower interval values for faster testing
-            HotClipsController.spikeTime = 20;
-            HotClipsController.reduceTime = 20;
 
             HotClipsController.start();
 
@@ -90,6 +82,7 @@ describe('HotClipsController methods', function() {
             expect(function (){HotClipsController.checkForSpikes(123)}).to.not.throw();
         });
         it('should not clip for streamers with a cooldown', function() {
+            process.env.NODE_ENV='test';
             let monitorTwitchChatStubInner = class {
                 constructor(){
 
@@ -115,6 +108,7 @@ describe('HotClipsController methods', function() {
             HotClipsControllerInner.checkForSpikes(45);
 
             expect(HotClipsControllerInner.clipIt).to.have.been.called.exactly(0);
+            delete process.env.NODE_ENV;
         });
         it('should call getStreamList', function() {
             chai.spy.on(HotClipsController, 'getStreamList');
@@ -141,6 +135,7 @@ describe('HotClipsController methods', function() {
             expect(HotClipsController.clipIt).to.have.been.called.exactly(3);
         });
         it('should catch errors from clipIt', function() {
+            process.env.NODE_ENV = 'test';
             let clipperStubInner = class {
                 constructor(){
 
@@ -158,6 +153,7 @@ describe('HotClipsController methods', function() {
             let HotClipsControllerInner = new HotClipsControllerClassInner();
 
             expect(function (){HotClipsControllerInner.checkForSpikes(35)}).to.not.throw();
+            delete process.env.NODE_ENV;
         });
     });
     describe('getStreamList', function() {

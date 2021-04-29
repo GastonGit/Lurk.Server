@@ -1,5 +1,6 @@
 ## Setting up server
 - Install npm modules
+- Rename configExample.json to config.json(lib/settings/) and mess around with the values
 - Setup environment variables
 
 ## Guide to server environment variables

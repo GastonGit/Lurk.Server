@@ -1,7 +1,7 @@
 
 const fetchStub = function (url, options){
     // https://dev.twitch.tv/docs/api/reference#get-streams
-    if (url === "https://api.twitch.tv/helix/streams?first=100"){
+    if (url === "https://api.twitch.tv/helix/streams?first=100&language=en"){
         if (options.method === "get"){
             const result = require("../stubs/data/helix-streams")
             return Promise.resolve({
@@ -12,7 +12,7 @@ const fetchStub = function (url, options){
             throw new Error("(fetchStub): Unexpected method");
         }
     }
-    if (url === "https://api.twitch.tv/helix/streams?first=100&after=eyJiIjp7IkN1cnNvciI6ImV5SnpJam8wT1RJM05p" +
+    if (url === "https://api.twitch.tv/helix/streams?first=100&language=en&after=eyJiIjp7IkN1cnNvciI6ImV5SnpJam8wT1RJM05p" +
         "NDBPVGc0TlRreU5UYzFOVFFzSW1RaU9tWmhiSE5sTENKMElqcDBjblZsZlE9PSJ9LCJhIjp7IkN1cnNvciI6ImV5SnpJam96Tnpj" +
         "MUxqRXdNakE1TURrME9USTNPU3dpWkNJNlptRnNjMlVzSW5RaU9uUnlkV1Y5In19"){
         if (options.method === "get"){

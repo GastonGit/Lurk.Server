@@ -123,7 +123,7 @@ class MonitorTwitchChat{
 
     async request100Streams(pagination){
 
-        let url = "https://api.twitch.tv/helix/streams?first=100"
+        let url = "https://api.twitch.tv/helix/streams?first=100&language=en"
 
         if (pagination){
             url += '&after=' + pagination;

@@ -41,3 +41,15 @@
 .unmute-icon{
     height: 100%;
 }
+
+.backText{
+    position: absolute;
+    z-index: -1;
+    color: #797db1;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

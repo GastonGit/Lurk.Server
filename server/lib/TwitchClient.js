@@ -38,14 +38,16 @@ class TwitchClient{
     joinChannels(channels){
         helper.ensureArgument(channels, 'array');
 
+        console.log('\x1b[44m%s\x1b[0m','\n--- TwitchClient :: Joining channels')
+
         const client = this.client
         for (let i = 0; i < channels.length; i++){
             setTimeout(() => {
                 client.join(channels[i])
                     .then((data) => {
-                        console.log(data);
+                        console.log(data[0].substring(data[0].indexOf('#') + 1));
                     }).catch((err) => {
-                    console.error('Error joining channel(' + channels[i] + '): ' + err);
+                    console.error('\x1b[31m%s\x1b[0m',err + ' :: ERROR :: ' + channels[i]);
                 });
             }, this.joinTimeout * (i+1));
         }

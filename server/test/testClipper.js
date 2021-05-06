@@ -80,7 +80,7 @@ describe('Clipper methods', function() {
             let ClipperClassInner = proxyquire('../lib/Clipper',{'node-fetch':fetchStubInner});
             let ClipperInner = new ClipperClassInner();
 
-            await expect(ClipperInner.createClip("MoonMoon")).to.be.rejectedWith('createClip - status code is: 503');
+            await expect(ClipperInner.createClip("MoonMoon")).to.be.rejectedWith('(MoonMoon)createClip - status code: 503');
         });
     });
     describe('getVideoUrl', function() {

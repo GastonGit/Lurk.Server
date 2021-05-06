@@ -3,10 +3,10 @@ let config;
 
 /* istanbul ignore else */
 if (process.env.NODE_ENV === 'test'){
-    console.log('Using settings from configTest.json')
+    console.log('\x1b[44m%s\x1b[0m','\n--- HotClipsController :: Using settings from configTest.json\n')
     config = require('./settings/configTest.json');
 } else {
-    console.log('Using settings from config.json')
+    console.log('\x1b[44m%s\x1b[0m','\n--- HotClipsController :: Using settings from config.json\n')
     config = require('./settings/config.json');
 }
 
@@ -69,7 +69,7 @@ class HotClipsController{
             if (!list[i].cooldown){
                 if (list[i].hits >= (spike + (parseInt(list[i].viewer_count)) / 5000)){
                     this.clipIt(list[i].user_name).catch((error) => {
-                        console.error('Error during "clipIt": ' + error);
+                        console.error('\x1b[31m%s\x1b[0m','clipIt :: ' + error);
                     });
                 }
             }
@@ -82,6 +82,8 @@ class HotClipsController{
         this.cooldownStreamer(streamer);
         this.resetHits(streamer);
         const clip = await this.createClip(streamer);
+
+        console.log('\x1b[32m%s\x1b[0m','clipIt :: SUCCESS :: ' + streamer)
         this.delayAddingClip(clip.id);
     }
 

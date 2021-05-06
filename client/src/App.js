@@ -78,7 +78,7 @@ export default class App extends React.Component {
           this.nextClip();
       }.bind(this);
 
-    let updateInterval = setInterval(this.updateList.bind(this), 5000)
+    let updateInterval = setInterval(this.updateList.bind(this), 60000)
     this.setState({updateInterval: updateInterval});
 
 

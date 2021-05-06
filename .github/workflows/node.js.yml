@@ -30,7 +30,7 @@ jobs:
   server:
     runs-on: ubuntu-latest
     env:
-      NODE_ENV=test
+      NODE_ENV: test
     
     defaults:
       run:

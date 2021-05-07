@@ -136,8 +136,8 @@ describe('testStubs', function (){
             });
         });
         describe('joinChannels', function() {
-            it('should throw when called without a string argument', function() {
-                expect(function(){TwitchClientStub.joinChannels('stringag')}).to.not.throw();
+            it('should throw when called without an array argument', function() {
+                expect(function(){TwitchClientStub.joinChannels(['stringag'])}).to.not.throw();
                 expect(function(){TwitchClientStub.joinChannels()}).to.throw();
                 expect(function(){TwitchClientStub.joinChannels(123)}).to.throw();
             });

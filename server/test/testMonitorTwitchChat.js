@@ -1,6 +1,8 @@
 const chai = require('chai')
 const spies = require('chai-spies');
+const chai_as_promised = require('chai-as-promised')
 chai.use(spies);
+chai.use(chai_as_promised);
 const assert = chai.assert;
 const expect = chai.expect;
 const should = chai.should();
@@ -305,9 +307,7 @@ describe('MonitorTwitchChat methods', function() {
     describe('joinChannels', function() {
         it('should not throw', async function() {
             await MonitorTwitchChat.updateStreamList();
-            MonitorTwitchChat.setCompactStreamList();
-            const list = MonitorTwitchChat.getCompactStreamList();
-            expect(MonitorTwitchChat.joinChannels(list)).to.not.throw;
+            return (MonitorTwitchChat.joinChannels()).should.be.fulfilled;
         });
     });
     describe('connectToTwitch', function() {

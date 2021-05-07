@@ -1,6 +1,8 @@
 const chai = require('chai')
 const spies = require('chai-spies');
+const chai_as_promised = require('chai-as-promised')
 chai.use(spies);
+chai.use(chai_as_promised);
 const assert = chai.assert;
 const expect = chai.expect;
 const should = chai.should();

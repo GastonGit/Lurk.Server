@@ -46,8 +46,8 @@ class HotClipsController{
 
     async setupConnection(){
         await this.monitorTwitchChat.updateStreamList();
-        await this.monitorTwitchChat.connectToTwitch();
         await this.monitorTwitchChat.joinChannels();
+        await this.monitorTwitchChat.connectToTwitch();
     }
 
     start(){

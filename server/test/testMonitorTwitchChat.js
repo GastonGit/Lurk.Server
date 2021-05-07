@@ -307,9 +307,7 @@ describe('MonitorTwitchChat methods', function() {
     describe('joinChannels', function() {
         it('should not throw', async function() {
             await MonitorTwitchChat.updateStreamList();
-            MonitorTwitchChat.setCompactStreamList();
-            const list = MonitorTwitchChat.getCompactStreamList();
-            expect(MonitorTwitchChat.joinChannels(list)).to.not.throw;
+            return (MonitorTwitchChat.joinChannels()).should.be.fulfilled;
         });
     });
     describe('connectToTwitch', function() {

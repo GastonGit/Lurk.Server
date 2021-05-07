@@ -24,7 +24,9 @@ class MonitorTwitchChat{
 
     async joinChannels(){
         this.setCompactStreamList();
-        this.client.joinChannels(this.getCompactStreamList())
+        this.client.client.on('connected', function(){
+            this.client.joinChannels(this.getCompactStreamList())
+        }.bind(this))
     }
 
     decreaseHits(amount){

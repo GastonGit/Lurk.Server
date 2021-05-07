@@ -1,7 +1,13 @@
 const helper = require('../lib/helper');
-
 class TwitchClient{
-    constructor() {}
+
+    client = {}
+
+    constructor() {
+        this.client.on = function(event, callback) {
+            callback('test')
+        }
+    }
 
     connectToTwitch(){
 
@@ -30,7 +36,7 @@ class TwitchClient{
     }
 
     joinChannels(channels){
-        helper.ensureArgument(channels, 'string');
+        helper.ensureArgument(channels, 'array');
     }
 }
 

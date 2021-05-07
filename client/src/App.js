@@ -81,10 +81,11 @@ export default class App extends React.Component {
     let updateInterval = setInterval(this.updateList.bind(this), 60000)
     this.setState({updateInterval: updateInterval});
 
-
     document.querySelector(".unmuteButton").addEventListener("click", function(){
         const video = document.querySelector(".videoClip");
+        video.volume = 0.5;
         video.muted = false;
+
         this.remove();
     });
   }

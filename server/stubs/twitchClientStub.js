@@ -1,5 +1,4 @@
 const helper = require('../lib/helper');
-const EventEmitter = require('events')
 class TwitchClient{
 
     client = {}

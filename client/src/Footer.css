@@ -1,13 +1,16 @@
 .Footer{
     flex-shrink: 0;
     text-align: center;
-    background-color: #0c030b;
+    /*background-color: #0c030b;*/
     min-height: 50px;
     width: 100%;
 }
 
 .Footer a{
     display: block;
+    width: 6%;
+    float: right;
+
     margin-block-start: 1em;
     margin-block-end: 1em;
     margin-inline-start: 0;

@@ -6,7 +6,7 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {addedClips: [], clips: [], currentClip: "", noClips: false};
+    this.state = {addedClips: [], clips: [], currentClip: "https://production.assets.clips.twitchcdn.net/41827822749-offset-21738.mp4", noClips: false};
     this.nextClip = this.nextClip.bind(this);
   }
 
@@ -88,6 +88,11 @@ export default class App extends React.Component {
 
         this.remove();
     });
+
+      document.querySelector(".videoClip").onerror = function() {
+          console.log('Error loading current clip, playing the next clip');
+          this.nextClip();
+      }.bind(this);
   }
 
   componentWillUnmount(){

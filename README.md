@@ -4,6 +4,8 @@
 # Hot Clips
 Automatically clips exciting and funny moments from Twitch in real-time and then showcases them on a website.
 
+![GIF Preview](client/public/HotClips.gif)
+
 # Features
 - Clip live Twitch streamers who are undergoing a spike in emote usage
 - Options for deciding both emotes to watch and sensitivity

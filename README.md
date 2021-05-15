@@ -15,7 +15,7 @@ Automatically clips exciting and funny moments from Twitch in real-time and then
 ### Why do I have to manually unmute?
 Because Chrome does not allow websites to autoplay unmuted videos, for more details see https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
 ### Why does X streamer never show up?
-They might have been manually  filtered for various reasons
+The streamer might have clip creation restricted to subscribers
 
 # Development
 ## [Milestones](https://github.com/GastonGit/Hot-Twitch-Clips/milestones)

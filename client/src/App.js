@@ -11,7 +11,7 @@ export default class App extends React.Component {
   }
 
   async fetchClips() {
-    fetch("http://localhost:9000/")
+    fetch(process.env.REACT_APP_SERVER_URL)
         .then(res => res.json())
         .then(data => {
           let clips = []
@@ -30,7 +30,7 @@ export default class App extends React.Component {
   }
 
   updateList(){
-      fetch("http://localhost:9000/")
+      fetch(process.env.REACT_APP_SERVER_URL)
           .then(res => res.json())
           .then(data => {
               let newClips = [...data]

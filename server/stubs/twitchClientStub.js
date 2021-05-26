@@ -38,6 +38,10 @@ class TwitchClient{
     joinChannels(channels){
         helper.ensureArgument(channels, 'array');
     }
+
+    leaveChannels(channels){
+        helper.ensureArgument(channels, 'array');
+    }
 }
 
 module.exports = TwitchClient;

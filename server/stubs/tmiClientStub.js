@@ -27,6 +27,13 @@ client.prototype.join = function join(channel){
     return Promise.resolve([channel])
 }
 
+client.prototype.part = function part(channel){
+    const index = list.indexOf(channel);
+    list = list.splice(index, 1);
+
+    return Promise.resolve([channel])
+}
+
 client.prototype.joinedChannels = function joinedChannels(){
     return list;
 }

@@ -19,6 +19,10 @@ class MonitorTwitchChat{
 
     }
 
+    async updateChannels(){
+
+    }
+
     decreaseHits(amount){
         helper.ensureArgument(amount, 'number');
     }

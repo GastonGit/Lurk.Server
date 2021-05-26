@@ -22,6 +22,7 @@ class HotClipsController{
     checkTimer;
     reduceTimer;
     clipper;
+    updateTimer;
 
     spikeValue = config.spikeValue;
     spikeTime = config.spikeTime;
@@ -31,7 +32,7 @@ class HotClipsController{
     cooldownLengthInSeconds = config.cooldownLengthInSeconds * 1000;
     addClipDelay = config.addClipDelay;
     removeClipTimeInMinutes = config.removeClipTimeInMinutes * 60000;
-
+    updateTimeInMinutes = config.updateTimeInMinutes * 60000
 
     constructor() {
         this.monitorTwitchChat = new MonitorTwitchChat(
@@ -51,11 +52,24 @@ class HotClipsController{
     }
 
     start(){
+        this.startMonitorTimers();
+        this.updateTimer = setInterval((function (){this.updateChannels();}).bind(this), this.updateTimeInMinutes);
+    }
+
+    async updateChannels(){
+        this.endAllMonitorTimers();
+
+        await this.monitorTwitchChat.updateChannels();
+
+        this.startMonitorTimers();
+    }
+
+    startMonitorTimers(){
         this.checkTimer = setInterval((function (){this.checkForSpikes(this.spikeValue);}).bind(this), this.spikeTime);
         this.reduceTimer = setInterval((function (){this.monitorTwitchChat.decreaseHits(this.reduceValue)}).bind(this),this.reduceTime)
     }
 
-    endAllTimers(){
+    endAllMonitorTimers(){
         clearInterval(this.checkTimer);
         clearInterval(this.reduceTimer);
     }

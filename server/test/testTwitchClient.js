@@ -69,14 +69,10 @@ describe('TwitchClient methods', function() {
         });
     });
     describe('joinChannels', function() {
-        it('should throw without an argument', function() {
-            expect(function(){TwitchClient.joinChannels()}).to.throw();
-        });
-        it('should take an array as an argument', function() {
-            expect(function(){TwitchClient.joinChannels([123,123,123])}).to.not.throw();
-
-            expect(function(){TwitchClient.joinChannels('string')}).to.throw();
-            expect(function(){TwitchClient.joinChannels(NaN)}).to.throw();
+        it('should take an array argument', async function() {
+            await expect(TwitchClient.joinChannels()).to.be.rejectedWith('Argument is undefined');
+            await expect(TwitchClient.joinChannels(123)).to.be.rejectedWith('Argument is not an array');
+            await expect(TwitchClient.joinChannels([''])).to.be.fulfilled;
         });
         it('should join all channels given in an array', function(done) {
             TwitchClient.joinTimeout = 0;
@@ -108,6 +104,26 @@ describe('TwitchClient methods', function() {
 
             let channels = ['kappa','poggers','pogchamp','greyface']
             expect(async function (){await TwitchClientInner.joinChannels(channels)}).to.not.throw();
+        });
+    });
+    describe('leaveChannels', function() {
+        it('should take an array argument', async function() {
+            await expect(TwitchClient.leaveChannels()).to.be.rejectedWith('Argument is undefined');
+            await expect(TwitchClient.leaveChannels(123)).to.be.rejectedWith('Argument is not an array');
+            await expect(TwitchClient.leaveChannels([''])).to.be.fulfilled;
+        });
+        it('should leave all current channels', function(done) {
+            TwitchClient.joinTimeout = 0;
+            let channels = ['kappa','poggers','pogchamp','greyface']
+            TwitchClient.joinChannels(channels);
+            TwitchClient.leaveChannels(channels)
+
+            let checkExpect = function(){
+                expect(TwitchClient.client.joinedChannels()).to.not.include.members(channels)
+                done();
+            }
+
+            setTimeout(checkExpect, 10);
         });
     });
 });

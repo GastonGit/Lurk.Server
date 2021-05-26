@@ -22,8 +22,20 @@ class MonitorTwitchChat{
         await this.client.connectToTwitch();
     }
 
+    async updateChannels(){
+        await this.leaveChannels();
+
+        await this.updateStreamList()
+        this.updateCompactStreamList();
+        await this.client.joinChannels(this.getCompactStreamList())
+    }
+
+    async leaveChannels(){
+        await this.client.leaveChannels(this.getCompactStreamList())
+    }
+
     async joinChannels(){
-        this.setCompactStreamList();
+        this.updateCompactStreamList();
         this.client.client.on('connected', function(){
             this.client.joinChannels(this.getCompactStreamList())
         }.bind(this))
@@ -41,7 +53,8 @@ class MonitorTwitchChat{
         })
     }
 
-    setCompactStreamList(){
+    updateCompactStreamList(){
+        this.compactStreamList = [];
         let compactStreamList = this.compactStreamList;
         this.streamList.forEach(function(streamer){
             compactStreamList.push(streamer.user_name);

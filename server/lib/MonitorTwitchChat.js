@@ -73,7 +73,7 @@ class MonitorTwitchChat{
 
         this.streamList[this.getStreamerIndex(streamer)].cooldown = true;
 
-        setTimeout(function(){this.removeCooldownForStreamer(streamer)}.bind(this),timeInSeconds * 1000);
+        setTimeout(function(){this.removeCooldownForStreamer(streamer)}.bind(this),timeInSeconds);
     }
 
     removeCooldownForStreamer(streamer){

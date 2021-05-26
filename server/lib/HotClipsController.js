@@ -28,9 +28,9 @@ class HotClipsController{
     reduceValue = config.reduceValue;
     reduceTime = config.reduceTime;
 
-    cooldownLengthInSeconds = config.cooldownLengthInSeconds;
+    cooldownLengthInSeconds = config.cooldownLengthInSeconds * 1000;
     addClipDelay = config.addClipDelay;
-    removeClipTimeInMinutes = config.removeClipTimeInMinutes;
+    removeClipTimeInMinutes = config.removeClipTimeInMinutes * 60000;
 
 
     constructor() {
@@ -100,7 +100,7 @@ class HotClipsController{
 
             setTimeout(function(){
                 this.clipList.removeClip();
-            }.bind(this), (this.removeClipTimeInMinutes * 60000))
+            }.bind(this), (this.removeClipTimeInMinutes))
         }.bind(this), this.addClipDelay);
     }
 

@@ -292,16 +292,21 @@ describe('MonitorTwitchChat methods', function() {
                 .to.equal(false);
         });
     });
-    describe('setCompactStreamList', function() {
+    describe('updateCompactStreamList', function() {
         it('should set compactStreamList to contain channel user names', async function() {
             await MonitorTwitchChat.updateStreamList();
 
-            MonitorTwitchChat.setCompactStreamList();
+            MonitorTwitchChat.updateCompactStreamList();
             const list = MonitorTwitchChat.getCompactStreamList();
 
             expect(list).to.include('asmongold');
             expect(list).to.include('cloakzy');
             expect(list).to.include('saiiren');
+        });
+    });
+    describe('updateChannels', function() {
+        it('should not throw', async function() {
+            return (MonitorTwitchChat.updateChannels()).should.be.fulfilled;
         });
     });
     describe('joinChannels', function() {

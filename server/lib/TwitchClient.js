@@ -35,22 +35,36 @@ class TwitchClient{
         this.client.on('message', messageHandler);
     }
 
-    joinChannels(channels){
+    async joinChannels(channels){
         helper.ensureArgument(channels, 'array');
 
-        console.log('\x1b[44m%s\x1b[0m','\n--- TwitchClient :: Joining channels')
+        console.log('\x1b[44m%s\x1b[0m','\n--- TwitchClient :: Joining channels...')
 
         const client = this.client
-        for (let i = 0; i < channels.length; i++){
-            setTimeout(() => {
-                client.join(channels[i])
-                    .then((data) => {
-                        console.log(data[0].substring(data[0].indexOf('#') + 1));
-                    }).catch((err) => {
-                    console.error('\x1b[31m%s\x1b[0m',err + ' :: ERROR :: ' + channels[i]);
-                });
-            }, this.joinTimeout * (i+1));
-        }
+        const promises = channels.map(async channel => {
+            return await client.join(channel);
+        })
+
+        const result = await Promise.allSettled(promises)
+        console.log(result.map(promise => promise.status));
+
+        console.log('\x1b[44m%s\x1b[0m','\n--- TwitchClient :: ...Joined channels')
+    }
+
+    async leaveChannels(channels){
+        helper.ensureArgument(channels, 'array');
+
+        console.log('\x1b[44m%s\x1b[0m','\n--- TwitchClient :: Leaving channels...')
+
+        const client = this.client
+        const promises = channels.map(async channel => {
+            return await client.part(channel);
+        })
+
+        const result = await Promise.allSettled(promises)
+        console.log(result.map(promise => promise.status));
+
+        console.log('\x1b[44m%s\x1b[0m','--- TwitchClient :: ...Left channels')
     }
 }
 

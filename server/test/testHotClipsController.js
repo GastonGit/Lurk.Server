@@ -42,19 +42,57 @@ describe('HotClipsController methods', function() {
         });
     });
     describe('start', function() {
-        it('should not throw', function() {
+        it('should not throw', function(done) {
             expect(function (){HotClipsController.start()}).to.not.throw();
-            HotClipsController.endAllTimers();
+            HotClipsController.endAllMonitorTimers();
+            clearInterval(HotClipsController.updateTimer);
+            done()
+        });
+        it('should call startMonitorTimers', function(done) {
+            chai.spy.on(HotClipsController, 'startMonitorTimers');
+            expect(HotClipsController.startMonitorTimers).to.be.spy;
+
+            HotClipsController.start();
+
+            let checkExpect = function(){
+                expect(HotClipsController.startMonitorTimers).to.have.been.called();
+                HotClipsController.endAllMonitorTimers();
+                clearInterval(HotClipsController.updateTimer);
+                done();
+            }
+
+            setTimeout(checkExpect, 50);
+        });
+        it('should call updateChannels', function(done) {
+            chai.spy.on(HotClipsController, 'updateChannels');
+            expect(HotClipsController.updateChannels).to.be.spy;
+
+            HotClipsController.start();
+
+            let checkExpect = function(){
+                expect(HotClipsController.updateChannels).to.have.been.called();
+                HotClipsController.endAllMonitorTimers();
+                clearInterval(HotClipsController.updateTimer);
+                done();
+            }
+
+            setTimeout(checkExpect, 15);
+        });
+    });
+    describe('startMonitorTimers', function() {
+        it('should not throw', function() {
+            expect(function (){HotClipsController.startMonitorTimers()}).to.not.throw();
+            HotClipsController.endAllMonitorTimers();
         });
         it('should call checkForSpikes', function(done) {
             chai.spy.on(HotClipsController, 'checkForSpikes');
             expect(HotClipsController.checkForSpikes).to.be.spy;
 
-            HotClipsController.start();
+            HotClipsController.startMonitorTimers();
 
             let checkExpect = function(){
                 expect(HotClipsController.checkForSpikes).to.have.been.called();
-                HotClipsController.endAllTimers();
+                HotClipsController.endAllMonitorTimers();
                 done();
             }
 
@@ -64,11 +102,11 @@ describe('HotClipsController methods', function() {
             chai.spy.on(HotClipsController.monitorTwitchChat, 'decreaseHits');
             expect(HotClipsController.monitorTwitchChat.decreaseHits).to.be.spy;
 
-            HotClipsController.start();
+            HotClipsController.startMonitorTimers();
 
             let checkExpect = function(){
                 expect(HotClipsController.monitorTwitchChat.decreaseHits).to.have.been.called();
-                HotClipsController.endAllTimers();
+                HotClipsController.endAllMonitorTimers();
                 done();
             }
 

@@ -8,13 +8,13 @@
 
   "joinTimeout": 200,
 
-  "spikeValue": 4,
-  "spikeTime": 400,
+  "spikeValue": 7,
+  "spikeTime": 600,
 
   "reduceValue": 60,
   "reduceTime": 3000,
 
-  "cooldownLengthInSeconds": 30,
+  "cooldownLengthInSeconds": 120,
   "addClipDelay": 15000,
   "removeClipTimeInMinutes": 20,
   "updateTimeInMinutes": 60

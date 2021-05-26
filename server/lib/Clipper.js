@@ -75,7 +75,7 @@ class Clipper{
             clip.thumbnail_url.indexOf('-preview')
         );
 
-        return 'https://production.assets.clips.twitchcdn.net/' + videoID + '.mp4';
+        return 'https://clips-media-assets2.twitch.tv/' + videoID + '.mp4';
     }
 
     async getAccessToken(){

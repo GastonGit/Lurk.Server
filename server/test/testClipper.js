@@ -100,7 +100,7 @@ describe('Clipper methods', function() {
         it('should return a twitch clip mp4 url as a string', async function() {
             const result = await Clipper.getVideoUrl("SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl");
             expect(result).to.be.an('string');
-            expect(result).to.equal('https://production.assets.clips.twitchcdn.net/AT-cm%7C1140679825.mp4');
+            expect(result).to.equal('https://clips-media-assets2.twitch.tv/AT-cm%7C1140679825.mp4');
         });
     });
     describe('getBroadcasterID', function() {

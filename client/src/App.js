@@ -6,7 +6,7 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {addedClips: [], clips: [], currentClip: "https://production.assets.clips.twitchcdn.net/41827822749-offset-21738.mp4", noClips: false};
+    this.state = {addedClips: [], clips: [], currentClip: "https://clips-media-assets2.twitch.tv/42179710588-offset-17644.mp4", noClips: false};
     this.nextClip = this.nextClip.bind(this);
   }
 

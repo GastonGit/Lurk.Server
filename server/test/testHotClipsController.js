@@ -281,6 +281,47 @@ describe('HotClipsController methods', function() {
             expect(HotClipsController.clipList.addClip).to.have.been.called();
         });
     });
+    describe('delayAddingClip', function() {
+        it('should call addClip if videoURL is valid', function(done) {
+            chai.spy.on(HotClipsController, 'addClip');
+            expect(HotClipsController.addClip).to.be.spy;
+
+            HotClipsController.delayAddingClip('twitchClip');
+
+            let checkExpect = function(){
+                expect(HotClipsController.addClip).to.have.been.called();
+                done();
+            }
+
+            setTimeout(checkExpect, 50);
+        });
+        it('should call clipList.removeClip if videoURL is valid', function(done) {
+            chai.spy.on(HotClipsController.clipList, 'removeClip');
+            expect(HotClipsController.clipList.removeClip).to.be.spy;
+
+            HotClipsController.delayAddingClip('twitchClip');
+
+            let checkExpect = function(){
+                expect(HotClipsController.clipList.removeClip).to.have.been.called();
+                done();
+            }
+
+            setTimeout(checkExpect, 500);
+        });
+        it('should not call addClip if videoURL is not valid', function(done) {
+            chai.spy.on(HotClipsController, 'addClip');
+            expect(HotClipsController.addClip).to.be.spy;
+
+            HotClipsController.delayAddingClip('MISS');
+
+            let checkExpect = function(){
+                expect(HotClipsController.addClip).to.not.have.been.called();
+                done();
+            }
+
+            setTimeout(checkExpect, 50);
+        });
+    });
     describe('createClip', function() {
         it('should take a string argument', async function() {
             await expect(HotClipsController.createClip()).to.be.rejectedWith('Argument is undefined');

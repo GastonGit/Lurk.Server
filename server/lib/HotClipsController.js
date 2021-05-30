@@ -111,11 +111,14 @@ class HotClipsController{
     delayAddingClip(id){
         setTimeout(async function(){
             const videoURL = await this.getVideoUrl(id);
-            this.addClip(videoURL);
 
-            setTimeout(function(){
-                this.clipList.removeClip();
-            }.bind(this), (this.removeClipTimeInMinutes))
+            if (videoURL.valid){
+
+                this.addClip(videoURL.url);
+                setTimeout(function(){
+                    this.clipList.removeClip();
+                }.bind(this), (this.removeClipTimeInMinutes))
+            }
         }.bind(this), this.addClipDelay);
     }
 

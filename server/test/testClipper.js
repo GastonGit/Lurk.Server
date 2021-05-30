@@ -14,7 +14,7 @@ let ClipperClass = proxyquire('../lib/Clipper',{'node-fetch':fetchStub});
 let Clipper
 
 describe('Clipper methods', function() {
-    before(function (){
+    beforeEach(function (){
         Clipper = new ClipperClass();
     })
     describe('Get clip', function() {
@@ -138,8 +138,31 @@ describe('Clipper methods', function() {
 
             expect(Clipper.getClip).to.have.been.called();
         });
-        it('should return a twitch clip mp4 url as a string', async function() {
-            const result = await Clipper.getVideoUrl("SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl");
+        it('should call formatVideoUrl if getClip is successful', function() {
+            chai.spy.on(Clipper, 'getClip');
+            expect(Clipper.getClip).to.be.spy;
+
+            Clipper.getVideoUrl('SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl');
+
+            expect(Clipper.getClip).to.have.been.called();
+        });
+        it('should not call formatVideoUrl if getClip is unsuccessful', function() {
+            chai.spy.on(Clipper, 'getClip');
+            expect(Clipper.getClip).to.be.spy;
+
+            Clipper.getVideoUrl('MISS');
+
+            expect(Clipper.getClip).to.have.been.called();
+        });
+    });
+    describe('formatVideoUrl', function() {
+        it('should take a string argument', function() {
+            expect(Clipper.formatVideoUrl).to.throw();
+            expect(function (){Clipper.formatVideoUrl(123);}).to.throw();
+            expect(function (){Clipper.formatVideoUrl('moonmoon')}).to.not.throw();
+        });
+        it('should return a twitch clip mp4 url as a string', function() {
+            const result = Clipper.formatVideoUrl("https://clips-media-assets2.twitch.tv/AT-cm%7C1140679825-preview-480x272.jpg");
             expect(result).to.be.an('string');
             expect(result).to.equal('https://clips-media-assets2.twitch.tv/AT-cm%7C1140679825.mp4');
         });

@@ -14,8 +14,12 @@ class Clipper{
         return {};
     }
 
-    getVideoUrl(){
-        return 'url';
+    getVideoUrl(str){
+        if (str === "MISS"){
+            return {valid: false}
+        } else{
+            return {valid: true, url: "url"}
+        }
     }
 }
 

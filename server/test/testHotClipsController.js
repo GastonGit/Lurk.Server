@@ -25,7 +25,9 @@ let MonitorTwitchChatClass = require('../lib/MonitorTwitchChat');
 
 describe('HotClipsController methods', function() {
     beforeEach(function (){
+        process.env.NODE_ENV='test';
         HotClipsController = new HotClipsControllerClass();
+        delete process.env.NODE_ENV;
     })
     describe('MonitorTwitchChat', function() {
         it('should be a MonitorTwitchChat class', function() {
@@ -244,7 +246,8 @@ describe('HotClipsController methods', function() {
 
             expect(HotClipsController.delayAddingClip).to.have.been.called()
         });
-        it('should not call delayAddingClip if clip has been created', async function() {
+        it('should not call delayAddingClip if clip has not been created', async function() {
+            process.env.NODE_ENV='test';
             class clipperStubInner {
                 createClip(){
                     return {created:false,data:{id: 'SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl'}};
@@ -264,6 +267,7 @@ describe('HotClipsController methods', function() {
             await HotClipsControllerInner.clipIt('moonmoon');
 
             expect(HotClipsControllerInner.delayAddingClip).to.not.have.been.called()
+            delete process.env.NODE_ENV;
         });
     });
     describe('addClip', function() {

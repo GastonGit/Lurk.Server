@@ -31,6 +31,10 @@ describe('TwitchClient methods', function() {
             const result = await TwitchClient.connectToTwitch();
             expect(result).to.deep.equal(['server', 'port']);
         });
+        it('should return an array when resolved', async function() {
+            const result = await TwitchClient.connectToTwitch();
+            expect(result).to.deep.equal(['server', 'port']);
+        });
         it('should return error message when rejected', async function() {
             let client = function(options){
                 this.identity = options.identity;
@@ -38,6 +42,9 @@ describe('TwitchClient methods', function() {
             }
             client.prototype.connect = function connect(){
                 return Promise.reject('ERROR123');
+            }
+            client.prototype.on = function on(){
+
             }
 
             const tmiStubInner = {

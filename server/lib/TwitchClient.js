@@ -23,6 +23,11 @@ class TwitchClient{
     }
 
     async connectToTwitch(){
+        /* istanbul ignore next */
+        this.client.on("disconnected", (reason) => {
+            console.log('\x1b[45m%s\x1b[0m','TMI.JS :: DISCONNECT :: ' + reason)
+        });
+
         return this.client.connect()
             .then((data) => {
                 return data;

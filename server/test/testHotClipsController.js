@@ -25,7 +25,9 @@ let MonitorTwitchChatClass = require('../lib/MonitorTwitchChat');
 
 describe('HotClipsController methods', function() {
     beforeEach(function (){
+        process.env.NODE_ENV='test';
         HotClipsController = new HotClipsControllerClass();
+        delete process.env.NODE_ENV;
     })
     describe('MonitorTwitchChat', function() {
         it('should be a MonitorTwitchChat class', function() {
@@ -236,13 +238,36 @@ describe('HotClipsController methods', function() {
 
             expect(HotClipsController.createClip).to.have.been.called();
         });
-        it('should call delayAddingClip', async function() {
+        it('should call delayAddingClip if clip has been created', async function() {
             chai.spy.on(HotClipsController, 'delayAddingClip');
             expect(HotClipsController.delayAddingClip).to.be.spy;
 
             await HotClipsController.clipIt('moonmoon');
 
             expect(HotClipsController.delayAddingClip).to.have.been.called()
+        });
+        it('should not call delayAddingClip if clip has not been created', async function() {
+            process.env.NODE_ENV='test';
+            class clipperStubInner {
+                createClip(){
+                    return {created:false,data:{id: 'SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl'}};
+                }
+            }
+            const HotClipsControllerClassInner = proxyquire('../lib/HotClipsController',{
+                './ClipList':clipListStub,
+                './MonitorTwitchChat':monitorTwitchChatStub,
+                './TwitchClient':twitchClientStub,
+                './Clipper': clipperStubInner
+            });
+            let HotClipsControllerInner = new HotClipsControllerClassInner();
+
+            chai.spy.on(HotClipsControllerInner, 'delayAddingClip');
+            expect(HotClipsControllerInner.delayAddingClip).to.be.spy;
+
+            await HotClipsControllerInner.clipIt('moonmoon');
+
+            expect(HotClipsControllerInner.delayAddingClip).to.not.have.been.called()
+            delete process.env.NODE_ENV;
         });
     });
     describe('addClip', function() {
@@ -258,6 +283,47 @@ describe('HotClipsController methods', function() {
             HotClipsController.addClip('twitchClip');
 
             expect(HotClipsController.clipList.addClip).to.have.been.called();
+        });
+    });
+    describe('delayAddingClip', function() {
+        it('should call addClip if videoURL is valid', function(done) {
+            chai.spy.on(HotClipsController, 'addClip');
+            expect(HotClipsController.addClip).to.be.spy;
+
+            HotClipsController.delayAddingClip('twitchClip');
+
+            let checkExpect = function(){
+                expect(HotClipsController.addClip).to.have.been.called();
+                done();
+            }
+
+            setTimeout(checkExpect, 50);
+        });
+        it('should call clipList.removeClip if videoURL is valid', function(done) {
+            chai.spy.on(HotClipsController.clipList, 'removeClip');
+            expect(HotClipsController.clipList.removeClip).to.be.spy;
+
+            HotClipsController.delayAddingClip('twitchClip');
+
+            let checkExpect = function(){
+                expect(HotClipsController.clipList.removeClip).to.have.been.called();
+                done();
+            }
+
+            setTimeout(checkExpect, 500);
+        });
+        it('should not call addClip if videoURL is not valid', function(done) {
+            chai.spy.on(HotClipsController, 'addClip');
+            expect(HotClipsController.addClip).to.be.spy;
+
+            HotClipsController.delayAddingClip('MISS');
+
+            let checkExpect = function(){
+                expect(HotClipsController.addClip).to.not.have.been.called();
+                done();
+            }
+
+            setTimeout(checkExpect, 50);
         });
     });
     describe('createClip', function() {

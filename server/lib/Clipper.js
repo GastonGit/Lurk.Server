@@ -38,13 +38,17 @@ class Clipper{
 
         const status = await response.status;
 
-        if (status !== 200 && status !== 202) {
-            throw new Error('(' + streamer + ")createClip - status code: " + status);
+        if (status === 200 || status === 202) {
+
+            const json = await response.json();
+            const data = json.data[0];
+
+            console.log('\x1b[32m%s\x1b[0m','createClip :: SUCCESS :: ' + streamer)
+            return {created: true, data};
+        } else{
+            console.log('\x1b[45m%s\x1b[0m','createClip :: FAILURE :: ' + streamer + ' (status code ' + status + ')')
+            return {created: false};
         }
-
-        const json = await response.json();
-
-        return json.data[0];
     }
 
     async getClip(slug){
@@ -70,13 +74,28 @@ class Clipper{
         helper.ensureArgument(slug, 'string');
 
         const clip = await this.getClip(slug);
-        const videoID = clip.thumbnail_url.substring(
-            clip.thumbnail_url.indexOf('.tv/') + 4,
-            clip.thumbnail_url.indexOf('-preview')
+
+        if (typeof clip !== 'undefined'){
+            const url = this.formatVideoUrl(clip.thumbnail_url);
+
+            return {valid: true, url}
+        } else {
+
+            return {valid: false};
+        }
+    }
+
+    formatVideoUrl(thumbnail_url){
+        helper.ensureArgument(thumbnail_url, 'string');
+
+        const videoID = thumbnail_url.substring(
+            thumbnail_url.indexOf('.tv/') + 4,
+            thumbnail_url.indexOf('-preview')
         );
 
         return 'https://clips-media-assets2.twitch.tv/' + videoID + '.mp4';
     }
+
 
     async getAccessToken(){
         const url = 'https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token='

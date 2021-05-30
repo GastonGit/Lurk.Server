@@ -10,7 +10,9 @@ class TwitchClient{
         this.client = new tmi.client({
             connection:{
                 reconnect: true,
-                secure: true
+                secure: true,
+                reconnectInterval: 100000,
+                maxReconnectInterval: 120000
             },
             identity:{
                 username: process.env.BOT_NAME,

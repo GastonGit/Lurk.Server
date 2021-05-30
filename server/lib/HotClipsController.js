@@ -97,8 +97,9 @@ class HotClipsController{
         this.resetHits(streamer);
         const clip = await this.createClip(streamer);
 
-        console.log('\x1b[32m%s\x1b[0m','clipIt :: SUCCESS :: ' + streamer)
-        this.delayAddingClip(clip.id);
+        if (clip.created){
+            this.delayAddingClip(clip.data.id);
+        }
     }
 
     async getVideoUrl(slug){
@@ -110,11 +111,14 @@ class HotClipsController{
     delayAddingClip(id){
         setTimeout(async function(){
             const videoURL = await this.getVideoUrl(id);
-            this.addClip(videoURL);
 
-            setTimeout(function(){
-                this.clipList.removeClip();
-            }.bind(this), (this.removeClipTimeInMinutes))
+            if (videoURL.valid){
+
+                this.addClip(videoURL.url);
+                setTimeout(function(){
+                    this.clipList.removeClip();
+                }.bind(this), (this.removeClipTimeInMinutes))
+            }
         }.bind(this), this.addClipDelay);
     }
 

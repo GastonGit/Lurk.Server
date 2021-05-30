@@ -7,15 +7,19 @@ class Clipper{
 
     createClip(){
 
-        return {id: 'SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl'};
+        return {created:true,data:{id: 'SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl'}};
     }
 
     getClip(){
         return {};
     }
 
-    getVideoUrl(){
-        return 'url';
+    getVideoUrl(str){
+        if (str === "MISS"){
+            return {valid: false}
+        } else{
+            return {valid: true, url: "url"}
+        }
     }
 }
 

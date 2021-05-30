@@ -52,6 +52,16 @@ const fetchStub = function (url, options){
         }
     }
 
+    if (url.includes("https://api.twitch.tv/helix/clips?id=MISS")){
+        const result = {
+            "data": []
+        }
+        return Promise.resolve({
+            json: () => Promise.resolve(result),
+            status: 200
+        })
+    }
+
     if (url.includes("https://api.twitch.tv/helix/clips?broadcaster_id=")){
         if (options.method === "post"){
             const result = {

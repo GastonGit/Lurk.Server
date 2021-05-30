@@ -38,13 +38,17 @@ class Clipper{
 
         const status = await response.status;
 
-        if (status !== 200 && status !== 202) {
-            throw new Error('(' + streamer + ")createClip - status code: " + status);
+        if (status === 200 || status === 202) {
+
+            const json = await response.json();
+            const data = json.data[0];
+
+            console.log('\x1b[32m%s\x1b[0m','createClip :: SUCCESS :: ' + streamer)
+            return {created: true, data};
+        } else{
+            console.log('\x1b[45m%s\x1b[0m','createClip :: FAILURE :: ' + streamer + ' (status code ' + status + ')')
+            return {created: false};
         }
-
-        const json = await response.json();
-
-        return json.data[0];
     }
 
     async getClip(slug){

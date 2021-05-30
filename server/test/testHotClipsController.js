@@ -236,13 +236,34 @@ describe('HotClipsController methods', function() {
 
             expect(HotClipsController.createClip).to.have.been.called();
         });
-        it('should call delayAddingClip', async function() {
+        it('should call delayAddingClip if clip has been created', async function() {
             chai.spy.on(HotClipsController, 'delayAddingClip');
             expect(HotClipsController.delayAddingClip).to.be.spy;
 
             await HotClipsController.clipIt('moonmoon');
 
             expect(HotClipsController.delayAddingClip).to.have.been.called()
+        });
+        it('should not call delayAddingClip if clip has been created', async function() {
+            class clipperStubInner {
+                createClip(){
+                    return {created:false,data:{id: 'SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl'}};
+                }
+            }
+            const HotClipsControllerClassInner = proxyquire('../lib/HotClipsController',{
+                './ClipList':clipListStub,
+                './MonitorTwitchChat':monitorTwitchChatStub,
+                './TwitchClient':twitchClientStub,
+                './Clipper': clipperStubInner
+            });
+            let HotClipsControllerInner = new HotClipsControllerClassInner();
+
+            chai.spy.on(HotClipsControllerInner, 'delayAddingClip');
+            expect(HotClipsControllerInner.delayAddingClip).to.be.spy;
+
+            await HotClipsControllerInner.clipIt('moonmoon');
+
+            expect(HotClipsControllerInner.delayAddingClip).to.not.have.been.called()
         });
     });
     describe('addClip', function() {

@@ -7,7 +7,7 @@ class Clipper{
 
     createClip(){
 
-        return {id: 'SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl'};
+        return {created:true,data:{id: 'SpunkySecretiveOrangeShadyLulu-KCNPm3bm3KTbuOCl'}};
     }
 
     getClip(){

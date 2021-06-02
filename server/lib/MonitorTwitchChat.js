@@ -84,14 +84,22 @@ class MonitorTwitchChat{
         helper.ensureArgument(streamer, 'string');
         helper.ensureArgument(timeInSeconds, 'number');
 
-        this.streamList[this.getStreamerIndex(streamer)].cooldown = true;
+        const index = this.getStreamerIndex(streamer)
 
-        setTimeout(function(){this.removeCooldownForStreamer(streamer)}.bind(this),timeInSeconds);
+        if (typeof this.streamList[index] !== 'undefined'){
+            this.streamList[index].cooldown = true;
+            setTimeout(function(){this.removeCooldownForStreamer(streamer)}.bind(this),timeInSeconds);
+        }
     }
 
     removeCooldownForStreamer(streamer){
         helper.ensureArgument(streamer, 'string');
-        this.streamList[this.getStreamerIndex(streamer)].cooldown = false;
+
+        const index = this.getStreamerIndex(streamer);
+
+        if (typeof this.streamList[index] !== 'undefined'){
+            this.streamList[index].cooldown = false;
+        }
     }
 
     resetStreamer(channel){

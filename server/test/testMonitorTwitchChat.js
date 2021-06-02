@@ -247,6 +247,9 @@ describe('MonitorTwitchChat methods', function() {
             expect(MonitorTwitchChat.getStreamerIndex("cloakzy")).to.equal(9);
             expect(MonitorTwitchChat.getStreamerIndex("BarbarOUSKing")).to.equal(98);
         });
+        it('should not throw if streamer is not found', async function() {
+            expect(function (){MonitorTwitchChat.getStreamerIndex("doesNOTexist")}).to.not.throw();
+        });
     });
     describe('getCompactStreamList', function() {
         it('should return an array', async function() {
@@ -273,6 +276,12 @@ describe('MonitorTwitchChat methods', function() {
             expect(MonitorTwitchChat.getStreamList()[MonitorTwitchChat.getStreamerIndex(streamer)].cooldown)
                 .to.equal(true);
         });
+        it('should not throw if streamer is not found', async function() {
+            await MonitorTwitchChat.updateStreamList();
+
+            const streamer = 'doesNotExist'
+            expect(function (){MonitorTwitchChat.cooldownStreamer(streamer,0);}).to.not.throw();
+        });
     });
     describe('removeCooldownForStreamer', function() {
         it('should take a string argument', async function() {
@@ -290,6 +299,12 @@ describe('MonitorTwitchChat methods', function() {
 
             expect(MonitorTwitchChat.getStreamList()[MonitorTwitchChat.getStreamerIndex(streamer)].cooldown)
                 .to.equal(false);
+        });
+        it('should not throw if streamer is not found', async function() {
+            await MonitorTwitchChat.updateStreamList();
+
+            const streamer = 'doesNotExist'
+            expect(function (){MonitorTwitchChat.removeCooldownForStreamer(streamer);}).to.not.throw();
         });
     });
     describe('updateCompactStreamList', function() {

@@ -25,10 +25,8 @@ class TwitchClient{
     async connectToTwitch(){
         /* istanbul ignore next */
         this.client.on("disconnected", (reason) => {
-            console.log('\x1b[45m%s\x1b[0m','TMI.JS :: DISCONNECT :: ' + reason)
-            if (reason === "Unable to connect."){
-                throw Error ("UNABLE TO CONNECT")
-            }
+            console.log('\x1b[45m%s\x1b[0m','TMI.JS :: DISCONNECT :: ' + reason);
+            throw Error ("UNABLE TO CONNECT");
         });
 
         return this.client.connect()

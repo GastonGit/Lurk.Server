@@ -102,6 +102,19 @@ const fetchStub = function (url, options){
         }
     }
 
+    if (url.includes("https://api.twitch.tv/helix/users?id=141981764")){
+        if (options.headers['Authorization'].includes("Bearer VALID")){
+            return Promise.resolve({
+                status: 200
+            })
+        }
+        /* istanbul ignore else */
+        else if (options.headers['Authorization'].includes("Bearer INVALID")){
+            return Promise.resolve({
+                status: 401
+            })
+        }
+    }
 
     throw new Error("(fetchStub): Unexpected url: " + url);
 };

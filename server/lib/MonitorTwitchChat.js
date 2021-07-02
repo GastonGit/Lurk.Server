@@ -102,6 +102,23 @@ class MonitorTwitchChat{
         }
     }
 
+    async validAppAccessToken(){
+
+        const url = "https://api.twitch.tv/helix/users?id=141981764"
+
+        const response = await fetch(url, {
+            method: 'get',
+            headers: {
+                'Client-ID': process.env.CLIENT_ID,
+                'Authorization': ' Bearer ' + process.env.CLIENT_APP_ACCESS_TOKEN
+            },
+        })
+
+        const status = await response.status;
+
+        return status !== 401;
+    }
+
     resetStreamer(channel){
         this.streamList[this.getStreamerIndex(channel)].hits = 0;
     }

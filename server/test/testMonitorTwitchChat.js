@@ -256,6 +256,24 @@ describe('MonitorTwitchChat methods', function() {
             expect(MonitorTwitchChat.getCompactStreamList()).to.be.an('array');
         });
     });
+    describe('validAppAccessToken', function() {
+        it('should return true if App access token is valid', async function() {
+            process.env.CLIENT_APP_ACCESS_TOKEN='VALID';
+            const result = await MonitorTwitchChat.validAppAccessToken()
+
+            expect(result).to.be.a('boolean');
+            expect(result).to.be.true;
+            delete process.env.CLIENT_APP_ACCESS_TOKEN;
+        });
+        it('should return false if App access token is not valid', async function() {
+            process.env.CLIENT_APP_ACCESS_TOKEN='INVALID';
+            const result = await MonitorTwitchChat.validAppAccessToken()
+
+            expect(result).to.be.a('boolean');
+            expect(result).to.be.false;
+            delete process.env.CLIENT_APP_ACCESS_TOKEN;
+        });
+    });
     describe('cooldownStreamer', function() {
         it('should take a string and an int', async function() {
             await MonitorTwitchChat.updateStreamList();

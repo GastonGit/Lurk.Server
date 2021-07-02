@@ -94,6 +94,15 @@ describe('testStubs', function (){
                     )}).to.throw();
                 });
             });
+            describe('with test access token url', function() {
+                it('should throw if not used with the option headers VALID or INVALID', function() {
+                    console.log('-----------------------------------------------------------')
+                    expect(function(){
+                        fetchStub('https://api.twitch.tv/helix/users?id=141981764')
+                        console.log('-.---.---.---.---.---.---.---.---.---.---.---.---.---.---.---.---.---.-- 4')
+                    }).to.throw();
+                });
+            });
         });
     });
     describe('twitchClientStub', function() {

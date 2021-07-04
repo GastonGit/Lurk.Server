@@ -15,7 +15,9 @@
     margin-block-end: 1em;
     margin-inline-start: 0;
     margin-inline-end: 0;
+
     text-decoration: none;
+    user-select: none;
 }
 
 a:link {

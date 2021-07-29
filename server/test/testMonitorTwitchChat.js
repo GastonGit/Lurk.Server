@@ -69,30 +69,40 @@ describe('MonitorTwitchChat methods', function() {
         });
     });
     describe('requestStreams', async function() {
-        const result = await MonitorTwitchChat.requestStreams();
         it('should return an array that is not empty', async function() {
+            const result = await MonitorTwitchChat.requestStreams();
+            expect(result).to.be.an('array').to.be.an('array').that.is.not.empty;
+        });
+        it('should return an array that is not empty', async function() {
+            const result = await MonitorTwitchChat.requestStreams();
             expect(result).to.be.an('array').to.be.an('array').that.is.not.empty;
         });
         it('should return an array that contains objects with the keys user_name, viewer_count and hits', async function() {
+            const result = await MonitorTwitchChat.requestStreams();
             expect(result[0]).to.be.an('object').that.includes.all.keys('user_name','viewer_count','hits');
         });
         it('should return an array that contain objects with string key user_name', async function() {
+            const result = await MonitorTwitchChat.requestStreams();
             assert.isString(result[0].user_name);
         });
         it('should return an array that contain objects with number key viewer_count', async function() {
+            const result = await MonitorTwitchChat.requestStreams();
             assert.isNumber(result[0].viewer_count);
         });
         it('should return an array that contain objects with number key hits', async function() {
+            const result = await MonitorTwitchChat.requestStreams();
             assert.isNumber(result[0].hits);
         });
         it('should return with data from helix-stream', async function() {
+            const result = await MonitorTwitchChat.requestStreams();
             expect(result).to.deep.include({
-                user_name:"kyle", viewer_count:7851, hits:0
+                user_name:"kyle", viewer_count:7851, hits:0, cooldown: false
             })
         });
         it('should return with data from helix-stream-pagination', async function() {
+            const result = await MonitorTwitchChat.requestStreams();
             expect(result).to.deep.include({
-                user_name:"saiiren", viewer_count:2175, hits:0
+                user_name:"saiiren", viewer_count:2175, hits:0, cooldown: false
             })
         });
         describe('request100Streams', function() {

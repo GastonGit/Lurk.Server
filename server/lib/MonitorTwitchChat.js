@@ -140,6 +140,13 @@ class MonitorTwitchChat{
 
     async requestStreams(){
 
+        const validAAT = await this.validAppAccessToken();
+
+        /* istanbul ignore if */
+        if (!validAAT){
+            throw Error("Current App Access Token is invalid");
+        }
+
         let streams = [];
         let pagination = undefined;
 

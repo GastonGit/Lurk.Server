@@ -114,6 +114,11 @@ const fetchStub = function (url, options){
                 status: 401
             })
         }
+        else{
+            return Promise.resolve({
+                status: 200
+            })
+        }
     }
 
     throw new Error("(fetchStub): Unexpected url: " + url);

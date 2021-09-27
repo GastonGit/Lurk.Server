@@ -1,5 +1,5 @@
 import { act } from "react-dom/test-utils";
-import App from './App';
+import App from '../components/App';
 import {render, unmountComponentAtNode} from "react-dom";
 import React from 'react';
 

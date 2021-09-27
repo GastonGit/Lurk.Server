@@ -1,6 +1,6 @@
 import React from "react";
-import './App.css';
-import unmuteIcon from './assets/unmute_icon.svg'
+import '../styles/App.css';
+import unmuteIcon from '../assets/unmute_icon.svg'
 
 export default class App extends React.Component {
 

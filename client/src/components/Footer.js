@@ -1,8 +1,7 @@
-import React from "react";
+import React from 'react';
 import '../styles/Footer.css';
 
 export default class Footer extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {};
@@ -11,7 +10,9 @@ export default class Footer extends React.Component {
     render() {
         return (
             <footer className="Footer">
-                <a href="https://github.com/GastonGit/Hot-Twitch-Clips">About</a>
+                <a href="https://github.com/GastonGit/Hot-Twitch-Clips">
+                    About
+                </a>
             </footer>
         );
     }

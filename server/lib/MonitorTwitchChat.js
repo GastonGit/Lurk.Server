@@ -147,6 +147,9 @@ class MonitorTwitchChat{
             throw Error("Current App Access Token is invalid");
         }
 
+        // TODO: Temp solution. Add to config.
+        const blockedStreamers = ["nymn"]
+
         let streams = [];
         let pagination = undefined;
 
@@ -154,12 +157,14 @@ class MonitorTwitchChat{
             const fetchedStreams = await this.request100Streams(pagination);
 
             fetchedStreams.data.forEach(function(streamer){
-                streams.push({
-                    user_name: streamer.user_login.toLowerCase(),
-                    viewer_count: parseInt(streamer.viewer_count),
-                    hits: 0,
-                    cooldown: false
-                })
+                if (!blockedStreamers.includes(streamer.user_login.toLowerCase())){
+                    streams.push({
+                        user_name: streamer.user_login.toLowerCase(),
+                        viewer_count: parseInt(streamer.viewer_count),
+                        hits: 0,
+                        cooldown: false
+                    })
+                }
             })
 
             pagination = fetchedStreams.pagination.cursor;

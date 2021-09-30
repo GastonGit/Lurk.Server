@@ -105,6 +105,14 @@ describe('MonitorTwitchChat methods', function() {
                 user_name:"saiiren", viewer_count:2175, hits:0, cooldown: false
             })
         });
+        it('should not add blocked streamers to list', async function() {
+            // TEMP SOLUTION - NYMN IS ALWAYS BLOCKED (HARCODED)
+            // TODO: Update when temp solution is redone.
+            const result = await MonitorTwitchChat.requestStreams();
+            expect(result).to.not.deep.include({
+                user_name:"nymn", viewer_count:3532, hits:0, cooldown: false
+            })
+        });
         describe('request100Streams', function() {
             it('should return an object', async function() {
                 expect(await MonitorTwitchChat.request100Streams()).to.be.an('object');
@@ -198,26 +206,26 @@ describe('MonitorTwitchChat methods', function() {
         })
         it('should reset a channels hits to 0', async function() {
             for (let i = 0; i < 565; i++){
-                MonitorTwitchChat.onMessageHandler('NymN', {}, validMessages[1], false);
+                MonitorTwitchChat.onMessageHandler('Saiiren', {}, validMessages[1], false);
             }
 
-            MonitorTwitchChat.resetStreamer("Nymn");
+            MonitorTwitchChat.resetStreamer("Saiiren");
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"nymn", viewer_count:3532, hits:0, cooldown:false
+                user_name:"saiiren", viewer_count:2175, hits:0, cooldown:false
             })
         });
         it('should not reset every channels hits to 0', async function() {
             for (let i = 0; i < 565; i++){
-                MonitorTwitchChat.onMessageHandler('NymN', {}, validMessages[1], false);
+                MonitorTwitchChat.onMessageHandler('Kyle', {}, validMessages[1], false);
             }
             const hitCount = 200;
             for (let i = 0; i < hitCount; i++){
                 MonitorTwitchChat.onMessageHandler('saiiren', {}, validMessages[1], false);
             }
 
-            MonitorTwitchChat.resetStreamer("Nymn");
+            MonitorTwitchChat.resetStreamer("Kyle");
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"nymn", viewer_count:3532, hits:0, cooldown:false
+                user_name:"kyle", viewer_count:7851, hits:0, cooldown:false
             })
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
                 user_name:"saiiren", viewer_count:2175, hits:hitCount, cooldown:false
@@ -227,9 +235,6 @@ describe('MonitorTwitchChat methods', function() {
     describe('resetAllStreamers', function() {
         it('should reset every channels hits to 0', async function() {
             await MonitorTwitchChat.updateStreamList();
-            for (let i = 0; i < 565; i++){
-                MonitorTwitchChat.onMessageHandler('NymN', {}, validMessages[1], false);
-            }
             for (let i = 0; i < 200; i++){
                 MonitorTwitchChat.onMessageHandler('saiiren', {}, validMessages[1], false);
             }
@@ -238,9 +243,6 @@ describe('MonitorTwitchChat methods', function() {
             }
 
             MonitorTwitchChat.resetAllStreamers();
-            expect(MonitorTwitchChat.getStreamList()).to.deep.include({
-                user_name:"nymn", viewer_count:3532, hits:0, cooldown:false
-            })
             expect(MonitorTwitchChat.getStreamList()).to.deep.include({
                 user_name:"saiiren", viewer_count:2175, hits:0, cooldown:false
             })
@@ -376,42 +378,37 @@ describe('MonitorTwitchChat methods', function() {
             MonitorTwitchChat.streamList = [
                 {user_name: 'kyle', viewer_count: 123, hits: 50},
                 {user_name: 'moonmoon', viewer_count: 54, hits: 62},
-                {user_name: 'nymn', viewer_count: 78, hits: 13},
                 {user_name: 'forsen', viewer_count: 678, hits: 30},
                 {user_name: 'sodapoppin', viewer_count: 1233, hits: 10}
             ]
             MonitorTwitchChat.decreaseHits(1);
             expect(MonitorTwitchChat.getStreamList()[0].hits).to.equal(49);
             expect(MonitorTwitchChat.getStreamList()[1].hits).to.equal(61);
-            expect(MonitorTwitchChat.getStreamList()[2].hits).to.equal(12);
-            expect(MonitorTwitchChat.getStreamList()[3].hits).to.equal(29);
-            expect(MonitorTwitchChat.getStreamList()[4].hits).to.equal(9);
+            expect(MonitorTwitchChat.getStreamList()[2].hits).to.equal(29);
+            expect(MonitorTwitchChat.getStreamList()[3].hits).to.equal(9);
 
             MonitorTwitchChat.decreaseHits(3);
             expect(MonitorTwitchChat.getStreamList()[0].hits).to.equal(46);
             expect(MonitorTwitchChat.getStreamList()[1].hits).to.equal(58);
-            expect(MonitorTwitchChat.getStreamList()[2].hits).to.equal(9);
-            expect(MonitorTwitchChat.getStreamList()[3].hits).to.equal(26);
-            expect(MonitorTwitchChat.getStreamList()[4].hits).to.equal(6);
+            expect(MonitorTwitchChat.getStreamList()[2].hits).to.equal(26);
+            expect(MonitorTwitchChat.getStreamList()[3].hits).to.equal(6);
         });
         it('should not reduce streamer hits below 0', function() {
             MonitorTwitchChat.streamList = [
                 {user_name: 'kyle', viewer_count: 123, hits: 50},
                 {user_name: 'moonmoon', viewer_count: 54, hits: 62},
-                {user_name: 'nymn', viewer_count: 78, hits: 13},
                 {user_name: 'forsen', viewer_count: 678, hits: 30},
                 {user_name: 'sodapoppin', viewer_count: 1233, hits: 10}
             ]
 
             MonitorTwitchChat.decreaseHits(11);
-            expect(MonitorTwitchChat.getStreamList()[4].hits).to.equal(0);
+            expect(MonitorTwitchChat.getStreamList()[3].hits).to.equal(0);
 
             MonitorTwitchChat.decreaseHits(100);
             expect(MonitorTwitchChat.getStreamList()[0].hits).to.equal(0);
             expect(MonitorTwitchChat.getStreamList()[1].hits).to.equal(0);
             expect(MonitorTwitchChat.getStreamList()[2].hits).to.equal(0);
             expect(MonitorTwitchChat.getStreamList()[3].hits).to.equal(0);
-            expect(MonitorTwitchChat.getStreamList()[4].hits).to.equal(0);
         });
     });
 });

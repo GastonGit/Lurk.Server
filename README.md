@@ -22,7 +22,7 @@ Automatically clips exciting and funny moments from Twitch in real-time and then
 ### Why do I have to manually unmute?
 Because Chrome does not allow websites to autoplay unmuted videos, for more details see https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
 ### Why does X streamer never show up?
-The streamer might have clip creation restricted to subscribers
+The streamer might have clip creation restricted to subscribers or has been explicitly filtered out.
 ### Why are all clips 30 seconds long? Why are some clips badly timed, ending abruptly or missing context?
 The official API for Twitch clips is currently very limited
 

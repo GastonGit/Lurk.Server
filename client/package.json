@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "homepage": "/hotclips/",
   "private": true,
+  "main": "src/index.tsx",
   "scripts": {
     "start": "react-scripts start",
     "start:prod": "serve -s build -l 5003",

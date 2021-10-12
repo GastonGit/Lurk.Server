@@ -1,0 +1,63 @@
+.Head {
+    height: 60px;
+    width: 100vw;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+
+    background-color: var(--secondary-bg-color);
+    color: var(--secondary-bg-color);
+}
+
+.HeaderContent {
+    height: 80%;
+    width: 96%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-direction: row;
+}
+
+.HeaderContentMain {
+    height: 100%;
+    width: 15%;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+}
+
+.HeaderItem {
+    height: 60%;
+}
+
+.HeaderItem > img{
+    height: 100%;
+}
+
+
+.Header-link {
+    font-size: 200%;
+    text-decoration: none;
+    margin-right: 12px;
+}
+
+.Header-link:link {
+    color: var(--main-title-color);
+}
+
+.Header-link:visited {
+    color: var(--main-title-color);
+}
+
+.Header-link:hover {
+    color: var(--secondary-title-color);
+}
+
+.Header-link:active {
+    color: var(--main-title-color);
+}

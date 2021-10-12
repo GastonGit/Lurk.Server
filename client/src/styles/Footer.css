@@ -21,17 +21,17 @@
 }
 
 a:link {
-    color: #3f355c;
+    color: var(--main-title-color);
 }
 
 a:visited {
-    color: #3f355c;
+    color: var(--main-title-color);
 }
 
 a:hover {
-    color: #797db1;
+    color: var(--secondary-title-color);
 }
 
 a:active {
-    color: #4c4e88;
+    color: var(--main-title-color);
 }

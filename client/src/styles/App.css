@@ -23,7 +23,7 @@
     width: 1280px;
     opacity: 0.95;
 
-    background-color: #797db1;
+    background-color: var(--secondary-bg-color);
     border: 0;
     position: absolute;
 
@@ -37,7 +37,7 @@
 }
 
 .unmuteButton:hover {
-    background-color: #291f43;
+    background-color: var(--main-text-color);
 }
 
 .unmute-icon{
@@ -47,7 +47,7 @@
 .backText{
     position: absolute;
     z-index: -1;
-    color: #797db1;
+    color: var(--main-text-color);
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;

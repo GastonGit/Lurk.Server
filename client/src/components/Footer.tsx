@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/Footer.css';
-import Grid from '@mui/material/Grid';
+import { Grid } from '@mui/material';
 
 export default class Footer extends React.Component<unknown, unknown> {
     constructor(props: unknown) {
@@ -10,13 +10,17 @@ export default class Footer extends React.Component<unknown, unknown> {
 
     render(): JSX.Element {
         return (
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-                <footer className="Footer">
-                    <a href="https://github.com/GastonGit/Hot-Twitch-Clips">
-                        About
-                    </a>
-                </footer>
-            </Grid>
+            <div className="Footer">
+                <div className="FooterContent">
+                    <Grid container xs={12} sm={12} md={12} lg={12}>
+                        <Grid item xs={4} sm={3} md={2}>
+                            <a href="https://github.com/GastonGit/Hot-Twitch-Clips">
+                                About
+                            </a>
+                        </Grid>
+                    </Grid>
+                </div>
+            </div>
         );
     }
 }

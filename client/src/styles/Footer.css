@@ -1,7 +1,16 @@
 .Footer{
+    width: 100vw;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.FooterContent{
     text-align: center;
     height: 50px;
-    width: 100vw;
+    width: 1280px;
+    max-width: 100%;
 }
 
 .Footer a{

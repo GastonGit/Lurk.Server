@@ -1,6 +1,5 @@
 import React from 'react';
 import '../styles/App.css';
-import unmuteIcon from '../assets/unmute_icon.svg';
 
 interface AppState {
     addedClips: Array<string>;
@@ -100,18 +99,6 @@ export default class App extends React.Component<unknown, AppState> {
         const updateInterval = setInterval(this.updateList.bind(this), 60000);
         this.setState({ updateInterval: updateInterval });
 
-        (
-            document.querySelector('.unmuteButton') as HTMLButtonElement
-        ).addEventListener('click', function () {
-            const video = document.querySelector(
-                '.videoClip',
-            ) as HTMLVideoElement;
-            video.volume = 0.5;
-            video.muted = false;
-
-            this.remove();
-        });
-
         (document.querySelector('.videoClip') as HTMLElement).onerror = () => {
             console.log('Error loading current clip, playing the next clip');
             this.nextClip();
@@ -141,14 +128,6 @@ export default class App extends React.Component<unknown, AppState> {
                     controls
                     muted
                 />
-                <button className="unmuteButton">
-                    <img
-                        className="unmute-icon"
-                        src={unmuteIcon}
-                        alt="unmute"
-                        draggable="false"
-                    />
-                </button>
             </div>
         );
     }

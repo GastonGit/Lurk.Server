@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/App.css';
+import Grid from '@mui/material/Grid';
 
 interface AppState {
     addedClips: Array<string>;
@@ -115,15 +116,17 @@ export default class App extends React.Component<unknown, AppState> {
         }
 
         return (
-            <div className="App">
-                <video
-                    className="videoClip"
-                    src={this.state.currentClip}
-                    autoPlay={true}
-                    controls
-                    muted
-                />
-            </div>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+                <div className="App">
+                    <video
+                        className="videoClip"
+                        src={this.state.currentClip}
+                        autoPlay={true}
+                        controls
+                        muted
+                    />
+                </div>
+            </Grid>
         );
     }
 }

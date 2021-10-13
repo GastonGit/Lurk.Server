@@ -10,15 +10,9 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     <React.StrictMode>
         <Grid container className="RootGrid" direction="column" spacing={0}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-                <Header />
-            </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-                <App />
-            </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-                <Footer />
-            </Grid>
+            <Header />
+            <App />
+            <Footer />
         </Grid>
     </React.StrictMode>,
     document.getElementById('root'),

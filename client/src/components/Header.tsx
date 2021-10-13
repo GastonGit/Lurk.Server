@@ -1,18 +1,24 @@
 import React from 'react';
 import '../styles/Header.css';
+import Grid from '@mui/material/Grid';
 
 export default class Header extends React.Component<unknown, unknown> {
     render(): JSX.Element {
         return (
-            <header className="Head">
-                <div className="HeaderContent">
-                    <div className="HeaderContentMain">
-                        <a href="https://gastongit.com" className="Header-link">
-                            GastonGit
-                        </a>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+                <header className="Head">
+                    <div className="HeaderContent">
+                        <div className="HeaderContentMain">
+                            <a
+                                href="https://gastongit.com"
+                                className="Header-link"
+                            >
+                                GastonGit
+                            </a>
+                        </div>
                     </div>
-                </div>
-            </header>
+                </header>
+            </Grid>
         );
     }
 }

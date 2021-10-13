@@ -116,11 +116,6 @@ export default class App extends React.Component<unknown, AppState> {
 
         return (
             <div className="App">
-                <p className="backText">
-                    Nothing clip worthy is happening right now :(
-                    <br />
-                    Videos will show up automatically, no need to F5
-                </p>
                 <video
                     className="videoClip"
                     src={this.state.currentClip}

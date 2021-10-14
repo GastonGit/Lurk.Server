@@ -4,16 +4,13 @@ import './index.css';
 import Header from './components/Header';
 import App from './components/App';
 import Footer from './components/Footer';
-import Grid from '@mui/material/Grid';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
     <React.StrictMode>
-        <Grid container className="RootGrid" direction="column" spacing={0}>
-            <Header />
-            <App />
-            <Footer />
-        </Grid>
+        <Header />
+        <App />
+        <Footer />
     </React.StrictMode>,
     document.getElementById('root'),
 );

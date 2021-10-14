@@ -5,45 +5,32 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: row;
-
-    background-color: var(--secondary-bg-color);
-    color: var(--secondary-bg-color);
 }
 
 .HeaderContent {
-    height: 80%;
-    width: 96%;
+    background-color: var(--secondary-bg-color);
+    color: var(--secondary-bg-color);
 
+    height: 100%;
+    width: 1280px;
+    max-width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.HeaderItem {
     display: flex;
     justify-content: space-between;
     align-items: stretch;
     flex-direction: row;
 }
 
-.HeaderContentMain {
-    height: 100%;
-    width: 15%;
-
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: row;
-}
-
-.HeaderItem {
-    height: 60%;
-}
-
-.HeaderItem > img{
-    height: 100%;
-}
-
-
 .Header-link {
     font-size: 200%;
     text-decoration: none;
-    margin-right: 12px;
 }
 
 .Header-link:link {

@@ -1,9 +1,9 @@
 :root {
-  --main-bg-color: #0B0C10;
-  --secondary-bg-color: #1F2833;
-  --main-title-color: #66FCF1;
-  --secondary-title-color: #45A29E;
-  --main-text-color: #C5C6C7;
+  --main-bg-color: #383F51;
+  --secondary-bg-color: #3C4F76;
+  --main-title-color: #DDDBF1;
+  --secondary-title-color: #AB9F9D;
+  --main-text-color: #D1BEB0;
 }
 
 * {

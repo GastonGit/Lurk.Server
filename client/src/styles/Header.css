@@ -9,7 +9,7 @@
 
 .HeaderContent {
     background-color: var(--secondary-bg-color);
-    color: var(--secondary-bg-color);
+    color: var(--main-title-color);
 
     height: 100%;
     width: 1280px;

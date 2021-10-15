@@ -2,26 +2,27 @@
     width: 100vw;
 
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .FooterContent{
-    text-align: center;
     height: 50px;
     width: 1280px;
     max-width: 100%;
+
+    text-align: center;
 }
 
 .Footer a{
-    display: block;
     width: 6%;
+
+    display: block;
 
     margin-block-start: 1em;
     margin-block-end: 1em;
     margin-inline-start: 0;
     margin-inline-end: 0;
-
     text-decoration: none;
     user-select: none;
 }

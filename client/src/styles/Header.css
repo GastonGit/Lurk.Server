@@ -3,8 +3,8 @@
     width: 100vw;
 
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .HeaderContent {
@@ -16,16 +16,16 @@
     max-width: 100%;
 
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: row;
+    justify-content: center;
 }
 
 .HeaderItem {
     display: flex;
-    justify-content: space-between;
     align-items: stretch;
     flex-direction: row;
+    justify-content: space-between;
 }
 
 .Header-link {

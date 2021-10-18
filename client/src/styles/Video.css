@@ -1,0 +1,8 @@
+.videoClip{
+    height: 100%;
+    width: 100%;
+
+    display: none;
+
+    user-select: none;
+}

@@ -1,4 +1,4 @@
-.Footer{
+.footer{
     width: 100vw;
 
     display: flex;
@@ -6,7 +6,7 @@
     justify-content: center;
 }
 
-.FooterContent{
+.footer__content{
     height: 50px;
     width: 1280px;
     max-width: 100%;
@@ -14,7 +14,7 @@
     text-align: center;
 }
 
-.Footer a{
+.footer a{
     width: 6%;
 
     display: block;

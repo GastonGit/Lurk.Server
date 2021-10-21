@@ -9,8 +9,8 @@ export default class App extends React.Component<unknown, unknown> {
 
     render(): JSX.Element {
         return (
-            <div className="App">
-                <div className="AppContent">
+            <div className="app">
+                <div className="app__content">
                     <Video />
                 </div>
             </div>

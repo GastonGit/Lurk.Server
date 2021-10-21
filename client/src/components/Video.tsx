@@ -73,7 +73,7 @@ export default class Video extends React.Component<unknown, VideoState> {
     nextClip(): void {
         if (this.state.clips.length > 0) {
             (
-                document.querySelector('.videoClip') as HTMLVideoElement
+                document.querySelector('.js-video__clip') as HTMLVideoElement
             ).style.display = 'block';
             const updatedArray = [...this.state.clips];
             const currentClip = updatedArray.shift();
@@ -83,7 +83,7 @@ export default class Video extends React.Component<unknown, VideoState> {
             });
         } else {
             (
-                document.querySelector('.videoClip') as HTMLVideoElement
+                document.querySelector('.js-video__clip') as HTMLVideoElement
             ).style.display = 'none';
             this.setState({ noClips: true });
         }
@@ -91,18 +91,22 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     componentDidMount(): void {
         this.fetchClips().catch((err) => err);
-        (document.querySelector('.videoClip') as HTMLVideoElement).onended =
-            () => {
-                this.nextClip();
-            };
+        (
+            document.querySelector('.js-video__clip') as HTMLVideoElement
+        ).onended = () => {
+            this.nextClip();
+        };
 
         const updateInterval = setInterval(this.updateList.bind(this), 60000);
         this.setState({ updateInterval: updateInterval });
 
-        (document.querySelector('.videoClip') as HTMLElement).onerror = () => {
-            console.log('Error loading current clip, playing the next clip');
-            this.nextClip();
-        };
+        (document.querySelector('.js-video__clip') as HTMLElement).onerror =
+            () => {
+                console.log(
+                    'Error loading current clip, playing the next clip',
+                );
+                this.nextClip();
+            };
     }
 
     componentWillUnmount(): void {
@@ -116,7 +120,7 @@ export default class Video extends React.Component<unknown, VideoState> {
 
         return (
             <video
-                className="videoClip"
+                className="js-video__clip"
                 src={this.state.currentClip}
                 autoPlay={true}
                 controls

@@ -4,11 +4,11 @@ import '../styles/Header.css';
 export default class Header extends React.Component<unknown, unknown> {
     render(): JSX.Element {
         return (
-            <header className="Head">
-                <div className="HeaderContent">
+            <header className="header">
+                <div className="header__content">
                     <a
                         href="https://gastongit.com/hotclips"
-                        className="Header-link"
+                        className="header__link"
                     >
                         Hot Twitch Clips
                     </a>

@@ -10,8 +10,8 @@ export default class Footer extends React.Component<unknown, unknown> {
 
     render(): JSX.Element {
         return (
-            <div className="Footer">
-                <div className="FooterContent">
+            <div className="footer">
+                <div className="footer__content">
                     <Grid container xs={12} sm={12} md={12} lg={12}>
                         <Grid item xs={4} sm={3} md={2}>
                             <a href="https://github.com/GastonGit/Hot-Twitch-Clips">

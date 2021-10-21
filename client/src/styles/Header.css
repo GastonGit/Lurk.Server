@@ -1,4 +1,4 @@
-.Head {
+.header {
     height: 60px;
     width: 100vw;
 
@@ -7,7 +7,7 @@
     justify-content: center;
 }
 
-.HeaderContent {
+.header__content {
     background-color: var(--secondary-bg-color);
     color: var(--main-title-color);
 
@@ -21,30 +21,23 @@
     justify-content: center;
 }
 
-.HeaderItem {
-    display: flex;
-    align-items: stretch;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.Header-link {
+.header__link {
     font-size: 200%;
     text-decoration: none;
 }
 
-.Header-link:link {
+.header__link:link {
     color: var(--main-title-color);
 }
 
-.Header-link:visited {
+.header__link:visited {
     color: var(--main-title-color);
 }
 
-.Header-link:hover {
+.header__link:hover {
     color: var(--secondary-title-color);
 }
 
-.Header-link:active {
+.header__link:active {
     color: var(--main-title-color);
 }

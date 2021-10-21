@@ -1,4 +1,4 @@
-.App{
+.app{
     width: 100vw;
 
     display: flex;
@@ -7,7 +7,7 @@
     justify-content: center;
 }
 
-.AppContent{
+.app__content{
     max-height: 720px;
     width: 1280px;
     max-width: 100%;

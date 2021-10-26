@@ -17,6 +17,11 @@
     "no-console": "off",
     "global-require": "off",
     "import/no-dynamic-require": "off",
-    "prettier/prettier": ["error"]
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
   }
 }

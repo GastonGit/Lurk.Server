@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/App.css';
-import Video from './Video';
+import VideoPlayer from './VideoPlayer';
 
 export default class App extends React.Component<unknown, unknown> {
     constructor(props: unknown) {
@@ -11,7 +11,7 @@ export default class App extends React.Component<unknown, unknown> {
         return (
             <div className="app">
                 <div className="app__content">
-                    <Video />
+                    <VideoPlayer />
                 </div>
             </div>
         );

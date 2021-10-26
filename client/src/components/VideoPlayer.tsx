@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/Video.css';
+import '../styles/VideoPlayer.css';
 
 interface VideoState {
     addedClips: Array<string>;
@@ -9,7 +9,7 @@ interface VideoState {
     updateInterval: NodeJS.Timeout | undefined;
 }
 
-export default class Video extends React.Component<unknown, VideoState> {
+export default class VideoPlayer extends React.Component<unknown, VideoState> {
     constructor(props: unknown) {
         super(props);
         this.state = {

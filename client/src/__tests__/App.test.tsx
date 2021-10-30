@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import App from '../components/App';
 
-test('renders unmute button image', () => {
+test('renders app', () => {
     render(<App />);
     expect(true).toBe(true);
 });

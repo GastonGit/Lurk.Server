@@ -62,32 +62,29 @@ export default class Video extends React.Component<unknown, VideoState> {
         }
     }
 
-    updateList(): void {
-        fetch(process.env.REACT_APP_SERVER_URL || '')
-            .then((res) => res.json())
-            .then((data) => {
-                const newClips = [...data];
-                for (let i = 0; i < newClips.length; i++) {
-                    if (!this.state.addedClips.includes(newClips[i])) {
-                        const clips = [...this.state.clips];
-                        clips.push(newClips[i]);
+    async updateList(): Promise<void> {
+        const data = await this.fetchClips();
 
-                        const addedClips = [...this.state.addedClips];
-                        addedClips.push(newClips[i]);
+        const newClips = [...data];
+        for (let i = 0; i < newClips.length; i++) {
+            if (!this.state.addedClips.includes(newClips[i])) {
+                const clips = [...this.state.clips];
+                clips.push(newClips[i]);
 
-                        this.setState({
-                            clips: clips,
-                            addedClips: addedClips,
-                        });
-                    }
-                }
+                const addedClips = [...this.state.addedClips];
+                addedClips.push(newClips[i]);
 
-                if (this.state.noClips) {
-                    this.setState({ noClips: false });
-                    this.nextClip();
-                }
-            })
-            .catch((err) => err);
+                this.setState({
+                    clips: clips,
+                    addedClips: addedClips,
+                });
+            }
+        }
+
+        if (this.state.noClips) {
+            this.setState({ noClips: false });
+            this.nextClip();
+        }
     }
 
     nextClip(): void {

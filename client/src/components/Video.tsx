@@ -23,6 +23,8 @@ export default class Video extends React.Component<unknown, VideoState> {
         this.nextClip = this.nextClip.bind(this);
     }
 
+    updateTimeInSeconds = 60;
+
     async fetchClips(): Promise<void> {
         fetch(process.env.REACT_APP_SERVER_URL || '')
             .then((res) => res.json())
@@ -97,7 +99,10 @@ export default class Video extends React.Component<unknown, VideoState> {
             this.nextClip();
         };
 
-        const updateInterval = setInterval(this.updateList.bind(this), 60000);
+        const updateInterval = setInterval(
+            this.updateList.bind(this),
+            this.updateTimeInSeconds * 1000,
+        );
         this.setState({ updateInterval: updateInterval });
 
         (document.querySelector('.js-video__clip') as HTMLElement).onerror =

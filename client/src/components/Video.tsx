@@ -26,11 +26,18 @@ export default class Video extends React.Component<unknown, VideoState> {
     updateTimeInSeconds = 60;
 
     async fetchClips(): Promise<Array<string>> {
-        const response = await fetch(
-            process.env.REACT_APP_SERVER_URL || '',
-        ).catch((err) => err);
+        let data = [];
 
-        return response.json();
+        try {
+            const response = await fetch(
+                process.env.REACT_APP_SERVER_URL || '',
+            );
+            data = await response.json();
+        } catch (e) {
+            console.error(e);
+        }
+
+        return data;
     }
 
     async getClips(): Promise<void> {

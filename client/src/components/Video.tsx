@@ -25,23 +25,34 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     updateTimeInSeconds = 60;
 
-    async fetchClips(): Promise<void> {
-        fetch(process.env.REACT_APP_SERVER_URL || '')
-            .then((res) => res.json())
-            .then((data) => {
-                const clips: string[] = [];
-                data.forEach(function (clip: string) {
-                    clips.push(clip);
-                });
-                this.setState({ clips: [...clips], addedClips: [...clips] });
+    async fetchClips(): Promise<Array<string>> {
+        const response = await fetch(
+            process.env.REACT_APP_SERVER_URL || '',
+        ).catch((err) => err);
 
-                if (clips.length === 0) {
-                    this.setState({ noClips: true });
-                } else {
-                    this.nextClip();
-                }
-            })
-            .catch((err) => err);
+        return response.json();
+    }
+
+    async getClips(): Promise<void> {
+        const data = await this.fetchClips();
+        this.setClips(data);
+        this.updateClipsBool();
+    }
+
+    setClips(data: Array<string>): void {
+        const clips: string[] = [];
+        data.forEach(function (clip: string) {
+            clips.push(clip);
+        });
+        this.setState({ clips: [...clips], addedClips: [...clips] });
+    }
+
+    updateClipsBool(): void {
+        if (this.state.clips.length === 0) {
+            this.setState({ noClips: true });
+        } else {
+            this.nextClip();
+        }
     }
 
     updateList(): void {
@@ -92,26 +103,27 @@ export default class Video extends React.Component<unknown, VideoState> {
     }
 
     componentDidMount(): void {
-        this.fetchClips().catch((err) => err);
-        (
-            document.querySelector('.js-video__clip') as HTMLVideoElement
-        ).onended = () => {
-            this.nextClip();
-        };
-
-        const updateInterval = setInterval(
-            this.updateList.bind(this),
-            this.updateTimeInSeconds * 1000,
-        );
-        this.setState({ updateInterval: updateInterval });
-
-        (document.querySelector('.js-video__clip') as HTMLElement).onerror =
-            () => {
-                console.log(
-                    'Error loading current clip, playing the next clip',
-                );
+        this.getClips().then(() => {
+            (
+                document.querySelector('.js-video__clip') as HTMLVideoElement
+            ).onended = () => {
                 this.nextClip();
             };
+
+            const updateInterval = setInterval(
+                this.updateList.bind(this),
+                this.updateTimeInSeconds * 1000,
+            );
+            this.setState({ updateInterval: updateInterval });
+
+            (document.querySelector('.js-video__clip') as HTMLElement).onerror =
+                () => {
+                    console.log(
+                        'Error loading current clip, playing the next clip',
+                    );
+                    this.nextClip();
+                };
+        });
     }
 
     componentWillUnmount(): void {

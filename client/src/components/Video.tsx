@@ -108,26 +108,34 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     componentDidMount(): void {
         this.getClips().then(() => {
-            (
-                document.querySelector('.js-video__clip') as HTMLVideoElement
-            ).onended = () => {
+            this.initClipEvents();
+            this.initUpdateInterval();
+        });
+    }
+
+    initClipEvents(): void {
+        (
+            document.querySelector('.js-video__clip') as HTMLVideoElement
+        ).onended = () => {
+            this.nextClip();
+        };
+
+        (document.querySelector('.js-video__clip') as HTMLElement).onerror =
+            () => {
+                console.log(
+                    'Error loading current clip, playing the next clip',
+                );
                 this.nextClip();
             };
+    }
 
-            const updateInterval = setInterval(
-                this.updateList.bind(this),
-                this.updateTimeInSeconds * 1000,
-            );
-            this.setState({ updateInterval: updateInterval });
+    initUpdateInterval(): void {
+        const updateInterval = setInterval(
+            this.updateList.bind(this),
+            this.updateTimeInSeconds * 1000,
+        );
 
-            (document.querySelector('.js-video__clip') as HTMLElement).onerror =
-                () => {
-                    console.log(
-                        'Error loading current clip, playing the next clip',
-                    );
-                    this.nextClip();
-                };
-        });
+        this.setState({ updateInterval: updateInterval });
     }
 
     componentWillUnmount(): void {

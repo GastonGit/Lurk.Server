@@ -25,6 +25,12 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     updateTimeInSeconds = 60;
 
+    async getClips(): Promise<void> {
+        const data = await this.fetchClips();
+        this.setClips(data);
+        this.updateClipsBool();
+    }
+
     async fetchClips(): Promise<Array<string>> {
         let data = [];
 
@@ -40,17 +46,13 @@ export default class Video extends React.Component<unknown, VideoState> {
         return data;
     }
 
-    async getClips(): Promise<void> {
-        const data = await this.fetchClips();
-        this.setClips(data);
-        this.updateClipsBool();
-    }
-
     setClips(data: Array<string>): void {
         const clips: string[] = [];
+
         data.forEach(function (clip: string) {
             clips.push(clip);
         });
+
         this.setState({ clips: [...clips], addedClips: [...clips] });
     }
 
@@ -64,8 +66,13 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     async updateList(): Promise<void> {
         const data = await this.fetchClips();
-
         const newClips = [...data];
+
+        this.addNewClips(newClips);
+        this.newClipsFound();
+    }
+
+    addNewClips(newClips: Array<string>): void {
         for (let i = 0; i < newClips.length; i++) {
             if (!this.state.addedClips.includes(newClips[i])) {
                 const clips = [...this.state.clips];
@@ -80,7 +87,9 @@ export default class Video extends React.Component<unknown, VideoState> {
                 });
             }
         }
+    }
 
+    newClipsFound(): void {
         if (this.state.noClips) {
             this.setState({ noClips: false });
             this.nextClip();
@@ -89,21 +98,35 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     nextClip(): void {
         if (this.state.clips.length > 0) {
-            (
-                document.querySelector('.js-video__clip') as HTMLVideoElement
-            ).style.display = 'block';
-            const updatedArray = [...this.state.clips];
-            const currentClip = updatedArray.shift();
-            this.setState({
-                currentClip: currentClip,
-                clips: updatedArray,
-            });
+            this.showVideo();
+            this.playNextVideo();
         } else {
-            (
-                document.querySelector('.js-video__clip') as HTMLVideoElement
-            ).style.display = 'none';
-            this.setState({ noClips: true });
+            this.hideVideo();
         }
+    }
+
+    playNextVideo(): void {
+        const updatedArray = [...this.state.clips];
+        const currentClip = updatedArray.shift();
+
+        this.setState({
+            currentClip: currentClip,
+            clips: updatedArray,
+        });
+    }
+
+    showVideo(): void {
+        (
+            document.querySelector('.js-video__clip') as HTMLVideoElement
+        ).style.display = 'block';
+    }
+
+    hideVideo(): void {
+        (
+            document.querySelector('.js-video__clip') as HTMLVideoElement
+        ).style.display = 'none';
+
+        this.setState({ noClips: true });
     }
 
     componentDidMount(): void {

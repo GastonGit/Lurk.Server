@@ -42,25 +42,25 @@ export default class Video extends React.Component<unknown, VideoState> {
     }
 
     async getClips(): Promise<void> {
-        const data = await this.fetchClips();
+        const clips = await this.fetchClips();
 
-        this.setClips(data);
+        this.setClips(clips);
         this.updateClipsBool();
     }
 
     async fetchClips(): Promise<Array<string>> {
-        let data = [];
+        let clips = [];
 
         try {
             const response = await fetch(
                 process.env.REACT_APP_SERVER_URL || '',
             );
-            data = await response.json();
+            clips = await response.json();
         } catch (e) {
             console.error(e);
         }
 
-        return data;
+        return clips;
     }
 
     setClips(data: Array<string>): void {

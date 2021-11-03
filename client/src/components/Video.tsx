@@ -63,13 +63,7 @@ export default class Video extends React.Component<unknown, VideoState> {
         return clips;
     }
 
-    setClips(data: Array<string>): void {
-        const clips: string[] = [];
-
-        data.forEach(function (clip: string) {
-            clips.push(clip);
-        });
-
+    setClips(clips: Array<string>): void {
         this.setState({ clips: [...clips], addedClips: [...clips] });
     }
 

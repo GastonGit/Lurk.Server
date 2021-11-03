@@ -12,6 +12,7 @@ interface VideoState {
 export default class Video extends React.Component<unknown, VideoState> {
     constructor(props: unknown) {
         super(props);
+
         this.state = {
             addedClips: [],
             clips: [],
@@ -20,6 +21,7 @@ export default class Video extends React.Component<unknown, VideoState> {
             noClips: false,
             updateInterval: undefined,
         };
+
         this.nextClip = this.nextClip.bind(this);
     }
 
@@ -30,6 +32,7 @@ export default class Video extends React.Component<unknown, VideoState> {
             this.initClipEvents(
                 document.querySelector('.js-video__clip') as HTMLVideoElement,
             );
+
             this.initUpdateInterval();
         });
     }
@@ -40,6 +43,7 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     async getClips(): Promise<void> {
         const data = await this.fetchClips();
+
         this.setClips(data);
         this.updateClipsBool();
     }

@@ -131,25 +131,22 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     componentDidMount(): void {
         this.getClips().then(() => {
-            this.initClipEvents();
+            this.initClipEvents(
+                document.querySelector('.js-video__clip') as HTMLVideoElement,
+            );
             this.initUpdateInterval();
         });
     }
 
-    initClipEvents(): void {
-        (
-            document.querySelector('.js-video__clip') as HTMLVideoElement
-        ).onended = () => {
+    initClipEvents(videoElement: HTMLVideoElement): void {
+        videoElement.onended = () => {
             this.nextClip();
         };
 
-        (document.querySelector('.js-video__clip') as HTMLElement).onerror =
-            () => {
-                console.log(
-                    'Error loading current clip, playing the next clip',
-                );
-                this.nextClip();
-            };
+        videoElement.onerror = () => {
+            console.log('Error loading current clip, playing the next clip');
+            this.nextClip();
+        };
     }
 
     initUpdateInterval(): void {

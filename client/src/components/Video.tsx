@@ -25,6 +25,19 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     updateTimeInSeconds = 60;
 
+    componentDidMount(): void {
+        this.getClips().then(() => {
+            this.initClipEvents(
+                document.querySelector('.js-video__clip') as HTMLVideoElement,
+            );
+            this.initUpdateInterval();
+        });
+    }
+
+    componentWillUnmount(): void {
+        clearInterval(this.state.updateInterval as NodeJS.Timeout);
+    }
+
     async getClips(): Promise<void> {
         const data = await this.fetchClips();
         this.setClips(data);
@@ -64,6 +77,58 @@ export default class Video extends React.Component<unknown, VideoState> {
         }
     }
 
+    initClipEvents(videoElement: HTMLVideoElement): void {
+        videoElement.onended = () => {
+            this.nextClip();
+        };
+
+        videoElement.onerror = () => {
+            console.log('Error loading current clip, playing the next clip');
+            this.nextClip();
+        };
+    }
+
+    initUpdateInterval(): void {
+        const updateInterval = setInterval(
+            this.updateList.bind(this),
+            this.updateTimeInSeconds * 1000,
+        );
+
+        this.setState({ updateInterval: updateInterval });
+    }
+
+    nextClip(): void {
+        if (this.state.clips.length > 0) {
+            this.showVideo();
+            this.playNextVideo();
+        } else {
+            this.hideVideo();
+        }
+    }
+
+    showVideo(): void {
+        (
+            document.querySelector('.js-video__clip') as HTMLVideoElement
+        ).style.display = 'block';
+    }
+
+    hideVideo(): void {
+        (
+            document.querySelector('.js-video__clip') as HTMLVideoElement
+        ).style.display = 'none';
+
+        this.setState({ noClips: true });
+    }
+    playNextVideo(): void {
+        const updatedArray = [...this.state.clips];
+        const currentClip = updatedArray.shift();
+
+        this.setState({
+            currentClip: currentClip,
+            clips: updatedArray,
+        });
+    }
+
     async updateList(): Promise<void> {
         const data = await this.fetchClips();
         const newClips = [...data];
@@ -94,72 +159,6 @@ export default class Video extends React.Component<unknown, VideoState> {
             this.setState({ noClips: false });
             this.nextClip();
         }
-    }
-
-    nextClip(): void {
-        if (this.state.clips.length > 0) {
-            this.showVideo();
-            this.playNextVideo();
-        } else {
-            this.hideVideo();
-        }
-    }
-
-    playNextVideo(): void {
-        const updatedArray = [...this.state.clips];
-        const currentClip = updatedArray.shift();
-
-        this.setState({
-            currentClip: currentClip,
-            clips: updatedArray,
-        });
-    }
-
-    showVideo(): void {
-        (
-            document.querySelector('.js-video__clip') as HTMLVideoElement
-        ).style.display = 'block';
-    }
-
-    hideVideo(): void {
-        (
-            document.querySelector('.js-video__clip') as HTMLVideoElement
-        ).style.display = 'none';
-
-        this.setState({ noClips: true });
-    }
-
-    componentDidMount(): void {
-        this.getClips().then(() => {
-            this.initClipEvents(
-                document.querySelector('.js-video__clip') as HTMLVideoElement,
-            );
-            this.initUpdateInterval();
-        });
-    }
-
-    initClipEvents(videoElement: HTMLVideoElement): void {
-        videoElement.onended = () => {
-            this.nextClip();
-        };
-
-        videoElement.onerror = () => {
-            console.log('Error loading current clip, playing the next clip');
-            this.nextClip();
-        };
-    }
-
-    initUpdateInterval(): void {
-        const updateInterval = setInterval(
-            this.updateList.bind(this),
-            this.updateTimeInSeconds * 1000,
-        );
-
-        this.setState({ updateInterval: updateInterval });
-    }
-
-    componentWillUnmount(): void {
-        clearInterval(this.state.updateInterval as NodeJS.Timeout);
     }
 
     render(): JSX.Element {

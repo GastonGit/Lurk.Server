@@ -85,9 +85,7 @@ export default class Video extends React.Component<unknown, VideoState> {
             '.js-video__clip',
         ) as HTMLVideoElement;
 
-        const nextClipIndex = this.state.clipIndex + 1;
-
-        if (nextClipIndex < this.state.playlist.length) {
+        if (this.state.clipIndex + 1 < this.state.playlist.length) {
             this.showVideo(videoElement);
             this.playNextVideo();
         } else {

@@ -41,7 +41,7 @@ export default class Video extends React.Component<unknown, VideoState> {
     async getClips(): Promise<void> {
         const clips = await this.fetchClips();
 
-        this.setClips(clips);
+        this.setState({ playlist: [...clips] });
         this.nextClip();
     }
 
@@ -58,10 +58,6 @@ export default class Video extends React.Component<unknown, VideoState> {
         }
 
         return clips;
-    }
-
-    setClips(clips: Array<string>): void {
-        this.setState({ playlist: [...clips] });
     }
 
     initClipEvents(videoElement: HTMLVideoElement): void {

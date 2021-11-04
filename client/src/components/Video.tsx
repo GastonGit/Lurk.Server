@@ -4,7 +4,6 @@ import '../styles/VideoPlayer.css';
 interface VideoState {
     playlist: Array<string>;
     clipIndex: number;
-    currentClip: string | undefined;
     noClips: boolean;
     updateInterval: NodeJS.Timeout | undefined;
 }
@@ -16,8 +15,6 @@ export default class Video extends React.Component<unknown, VideoState> {
         this.state = {
             playlist: [],
             clipIndex: -1,
-            currentClip:
-                'https://clips-media-assets2.twitch.tv/42179710588-offset-17644.mp4',
             noClips: false,
             updateInterval: undefined,
         };

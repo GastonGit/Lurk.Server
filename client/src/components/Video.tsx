@@ -4,7 +4,7 @@ import '../styles/VideoPlayer.css';
 interface VideoState {
     playlist: Array<string>;
     clipIndex: number;
-    noClips: boolean;
+    awaitingClips: boolean;
     updateInterval: NodeJS.Timeout | undefined;
 }
 
@@ -15,7 +15,7 @@ export default class Video extends React.Component<unknown, VideoState> {
         this.state = {
             playlist: [],
             clipIndex: -1,
-            noClips: false,
+            awaitingClips: false,
             updateInterval: undefined,
         };
 
@@ -66,7 +66,7 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     updateClipsBool(): void {
         if (this.state.playlist.length === 0) {
-            this.setState({ noClips: true });
+            this.setState({ awaitingClips: true });
         } else {
             this.nextClip();
         }
@@ -114,7 +114,7 @@ export default class Video extends React.Component<unknown, VideoState> {
     hideVideo(videoElement: HTMLVideoElement): void {
         videoElement.style.display = 'none';
 
-        this.setState({ noClips: true });
+        this.setState({ awaitingClips: true });
     }
 
     playNextVideo(): void {
@@ -147,8 +147,8 @@ export default class Video extends React.Component<unknown, VideoState> {
     }
 
     newClipsFound(): void {
-        if (this.state.noClips) {
-            this.setState({ noClips: false });
+        if (this.state.awaitingClips) {
+            this.setState({ awaitingClips: false });
             this.nextClip();
         }
     }

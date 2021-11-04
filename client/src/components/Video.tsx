@@ -81,25 +81,11 @@ export default class Video extends React.Component<unknown, VideoState> {
     }
 
     nextClip(): void {
-        const videoElement = document.querySelector(
-            '.js-video__clip',
-        ) as HTMLVideoElement;
-
         if (this.state.clipIndex + 1 < this.state.playlist.length) {
-            this.showVideo(videoElement);
             this.playNextVideo();
         } else {
-            this.hideVideo(videoElement);
+            this.setState({ awaitingClips: true });
         }
-    }
-
-    showVideo(videoElement: HTMLVideoElement): void {
-        videoElement.style.display = 'block';
-    }
-
-    hideVideo(videoElement: HTMLVideoElement): void {
-        videoElement.style.display = 'none';
-        this.setState({ awaitingClips: true });
     }
 
     playNextVideo(): void {

@@ -117,6 +117,7 @@ export default class Video extends React.Component<unknown, VideoState> {
 
         this.setState({ noClips: true });
     }
+
     playNextVideo(): void {
         const updatedArray = [...this.state.playlist];
         const currentClip = updatedArray.shift();

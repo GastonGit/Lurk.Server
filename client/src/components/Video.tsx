@@ -3,7 +3,7 @@ import '../styles/VideoPlayer.css';
 
 interface VideoState {
     addedClips: Array<string>;
-    clips: Array<string>;
+    playlist: Array<string>;
     currentClip: string | undefined;
     noClips: boolean;
     updateInterval: NodeJS.Timeout | undefined;
@@ -15,7 +15,7 @@ export default class Video extends React.Component<unknown, VideoState> {
 
         this.state = {
             addedClips: [],
-            clips: [],
+            playlist: [],
             currentClip:
                 'https://clips-media-assets2.twitch.tv/42179710588-offset-17644.mp4',
             noClips: false,
@@ -64,11 +64,11 @@ export default class Video extends React.Component<unknown, VideoState> {
     }
 
     setClips(clips: Array<string>): void {
-        this.setState({ clips: [...clips], addedClips: [...clips] });
+        this.setState({ playlist: [...clips], addedClips: [...clips] });
     }
 
     updateClipsBool(): void {
-        if (this.state.clips.length === 0) {
+        if (this.state.playlist.length === 0) {
             this.setState({ noClips: true });
         } else {
             this.nextClip();
@@ -100,7 +100,7 @@ export default class Video extends React.Component<unknown, VideoState> {
             '.js-video__clip',
         ) as HTMLVideoElement;
 
-        if (this.state.clips.length > 0) {
+        if (this.state.playlist.length > 0) {
             this.showVideo(videoElement);
             this.playNextVideo();
         } else {
@@ -118,12 +118,12 @@ export default class Video extends React.Component<unknown, VideoState> {
         this.setState({ noClips: true });
     }
     playNextVideo(): void {
-        const updatedArray = [...this.state.clips];
+        const updatedArray = [...this.state.playlist];
         const currentClip = updatedArray.shift();
 
         this.setState({
             currentClip: currentClip,
-            clips: updatedArray,
+            playlist: updatedArray,
         });
     }
 
@@ -138,14 +138,14 @@ export default class Video extends React.Component<unknown, VideoState> {
     addNewClips(newClips: Array<string>): void {
         for (let i = 0; i < newClips.length; i++) {
             if (!this.state.addedClips.includes(newClips[i])) {
-                const clips = [...this.state.clips];
+                const clips = [...this.state.playlist];
                 clips.push(newClips[i]);
 
                 const addedClips = [...this.state.addedClips];
                 addedClips.push(newClips[i]);
 
                 this.setState({
-                    clips: clips,
+                    playlist: clips,
                     addedClips: addedClips,
                 });
             }
@@ -160,7 +160,7 @@ export default class Video extends React.Component<unknown, VideoState> {
     }
 
     render(): JSX.Element {
-        if (!this.state.clips) {
+        if (!this.state.playlist) {
             return <span>Loading...</span>;
         }
 

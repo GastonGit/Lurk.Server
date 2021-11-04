@@ -42,7 +42,7 @@ export default class Video extends React.Component<unknown, VideoState> {
         const clips = await this.fetchClips();
 
         this.setClips(clips);
-        this.updateClipsBool();
+        this.nextClip();
     }
 
     async fetchClips(): Promise<Array<string>> {
@@ -62,14 +62,6 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     setClips(clips: Array<string>): void {
         this.setState({ playlist: [...clips] });
-    }
-
-    updateClipsBool(): void {
-        if (this.state.playlist.length === 0) {
-            this.setState({ awaitingClips: true });
-        } else {
-            this.nextClip();
-        }
     }
 
     initClipEvents(videoElement: HTMLVideoElement): void {
@@ -113,7 +105,6 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     hideVideo(videoElement: HTMLVideoElement): void {
         videoElement.style.display = 'none';
-
         this.setState({ awaitingClips: true });
     }
 

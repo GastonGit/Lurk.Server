@@ -97,8 +97,8 @@ export default class Video extends React.Component<unknown, VideoState> {
     }
 
     async updateList(): Promise<void> {
-        const data = await this.fetchClips();
-        const newClips = [...data];
+        const clips = await this.fetchClips();
+        const newClips = [...clips];
 
         this.addNewClips(newClips);
         this.newClipsFound();

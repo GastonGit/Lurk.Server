@@ -82,16 +82,12 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     nextClip(): void {
         if (this.state.clipIndex + 1 < this.state.playlist.length) {
-            this.playNextVideo();
+            this.setState((prevState) => ({
+                clipIndex: prevState.clipIndex + 1,
+            }));
         } else {
             this.setState({ awaitingClips: true });
         }
-    }
-
-    playNextVideo(): void {
-        this.setState((prevState) => ({
-            clipIndex: prevState.clipIndex + 1,
-        }));
     }
 
     async updatePlaylist(): Promise<void> {

@@ -15,7 +15,7 @@ export default class Video extends React.Component<unknown, VideoState> {
         this.state = {
             playlist: [],
             clipIndex: -1,
-            awaitingClips: false,
+            awaitingClips: true,
             updateInterval: undefined,
         };
 
@@ -25,7 +25,7 @@ export default class Video extends React.Component<unknown, VideoState> {
     updateTimeInSeconds = 60;
 
     componentDidMount(): void {
-        this.getClips().then(() => {
+        this.updatePlaylist().then(() => {
             this.initClipEvents(
                 document.querySelector('.js-video__clip') as HTMLVideoElement,
             );
@@ -36,13 +36,6 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     componentWillUnmount(): void {
         clearInterval(this.state.updateInterval as NodeJS.Timeout);
-    }
-
-    async getClips(): Promise<void> {
-        const clips = await this.fetchClips();
-
-        this.setState({ playlist: [...clips] });
-        this.playNextClip();
     }
 
     async fetchClips(): Promise<Array<string>> {

@@ -19,7 +19,7 @@ export default class Video extends React.Component<unknown, VideoState> {
             updateInterval: undefined,
         };
 
-        this.nextClip = this.nextClip.bind(this);
+        this.playNextClip = this.playNextClip.bind(this);
     }
 
     updateTimeInSeconds = 60;
@@ -42,7 +42,7 @@ export default class Video extends React.Component<unknown, VideoState> {
         const clips = await this.fetchClips();
 
         this.setState({ playlist: [...clips] });
-        this.nextClip();
+        this.playNextClip();
     }
 
     async fetchClips(): Promise<Array<string>> {
@@ -62,12 +62,12 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     initClipEvents(videoElement: HTMLVideoElement): void {
         videoElement.onended = () => {
-            this.nextClip();
+            this.playNextClip();
         };
 
         videoElement.onerror = () => {
             console.log('Error loading current clip, playing the next clip');
-            this.nextClip();
+            this.playNextClip();
         };
     }
 
@@ -80,7 +80,7 @@ export default class Video extends React.Component<unknown, VideoState> {
         this.setState({ updateInterval: updateInterval });
     }
 
-    nextClip(): void {
+    playNextClip(): void {
         if (this.state.clipIndex + 1 < this.state.playlist.length) {
             this.setState((prevState) => ({
                 clipIndex: prevState.clipIndex + 1,
@@ -113,7 +113,7 @@ export default class Video extends React.Component<unknown, VideoState> {
     newClipsFound(): void {
         if (this.state.awaitingClips) {
             this.setState({ awaitingClips: false });
-            this.nextClip();
+            this.playNextClip();
         }
     }
 

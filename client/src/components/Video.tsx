@@ -87,7 +87,6 @@ export default class Video extends React.Component<unknown, VideoState> {
         const clips = await this.fetchClips();
 
         this.addNewClips([...clips]);
-        this.newClipsFound();
     }
 
     addNewClips(latestClips: Array<string>): void {
@@ -102,6 +101,10 @@ export default class Video extends React.Component<unknown, VideoState> {
         this.setState((prevState) => ({
             playlist: prevState.playlist.concat(newClips),
         }));
+
+        if (newClips.length > 0) {
+            this.newClipsFound();
+        }
     }
 
     newClipsFound(): void {

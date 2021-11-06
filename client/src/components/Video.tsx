@@ -73,7 +73,7 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     initUpdateInterval(): void {
         const updateInterval = setInterval(
-            this.updateList.bind(this),
+            this.updatePlaylist.bind(this),
             this.updateTimeInSeconds * 1000,
         );
 
@@ -94,7 +94,7 @@ export default class Video extends React.Component<unknown, VideoState> {
         }));
     }
 
-    async updateList(): Promise<void> {
+    async updatePlaylist(): Promise<void> {
         const clips = await this.fetchClips();
 
         this.addNewClips([...clips]);

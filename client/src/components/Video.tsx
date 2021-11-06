@@ -90,17 +90,18 @@ export default class Video extends React.Component<unknown, VideoState> {
         this.newClipsFound();
     }
 
-    addNewClips(newClips: Array<string>): void {
-        for (let i = 0; i < newClips.length; i++) {
-            if (!this.state.playlist.includes(newClips[i])) {
-                const clips = [...this.state.playlist];
-                clips.push(newClips[i]);
+    addNewClips(latestClips: Array<string>): void {
+        const newClips: Array<string> = [];
 
-                this.setState({
-                    playlist: clips,
-                });
+        for (let i = 0; i < latestClips.length; i++) {
+            if (!this.state.playlist.includes(latestClips[i])) {
+                newClips.push(latestClips[i]);
             }
         }
+
+        this.setState((prevState) => ({
+            playlist: prevState.playlist.concat(newClips),
+        }));
     }
 
     newClipsFound(): void {

@@ -114,6 +114,10 @@ export default class Video extends React.Component<unknown, VideoState> {
         }
     }
 
+    unmuteVideo(videoElement: HTMLVideoElement): void {
+        videoElement.muted = false;
+    }
+
     render(): JSX.Element {
         if (!this.state.playlist) {
             return <span>Loading...</span>;

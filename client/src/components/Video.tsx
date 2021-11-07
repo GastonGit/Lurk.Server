@@ -26,11 +26,13 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     componentDidMount(): void {
         this.updatePlaylist().then(() => {
-            this.initClipEvents(
-                document.querySelector('.js-video__clip') as HTMLVideoElement,
-            );
+            const videoElement = document.querySelector(
+                '.js-video__clip',
+            ) as HTMLVideoElement;
 
+            this.initClipEvents(videoElement);
             this.initUpdateInterval();
+            this.unmuteVideo(videoElement);
         });
     }
 

@@ -26,13 +26,10 @@ export default class Video extends React.Component<unknown, VideoState> {
 
     componentDidMount(): void {
         this.updatePlaylist().then(() => {
-            const videoElement = document.querySelector(
-                '.js-video__clip',
-            ) as HTMLVideoElement;
-
-            this.initClipEvents(videoElement);
             this.initUpdateInterval();
-            this.unmuteVideo(videoElement);
+            this.unmuteVideo(
+                document.querySelector('.js-video__clip') as HTMLVideoElement,
+            );
         });
     }
 
@@ -53,17 +50,6 @@ export default class Video extends React.Component<unknown, VideoState> {
         }
 
         return clips;
-    }
-
-    initClipEvents(videoElement: HTMLVideoElement): void {
-        videoElement.onended = () => {
-            this.playNextClip();
-        };
-
-        videoElement.onerror = () => {
-            console.log('Error loading current clip, playing the next clip');
-            this.playNextClip();
-        };
     }
 
     initUpdateInterval(): void {
@@ -132,6 +118,8 @@ export default class Video extends React.Component<unknown, VideoState> {
                 autoPlay={true}
                 controls
                 muted
+                onEnded={this.playNextClip}
+                onError={this.playNextClip}
             />
         );
     }

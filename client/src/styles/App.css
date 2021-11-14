@@ -8,7 +8,14 @@
 }
 
 .app__content{
-    max-height: 720px;
+    height: 720px;
     width: 1280px;
     max-width: 100%;
+}
+
+@media screen and (max-width: 1280px) {
+    .app__content {
+        /*  height = width / (aspect ratio)  */
+        height: calc((100vw / (1280 / 720)));
+    }
 }

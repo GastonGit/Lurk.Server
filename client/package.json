@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "homepage": "/hotclips/",
   "private": true,
   "main": "src/index.tsx",

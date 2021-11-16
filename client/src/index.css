@@ -31,3 +31,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/*
+    Scrollbar
+*/
+::-webkit-scrollbar {
+  background: #FFC914;
+}
+
+::-webkit-scrollbar-button{
+  background: #2E282A;
+}
+
+::-webkit-scrollbar-thumb{
+  background: #2E282A;
+}

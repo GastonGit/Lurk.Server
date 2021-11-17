@@ -46,3 +46,7 @@ code {
 ::-webkit-scrollbar-thumb{
   background: #2E282A;
 }
+
+::-webkit-scrollbar-corner{
+  background: #2E282A;
+}

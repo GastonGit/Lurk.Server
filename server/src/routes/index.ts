@@ -8,7 +8,7 @@ const hotClips = new HotClipsController();
 hotClips.setupConnection();
 hotClips.start();
 
-indexRouter.get('/', (req: Request, res: Response) => {
+indexRouter.get('/', (_req: Request, res: Response) => {
     res.send(hotClips.getList());
 });
 

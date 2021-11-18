@@ -168,7 +168,7 @@ class MonitorTwitchChat {
   }
 
   async request100Streams(pagination) {
-    return await Fetcher.request100Streams(pagination);
+    return (await Fetcher.request100Streams(pagination)).json();
   }
 }
 

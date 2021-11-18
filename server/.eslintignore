@@ -1,0 +1,11 @@
+dist
+node_modules
+.idea
+npm-debug.log.*
+package.json
+
+logs
+*.log
+coverage
+.eslintcache
+.travis.yml

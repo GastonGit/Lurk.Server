@@ -35,6 +35,10 @@ code {
 /*
     Scrollbar
 */
+@supports (-moz-appearance:none) {
+  :root { scrollbar-color: #2E282A #FFC914; }
+}
+
 ::-webkit-scrollbar {
   background: #FFC914;
 }

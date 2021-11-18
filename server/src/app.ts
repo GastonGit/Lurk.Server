@@ -1,3 +1,20 @@
+import express, { Application } from 'express';
+import routes from './routes';
+import helmet from 'helmet';
+
+const app: Application = express();
+const PORT = process.env.PORT || 8000;
+
+app.use(helmet());
+app.use(express.json());
+app.use(routes);
+
+app.listen(PORT, (): void => {
+    console.log(`Server Running at http://localhost:${PORT}`);
+});
+
+/*
+
 require('dotenv').config();
 
 let express = require('express');
@@ -21,3 +38,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 
 module.exports = app;
+
+ */

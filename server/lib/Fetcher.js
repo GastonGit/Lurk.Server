@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const fakeFetch = require("./dev/FetcherDev");
 
 async function validAppAccessToken() {
   const url = "https://api.twitch.tv/helix/users?id=141981764";
@@ -34,7 +35,14 @@ async function request100Streams(pagination) {
   return await response.json();
 }
 
-module.exports = {
-  validAppAccessToken: validAppAccessToken,
-  request100Streams: request100Streams,
-};
+if (process.env.NODE_ENV === "development") {
+  module.exports = {
+    validAppAccessToken: fakeFetch.validAppAccessToken,
+    request100Streams: fakeFetch.request100Streams,
+  };
+} else {
+  module.exports = {
+    validAppAccessToken: validAppAccessToken,
+    request100Streams: request100Streams,
+  };
+}

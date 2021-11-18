@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 
-export async function validAppAccessToken() {
+async function validAppAccessToken() {
   const url = "https://api.twitch.tv/helix/users?id=141981764";
 
   const response = await fetch(url, {
@@ -16,7 +16,7 @@ export async function validAppAccessToken() {
   return status !== 401;
 }
 
-export async function request100Streams(pagination) {
+async function request100Streams(pagination) {
   let url = "https://api.twitch.tv/helix/streams?first=100&language=en";
 
   if (pagination) {
@@ -33,3 +33,8 @@ export async function request100Streams(pagination) {
 
   return await response.json();
 }
+
+module.exports = {
+  validAppAccessToken: validAppAccessToken,
+  request100Streams: request100Streams,
+};

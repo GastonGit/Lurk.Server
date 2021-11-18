@@ -6,7 +6,7 @@
     "start": "ts-node -r dotenv/config src/app.ts",
     "start:watch": "nodemon",
     "start:test_values": "set NODE_ENV=test_values&& nodemon",
-    "dev": "set NODE_ENV=development&&node bin/www",
+    "dev": "set NODE_ENV=development&&ts-node -r dotenv/config src/app.ts",
     "test": "set NODE_ENV=test&&mocha",
     "test-with-coverage": "set NODE_ENV=test&&nyc mocha"
   },

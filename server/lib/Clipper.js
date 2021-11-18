@@ -1,152 +1,172 @@
-require('dotenv').config();
-const helper = require('./helper');
-const fetch = require('node-fetch');
+require("dotenv").config();
+const helper = require("./helper");
+const fetch = require("node-fetch");
 
-class Clipper{
+class Clipper {
+  credentials;
 
-    credentials;
+  constructor() {
+    this.credentials = {
+      id: process.env.CLIENT_ID,
+      secret: process.env.CLIENT_SECRET,
+      code: process.env.CLIENT_CODE,
+      refresh: process.env.CLIENT_REFRESH,
+    };
+  }
 
-    constructor() {
-        this.credentials = {
-            id: process.env.CLIENT_ID,
-            secret: process.env.CLIENT_SECRET,
-            code: process.env.CLIENT_CODE,
-            refresh: process.env.CLIENT_REFRESH
-        }
+  async createClip(streamer) {
+    helper.ensureArgument(streamer, "string");
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("CLIP CREATED FOR: " + streamer);
+      return { id: "HealthyDelightfulEchidnaKappaPride" };
     }
 
-    async createClip(streamer){
-        helper.ensureArgument(streamer, 'string');
+    const broadcasterID = await this.getBroadcasterID(streamer);
 
-        if (process.env.NODE_ENV === 'test_values'){
-            console.log('CLIP CREATED FOR: ' + streamer);
-            return {id: 'HealthyDelightfulEchidnaKappaPride'};
-        }
+    const url =
+      "https://api.twitch.tv/helix/clips?broadcaster_id=" +
+      broadcasterID.toLowerCase();
+    const accessToken = await this.getAccessToken();
 
-        const broadcasterID = await this.getBroadcasterID(streamer);
+    const response = await fetch(url, {
+      method: "post",
+      headers: {
+        "Client-ID": this.credentials.id,
+        Authorization: "Bearer " + accessToken,
+      },
+    });
 
-        const url = 'https://api.twitch.tv/helix/clips?broadcaster_id=' + broadcasterID.toLowerCase();
-        const accessToken = await this.getAccessToken();
+    const status = await response.status;
 
-        const response = await fetch(url, {
-            method: 'post',
-            headers: {
-                'Client-ID': this.credentials.id,
-                'Authorization': 'Bearer ' + accessToken
-            },
-        })
+    if (status === 200 || status === 202) {
+      const json = await response.json();
+      const data = json.data[0];
 
-        const status = await response.status;
+      console.log("\x1b[32m%s\x1b[0m", "createClip :: SUCCESS :: " + streamer);
+      return { created: true, data };
+    } else {
+      console.log(
+        "\x1b[45m%s\x1b[0m",
+        "createClip :: FAILURE :: " + streamer + " (status code " + status + ")"
+      );
+      return { created: false };
+    }
+  }
 
-        if (status === 200 || status === 202) {
+  async getClip(slug) {
+    helper.ensureArgument(slug, "string");
 
-            const json = await response.json();
-            const data = json.data[0];
-
-            console.log('\x1b[32m%s\x1b[0m','createClip :: SUCCESS :: ' + streamer)
-            return {created: true, data};
-        } else{
-            console.log('\x1b[45m%s\x1b[0m','createClip :: FAILURE :: ' + streamer + ' (status code ' + status + ')')
-            return {created: false};
-        }
+    if (process.env.NODE_ENV === "development") {
+      return {
+        thumbnail_url:
+          "https://clips-media-assets2.twitch.tv/AT-cm%7C1140679825-preview-480x272.jpg",
+      };
     }
 
-    async getClip(slug){
-        helper.ensureArgument(slug, 'string');
+    const url = "https://api.twitch.tv/helix/clips?id=" + slug;
+    const accessToken = await this.getAccessToken();
 
-        const url = 'https://api.twitch.tv/helix/clips?id=' + slug;
-        const accessToken = await this.getAccessToken();
+    const response = await fetch(url, {
+      method: "get",
+      headers: {
+        "Client-ID": this.credentials.id,
+        Authorization: "Bearer " + accessToken,
+      },
+    });
 
-        const response = await fetch(url, {
-            method: 'get',
-            headers: {
-                'Client-ID': this.credentials.id,
-                'Authorization': 'Bearer ' + accessToken
-            },
-        })
+    const result = await response.json();
 
-        const result = await response.json();
+    return result.data[0];
+  }
 
-        return result.data[0];
+  async getVideoUrl(slug) {
+    helper.ensureArgument(slug, "string");
+
+    const clip = await this.getClip(slug);
+
+    if (typeof clip !== "undefined") {
+      const url = this.formatVideoUrl(clip.thumbnail_url);
+
+      return { valid: true, url };
+    } else {
+      return { valid: false };
+    }
+  }
+
+  formatVideoUrl(thumbnail_url) {
+    helper.ensureArgument(thumbnail_url, "string");
+
+    const videoID = thumbnail_url.substring(
+      thumbnail_url.indexOf(".tv/") + 4,
+      thumbnail_url.indexOf("-preview")
+    );
+
+    return "https://clips-media-assets2.twitch.tv/" + videoID + ".mp4";
+  }
+
+  async getAccessToken() {
+    if (process.env.NODE_ENV === "development") {
+      return "dev_string";
+    }
+    const url =
+      "https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=" +
+      this.credentials.refresh +
+      "&client_id=" +
+      this.credentials.id +
+      "&client_secret=" +
+      this.credentials.secret;
+
+    const response = await fetch(url, {
+      method: "post",
+    });
+
+    const status = await response.status;
+
+    if (status !== 200) {
+      throw new Error("getAccessToken - status code is: " + status);
     }
 
-    async getVideoUrl(slug){
-        helper.ensureArgument(slug, 'string');
+    const json = await response.json();
 
-        const clip = await this.getClip(slug);
+    return json.access_token;
+  }
 
-        if (typeof clip !== 'undefined'){
-            const url = this.formatVideoUrl(clip.thumbnail_url);
+  async getBroadcasterID(id) {
+    helper.ensureArgument(id, "string");
 
-            return {valid: true, url}
-        } else {
+    const user = await this.getUser(id);
 
-            return {valid: false};
-        }
+    return user.data[0].id;
+  }
+
+  async getUser(name) {
+    helper.ensureArgument(name, "string");
+
+    if (process.env.NODE_ENV === "development") {
+      return { data: ["shit"] };
     }
 
-    formatVideoUrl(thumbnail_url){
-        helper.ensureArgument(thumbnail_url, 'string');
+    const url =
+      "https://api.twitch.tv/helix/users?" + "login=" + name.toLowerCase();
+    const accessToken = await this.getAccessToken();
 
-        const videoID = thumbnail_url.substring(
-            thumbnail_url.indexOf('.tv/') + 4,
-            thumbnail_url.indexOf('-preview')
-        );
+    const response = await fetch(url, {
+      method: "get",
+      headers: {
+        "Client-ID": this.credentials.id,
+        Authorization: "Bearer " + accessToken,
+      },
+    });
 
-        return 'https://clips-media-assets2.twitch.tv/' + videoID + '.mp4';
+    const status = await response.status;
+
+    if (status !== 200) {
+      throw new Error("getUser - status code is: " + status);
     }
 
-
-    async getAccessToken(){
-        const url = 'https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token='
-            + this.credentials.refresh + '&client_id=' + this.credentials.id + '&client_secret=' +
-            this.credentials.secret;
-
-        const response = await fetch(url, {
-            method: 'post',
-        })
-
-        const status = await response.status;
-
-        if (status !== 200) {
-            throw new Error("getAccessToken - status code is: " + status);
-        }
-
-        const json = await response.json();
-
-        return json.access_token;
-    }
-
-    async getBroadcasterID(id){
-        helper.ensureArgument(id, 'string');
-
-        const user = await this.getUser(id);
-
-        return user.data[0].id;
-    }
-
-    async getUser(name){
-        helper.ensureArgument(name, 'string');
-
-        const url = 'https://api.twitch.tv/helix/users?' + 'login=' + name.toLowerCase()
-        const accessToken = await this.getAccessToken()
-
-        const response = await fetch(url, {
-            method: 'get',
-            headers: {
-                'Client-ID': this.credentials.id,
-                'Authorization': 'Bearer ' + accessToken
-            },
-        })
-
-        const status = await response.status;
-
-        if (status !== 200) {
-            throw new Error("getUser - status code is: " + status);
-        }
-
-        return await response.json();
-    }
+    return await response.json();
+  }
 }
 
 module.exports = Clipper;

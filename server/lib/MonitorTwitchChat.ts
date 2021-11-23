@@ -1,4 +1,4 @@
-import Fetcher from './dev/FetcherDev';
+import { validAppAccessToken, request100Streams } from './dev/FetcherDev';
 import { ChatUserstate } from 'tmi.js';
 
 export default class MonitorTwitchChat {
@@ -96,7 +96,7 @@ export default class MonitorTwitchChat {
     }
 
     async validAppAccessToken() {
-        return Fetcher.validAppAccessToken();
+        return validAppAccessToken();
     }
 
     resetStreamer(channel: any) {
@@ -166,6 +166,6 @@ export default class MonitorTwitchChat {
     }
 
     async request100Streams(pagination: any) {
-        return (await Fetcher.request100Streams(pagination)).json();
+        return (await request100Streams(pagination)).json();
     }
 }

@@ -1,10 +1,10 @@
 import result from '../../stubs/data/helix-streams-pagination';
 
-async function validAppAccessToken() {
+async function validAppAccessToken(): Promise<boolean> {
     return true;
 }
 
-async function request100Streams(pagination: any) {
+async function request100Streams(pagination: any): Promise<any> {
     console.log(pagination);
     return Promise.resolve({
         json: () => Promise.resolve(result),

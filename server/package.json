@@ -23,6 +23,7 @@
     "tmi.js": "^1.7.5"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.22",
     "@types/express": "^4.17.13",
     "@types/node": "^16.6.2",
     "@types/tmi.js": "^1.8.1",

@@ -1,11 +1,13 @@
 import tmi from 'tmi.js';
 import client from '../../stubs/tmiClientStub';
+let tmiExport;
 
 if (process.env.NODE_ENV === 'development') {
-    module.exports = {
+    tmiExport = {
         client,
         Client: client,
     };
 } else {
-    module.exports = tmi;
+    tmiExport = tmi;
 }
+export default tmiExport as typeof tmi;

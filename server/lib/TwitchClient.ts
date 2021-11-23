@@ -1,6 +1,7 @@
-import tmi from '.dev/tmiDev';
+import tmi from './dev/tmiDev';
+import { ChatUserstate } from 'tmi.js';
 
-class TwitchClient {
+export default class TwitchClient {
     client;
     joinTimeout;
 
@@ -10,7 +11,7 @@ class TwitchClient {
                 reconnect: true,
                 secure: true,
                 reconnectInterval: 100000,
-                maxReconnectInterval: 120000,
+                maxReconnectInverval: 120000,
             },
             identity: {
                 username: process.env.BOT_NAME,
@@ -43,9 +44,9 @@ class TwitchClient {
     setMessageHandler(
         messageHandler: (
             channel: string,
-            context: string,
+            userstate: ChatUserstate,
             message: string,
-            self: string,
+            self: boolean,
         ) => void,
     ) {
         this.client.on('message', messageHandler);
@@ -91,5 +92,3 @@ class TwitchClient {
         );
     }
 }
-
-module.exports = TwitchClient;

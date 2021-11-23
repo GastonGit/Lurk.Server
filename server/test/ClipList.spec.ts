@@ -4,7 +4,7 @@ import ClipList from '../lib/ClipList';
 const clipList = new ClipList();
 
 describe('ClipList suite', function () {
-    describe('Getting clips from list', function () {
+    describe('Getting clips from the list', function () {
         it('should return a string array', function () {
             assert.isArray(clipList.getList());
         });

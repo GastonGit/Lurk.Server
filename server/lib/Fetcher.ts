@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import fakeFetch from './dev/FetcherDev';
+import { validAppAccessToken, request100Streams } from './dev/FetcherDev';
 
 let exportValidAppAccessToken;
 let exportRequest100Streams;
@@ -20,7 +20,7 @@ async function realValidAppAccessToken(): Promise<boolean> {
     return status !== 401;
 }
 
-async function request100Streams(pagination: any) {
+async function realRequest100Streams(pagination: any) {
     let url = 'https://api.twitch.tv/helix/streams?first=100&language=en';
 
     if (pagination) {
@@ -39,11 +39,11 @@ async function request100Streams(pagination: any) {
 }
 
 if (process.env.NODE_ENV === 'development') {
-    exportValidAppAccessToken = fakeFetch.validAppAccessToken;
-    exportRequest100Streams = fakeFetch.request100Streams;
+    exportValidAppAccessToken = validAppAccessToken;
+    exportRequest100Streams = request100Streams;
 } else {
     exportValidAppAccessToken = realValidAppAccessToken;
-    exportRequest100Streams = request100Streams;
+    exportRequest100Streams = realRequest100Streams;
 }
 
 export { exportValidAppAccessToken as validAppAccessToken };

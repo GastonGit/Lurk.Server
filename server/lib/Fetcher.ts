@@ -1,8 +1,11 @@
 import fetch from 'node-fetch';
-import { request100Streams, validAppAccessToken } from './dev/FetcherDev';
+import {
+    getStatus as getStatusDev,
+    getJSON as getJSONDev,
+} from './dev/FetcherDev';
 
-let exportValidAppAccessToken;
-let exportRequest100Streams;
+let getStatusExport;
+let getJSONExport;
 
 async function fetchWrapper(url: string) {
     return await fetch(url, {
@@ -40,47 +43,13 @@ async function getJSON(url: string): Promise<unknown> {
     return json;
 }
 
-async function realValidAppAccessToken(): Promise<boolean> {
-    const url = 'https://api.twitch.tv/helix/users?id=141981764';
-    let status = 401;
-
-    try {
-        const response = await fetchWrapper(url);
-        status = response.status;
-    } catch (e) {
-        console.error(e);
-    }
-
-    return status !== 401;
-}
-
-async function realRequest100Streams(pagination: any) {
-    let url = 'https://api.twitch.tv/helix/streams?first=100&language=en';
-
-    if (pagination) {
-        url += '&after=' + pagination;
-    }
-
-    const response = await fetch(url, {
-        method: 'get',
-        headers: {
-            'Client-ID': process.env.CLIENT_ID || '',
-            Authorization: ' Bearer ' + process.env.CLIENT_APP_ACCESS_TOKEN,
-        },
-    });
-
-    return await response.json();
-}
-
 if (process.env.NODE_ENV === 'development') {
-    exportValidAppAccessToken = validAppAccessToken;
-    exportRequest100Streams = request100Streams;
+    getStatusExport = getStatusDev;
+    getJSONExport = getJSONDev;
 } else {
-    exportValidAppAccessToken = realValidAppAccessToken;
-    exportRequest100Streams = realRequest100Streams;
+    getStatusExport = getStatus;
+    getJSONExport = getJSON;
 }
 
-export { exportValidAppAccessToken as validAppAccessToken };
-export { exportRequest100Streams as request100Streams };
-export { getStatus as getStatus };
-export { getJSON as getJSON };
+export { getStatusExport as getStatus };
+export { getJSONExport as getJSON };

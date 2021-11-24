@@ -9,6 +9,11 @@ interface Credentials {
     refresh: string;
 }
 
+interface CreateClipResponse {
+    created: boolean;
+    data: Array<{ id: string; edit_url: string }> | undefined;
+}
+
 export default class Clipper {
     private credentials: Credentials;
 
@@ -21,12 +26,7 @@ export default class Clipper {
         };
     }
 
-    async createClip(streamer: string): Promise<unknown> {
-        if (process.env.NODE_ENV === 'development') {
-            console.log('CLIP CREATED FOR: ' + streamer);
-            return { id: 'HealthyDelightfulEchidnaKappaPride' };
-        }
-
+    async createClip(streamer: string): Promise<CreateClipResponse> {
         const broadcasterID: string = await this.getBroadcasterID(streamer);
 
         const url: string =
@@ -62,7 +62,7 @@ export default class Clipper {
                     status +
                     ')',
             );
-            return { created: false };
+            return { created: false, data: undefined };
         }
     }
 

@@ -1,5 +1,4 @@
 import { getJSON, getStatus } from './Fetcher';
-import { ChatUserstate } from 'tmi.js';
 
 export default class MonitorTwitchChat {
     streamList: Array<any>;

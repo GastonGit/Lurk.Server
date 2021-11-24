@@ -4,9 +4,6 @@ import {
     getJSON as getJSONDev,
 } from './dev/FetcherDev';
 
-let getStatusExport;
-let getJSONExport;
-
 async function fetchWrapper(url: string) {
     return await fetch(url, {
         method: 'get',
@@ -43,9 +40,12 @@ async function getJSON(url: string): Promise<unknown> {
     return json;
 }
 
+let getStatusExport: (url: string) => Promise<number>;
+let getJSONExport: (url: string) => Promise<unknown>;
+
 if (process.env.NODE_ENV === 'development') {
-    getStatusExport = getStatusDev;
-    getJSONExport = getJSONDev;
+    getStatusExport = getStatusDev as typeof getStatus;
+    getJSONExport = getJSONDev as typeof getJSON;
 } else {
     getStatusExport = getStatus;
     getJSONExport = getJSON;

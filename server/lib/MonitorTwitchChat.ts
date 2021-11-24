@@ -1,4 +1,6 @@
-import { validAppAccessToken, request100Streams } from './dev/FetcherDev';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { validAppAccessToken, request100Streams, getStatus } from './Fetcher';
 import { ChatUserstate } from 'tmi.js';
 
 export default class MonitorTwitchChat {
@@ -96,7 +98,11 @@ export default class MonitorTwitchChat {
     }
 
     async validAppAccessToken() {
-        return validAppAccessToken();
+        const status = await getStatus(
+            'https://api.twitch.tv/helix/users?id=141981764',
+        );
+
+        return status !== 401;
     }
 
     resetStreamer(channel: any) {
@@ -166,6 +172,8 @@ export default class MonitorTwitchChat {
     }
 
     async request100Streams(pagination: any) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         return (await request100Streams(pagination)).json();
     }
 }

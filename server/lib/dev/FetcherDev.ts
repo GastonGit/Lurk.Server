@@ -22,5 +22,8 @@ async function request100Streams(pagination: any): Promise<any> {
     });
 }
 
+export { getStatus as getStatus };
+export { getJSON as getJSON };
+
 export { validAppAccessToken as validAppAccessToken };
 export { request100Streams as request100Streams };

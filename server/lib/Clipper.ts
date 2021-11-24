@@ -12,12 +12,12 @@ interface Credentials {
 export default class Clipper {
     private credentials: Credentials;
 
-    constructor() {
+    constructor(id: string, secret: string, code: string, refresh: string) {
         this.credentials = {
-            id: process.env.CLIENT_ID || '',
-            secret: process.env.CLIENT_SECRET || '',
-            code: process.env.CLIENT_CODE || '',
-            refresh: process.env.CLIENT_REFRESH || '',
+            id: id,
+            secret: secret,
+            code: code,
+            refresh: refresh,
         };
     }
 

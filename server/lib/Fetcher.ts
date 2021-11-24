@@ -27,6 +27,19 @@ async function getStatus(url: string): Promise<number> {
     return status;
 }
 
+async function getJSON(url: string): Promise<unknown> {
+    let json;
+
+    try {
+        const response = await fetchWrapper(url);
+        json = response.json();
+    } catch (e) {
+        console.error(e);
+    }
+
+    return json;
+}
+
 async function realValidAppAccessToken(): Promise<boolean> {
     const url = 'https://api.twitch.tv/helix/users?id=141981764';
     let status = 401;
@@ -70,3 +83,4 @@ if (process.env.NODE_ENV === 'development') {
 export { exportValidAppAccessToken as validAppAccessToken };
 export { exportRequest100Streams as request100Streams };
 export { getStatus as getStatus };
+export { getJSON as getJSON };

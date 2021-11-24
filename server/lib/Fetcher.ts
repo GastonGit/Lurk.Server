@@ -1,11 +1,11 @@
-import fetch from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
 import {
     getStatus as getStatusDev,
     getJSON as getJSONDev,
     getResponse as getResponseDev,
 } from './dev/FetcherDev';
 
-async function fetchWrapper(url: string) {
+async function fetchWrapper(url: string): Promise<Response> {
     return await fetch(url, {
         method: 'get',
         headers: {

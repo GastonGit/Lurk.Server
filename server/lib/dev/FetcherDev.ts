@@ -1,5 +1,15 @@
 import result from '../../stubs/data/helix-streams-pagination';
 
+async function getStatus(url: string): Promise<number> {
+    console.log(url);
+    return 400;
+}
+
+async function getJSON(url: string): Promise<unknown> {
+    console.log(url);
+    return { data: [] };
+}
+
 async function validAppAccessToken(): Promise<boolean> {
     return true;
 }

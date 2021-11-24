@@ -5,6 +5,10 @@ import {
     getResponse as getResponseDev,
 } from './dev/FetcherDev';
 
+/*
+    TODO: CLIENT_APP_ACCESS_TOKEN MIGHT NEED TO BE REFRESHED EVERY CALL
+     (SEE FOR MORE: https://github.com/GastonGit/Hot-Twitch-Clips/commit/a2f77b0e19785414eb0693e01306aff074431441)
+ */
 async function fetchWrapper(url: string): Promise<Response> {
     return await fetch(url, {
         method: 'get',

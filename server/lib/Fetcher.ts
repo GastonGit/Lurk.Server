@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import {
     getStatus as getStatusDev,
     getJSON as getJSONDev,
+    getResponse as getResponseDev,
 } from './dev/FetcherDev';
 
 async function fetchWrapper(url: string) {
@@ -42,14 +43,18 @@ async function getJSON(url: string): Promise<unknown> {
 
 let getStatusExport: (url: string) => Promise<number>;
 let getJSONExport: (url: string) => Promise<unknown>;
+let getResponseExport: (url: string) => Promise<unknown>;
 
 if (process.env.NODE_ENV === 'development') {
     getStatusExport = getStatusDev as typeof getStatus;
     getJSONExport = getJSONDev as typeof getJSON;
+    getResponseExport = getResponseDev as typeof fetchWrapper;
 } else {
     getStatusExport = getStatus;
     getJSONExport = getJSON;
+    getResponseExport = fetchWrapper;
 }
 
 export { getStatusExport as getStatus };
 export { getJSONExport as getJSON };
+export { getResponseExport as getResponse };

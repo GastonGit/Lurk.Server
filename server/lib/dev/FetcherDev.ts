@@ -8,5 +8,15 @@ async function getJSON(url: string): Promise<unknown> {
     return { data: [] };
 }
 
+async function fetchWrapper(url: string): Promise<unknown> {
+    console.log(url);
+    const result = { data: [{ id: '121059319' }] };
+    return Promise.resolve({
+        json: () => Promise.resolve(result),
+        status: 200,
+    });
+}
+
 export { getStatus as getStatus };
 export { getJSON as getJSON };
+export { fetchWrapper as getResponse };

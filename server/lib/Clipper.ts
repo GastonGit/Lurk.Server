@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ path: __dirname + '../.env' });
-import fetch from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
+import { getResponse } from './Fetcher';
 
 interface Credentials {
     id: string;
@@ -32,17 +33,10 @@ export default class Clipper {
         const url: string =
             'https://api.twitch.tv/helix/clips?broadcaster_id=' +
             broadcasterID.toLowerCase();
-        const accessToken: string = await this.getAccessToken();
 
-        const response = await fetch(url, {
-            method: 'post',
-            headers: {
-                'Client-ID': this.credentials.id,
-                Authorization: 'Bearer ' + accessToken,
-            },
-        });
+        const response = (await getResponse(url)) as Response;
 
-        const status = await response.status;
+        const status = response.status;
 
         if (status === 200 || status === 202) {
             const json: any = await response.json();
@@ -75,7 +69,8 @@ export default class Clipper {
         }
 
         const url = 'https://api.twitch.tv/helix/clips?id=' + slug;
-        const accessToken = await this.getAccessToken();
+        //const accessToken = await this.getAccessToken();
+        const accessToken = 'temp';
 
         const response = await fetch(url, {
             method: 'get',
@@ -111,33 +106,6 @@ export default class Clipper {
         return 'https://clips-media-assets2.twitch.tv/' + videoID + '.mp4';
     }
 
-    async getAccessToken(): Promise<string> {
-        if (process.env.NODE_ENV === 'development') {
-            return 'dev_string';
-        }
-        const url =
-            'https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=' +
-            this.credentials.refresh +
-            '&client_id=' +
-            this.credentials.id +
-            '&client_secret=' +
-            this.credentials.secret;
-
-        const response = await fetch(url, {
-            method: 'post',
-        });
-
-        const status = await response.status;
-
-        if (status !== 200) {
-            throw new Error('getAccessToken - status code is: ' + status);
-        }
-
-        const json: any = await response.json();
-
-        return json.access_token;
-    }
-
     async getBroadcasterID(id: string): Promise<string> {
         const user: any = await this.getUser(id);
 
@@ -153,7 +121,8 @@ export default class Clipper {
             'https://api.twitch.tv/helix/users?' +
             'login=' +
             name.toLowerCase();
-        const accessToken = await this.getAccessToken();
+        //const accessToken = await this.getAccessToken();
+        const accessToken = 'temp';
 
         const response = await fetch(url, {
             method: 'get',

@@ -34,17 +34,6 @@ interface CreateClipResponse {
 }
 
 export default class Clipper {
-    private credentials: Credentials;
-
-    constructor(id: string, secret: string, code: string, refresh: string) {
-        this.credentials = {
-            id: id,
-            secret: secret,
-            code: code,
-            refresh: refresh,
-        };
-    }
-
     public async createClip(
         streamer: string,
         broadcasterID: string,
@@ -123,7 +112,7 @@ export default class Clipper {
         const response = await fetch(url, {
             method: 'get',
             headers: {
-                'Client-ID': this.credentials.id,
+                'Client-ID': 'temp',
                 Authorization: 'Bearer ' + accessToken,
             },
         });

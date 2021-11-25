@@ -21,7 +21,7 @@ export default class TwitchClient {
         this.joinTimeout = joinTimeout || 200;
     }
 
-    async connectToTwitch() {
+    public async connectToTwitch(): Promise<boolean> {
         /* istanbul ignore next */
         this.client.on('disconnected', (reason: string) => {
             console.error(
@@ -33,11 +33,12 @@ export default class TwitchClient {
 
         return this.client
             .connect()
-            .then((data: any) => {
-                return data;
+            .then(() => {
+                return true;
             })
             .catch((err: string) => {
-                return 'Error connecting to Twitch: ' + err;
+                console.log('Error connecting to Twitch: ' + err);
+                return false;
             });
     }
 

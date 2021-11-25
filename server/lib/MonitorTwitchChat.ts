@@ -41,7 +41,7 @@ export default class MonitorTwitchChat {
     }
 
     async connectToTwitch(): Promise<boolean> {
-        await this.client.connectToTwitch();
+        return await this.client.connectToTwitch();
     }
 
     async updateChannels() {

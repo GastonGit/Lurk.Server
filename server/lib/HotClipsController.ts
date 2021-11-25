@@ -33,34 +33,28 @@ import TwitchClient from './TwitchClient';
 import Clipper from './Clipper';
 
 export default class HotClipsController {
-    clipList;
-    monitorTwitchChat;
+    clipList: ClipList = new ClipList();
+    clipper: Clipper = new Clipper();
+    monitorTwitchChat: MonitorTwitchChat = new MonitorTwitchChat(
+        new TwitchClient(config.joinTimeout),
+        {
+            requestCount: config.requestCount,
+            validMessages: config.validMessages,
+        },
+    );
     checkTimer: NodeJS.Timer | undefined;
     reduceTimer: NodeJS.Timer | undefined;
-    clipper;
     updateTimer: NodeJS.Timer | undefined;
 
-    spikeValue = config.spikeValue;
-    spikeTime = config.spikeTime;
-    reduceValue = config.reduceValue;
-    reduceTime = config.reduceTime;
+    spikeValue: number = config.spikeValue;
+    spikeTime: number = config.spikeTime;
+    reduceValue: number = config.reduceValue;
+    reduceTime: number = config.reduceTime;
 
-    cooldownLengthInSeconds = config.cooldownLengthInSeconds * 1000;
-    addClipDelay = config.addClipDelay;
-    removeClipTimeInMinutes = config.removeClipTimeInMinutes * 60000;
-    updateTimeInMinutes = config.updateTimeInMinutes * 60000;
-
-    constructor() {
-        this.monitorTwitchChat = new MonitorTwitchChat(
-            new TwitchClient(config.joinTimeout),
-            {
-                requestCount: config.requestCount,
-                validMessages: config.validMessages,
-            },
-        );
-        this.clipList = new ClipList();
-        this.clipper = new Clipper();
-    }
+    cooldownLengthInSeconds: number = config.cooldownLengthInSeconds * 1000;
+    addClipDelay: number = config.addClipDelay;
+    removeClipTimeInMinutes: number = config.removeClipTimeInMinutes * 60000;
+    updateTimeInMinutes: number = config.updateTimeInMinutes * 60000;
 
     async setupConnection() {
         await this.monitorTwitchChat.updateStreamList();

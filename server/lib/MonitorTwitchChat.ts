@@ -1,19 +1,26 @@
 import { fetch } from './Fetcher';
-import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
+import {
+    Config,
+    FetchedStreams,
+    fetchResult,
+    Stream,
+    Streams,
+} from './Interfaces';
+import TwitchClient from './TwitchClient';
+import { ChatUserstate } from 'tmi.js';
 
 export default class MonitorTwitchChat {
-    streamList: Array<Stream>;
-    requestCount;
-    validMessages;
-    client;
-    compactStreamList: Array<string>;
+    client: TwitchClient;
+    requestCount: number;
+    validMessages: string[];
 
-    constructor(client: any, options: any) {
-        this.requestCount = options.requestCount || 1;
-        this.streamList = [];
-        this.validMessages = options.validMessages || ['OMEGALUL'];
-        this.compactStreamList = [];
+    streamList: Array<Stream> = [];
+    compactStreamList: Array<string> = [];
+
+    constructor(client: TwitchClient, options: Config) {
         this.client = client;
+        this.requestCount = options.requestCount || 1;
+        this.validMessages = options.validMessages || ['OMEGALUL'];
         this.client.setMessageHandler(this.onMessageHandler.bind(this));
     }
 
@@ -63,7 +70,12 @@ export default class MonitorTwitchChat {
         return this.compactStreamList;
     }
 
-    onMessageHandler(channel: string, message: string) {
+    onMessageHandler(
+        channel: string,
+        _userstate: ChatUserstate,
+        message: string,
+        _self: boolean,
+    ) {
         if (!this.validMessages.includes(message)) {
             return;
         }

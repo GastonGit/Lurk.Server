@@ -1,5 +1,4 @@
-import { getJSON, getStatus, fetch } from './Fetcher';
-import { response } from 'express';
+import { getStatus, fetch } from './Fetcher';
 import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
 
 export default class MonitorTwitchChat {

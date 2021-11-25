@@ -56,21 +56,26 @@ export default class HotClipsController {
     removeClipTimeInMinutes: number = config.removeClipTimeInMinutes * 60000;
     updateTimeInMinutes: number = config.updateTimeInMinutes * 60000;
 
-    public async setupConnection(): Promise<void> {
+    public async start(): Promise<void> {
+        await this.setupConnection();
+        this.startTimers();
+    }
+
+    getList() {
+        return this.clipList.getList();
+    }
+
+    private async setupConnection(): Promise<void> {
         await this.monitorTwitchChat.updateStreamList();
         await this.monitorTwitchChat.joinChannels();
         await this.monitorTwitchChat.connectToTwitch();
     }
 
-    public start(): void {
+    private startTimers(): void {
         this.startMonitorTimers();
         this.updateTimer = setInterval(() => {
             this.updateChannels();
         }, this.updateTimeInMinutes);
-    }
-
-    getList() {
-        return this.clipList.getList();
     }
 
     private async updateChannels(): Promise<void> {

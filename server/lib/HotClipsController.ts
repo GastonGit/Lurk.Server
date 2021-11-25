@@ -141,12 +141,12 @@ export default class HotClipsController {
         return (await this.clipper.getVideoUrl(slug)) as string;
     }
 
-    private addClipWithDelay(id: any): void {
+    private addClipWithDelay(slug: string): void {
         setTimeout(async () => {
-            const videoURL: any = await this.getVideoUrl(id);
+            const url: string = await this.getVideoUrl(slug);
 
-            if (videoURL.valid) {
-                this.addClip(videoURL.url);
+            if (typeof url !== 'undefined') {
+                this.addClip(url);
                 setTimeout(() => {
                     this.clipList.removeClip();
                 }, this.removeClipTimeInMinutes);

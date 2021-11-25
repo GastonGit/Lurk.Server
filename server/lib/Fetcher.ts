@@ -4,46 +4,7 @@ import {
     getJSON as getJSONDev,
     getResponse as getResponseDev,
 } from './dev/FetcherDev';
-
-interface Clip {
-    id: string;
-    url: string;
-    embed_url: string;
-    broadcaster_id: string;
-    broadcaster_name: string;
-    creator_id: string;
-    creator_name: string;
-    video_id: string;
-    game_id: string;
-    language: string;
-    title: string;
-    view_count: number;
-    created_at: string;
-    thumbnail_url: string;
-    duration: number;
-}
-
-interface FetcherResponse {
-    status: number;
-    data: unknown;
-    pagination: { cursor: string } | undefined;
-}
-
-interface Stream {
-    user_name: string;
-    viewer_count: number;
-    hits: number;
-    cooldown: boolean;
-}
-
-interface Data {
-    data: Array<any>;
-}
-
-interface JSON {
-    data: unknown;
-    pagination: { cursor: string } | undefined;
-}
+import { Clip, Data, FetcherResponse, JSON } from './Interfaces';
 
 /*
     TODO: CLIENT_APP_ACCESS_TOKEN MIGHT NEED TO BE REFRESHED EVERY CALL

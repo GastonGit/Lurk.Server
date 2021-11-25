@@ -1,28 +1,6 @@
 import { getJSON, getStatus, fetch } from './Fetcher';
 import { response } from 'express';
-
-interface Stream {
-    user_name: string;
-    viewer_count: number;
-    hits: number;
-    cooldown: boolean;
-}
-
-interface FetchedStreams {
-    user_login: string;
-    viewer_count: string;
-}
-
-interface Streams {
-    success: boolean;
-    streams: Array<Stream>;
-}
-
-interface fetchResult {
-    success: boolean;
-    data: Array<FetchedStreams>;
-    pagination: { cursor: string } | undefined;
-}
+import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
 
 export default class MonitorTwitchChat {
     streamList: Array<Stream>;

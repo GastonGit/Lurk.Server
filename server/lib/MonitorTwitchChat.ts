@@ -21,7 +21,7 @@ export default class MonitorTwitchChat {
         this.client.setMessageHandler(this.onMessageHandler.bind(this));
     }
 
-    async connectToTwitch(): Promise<boolean> {
+    public async connectToTwitch(): Promise<boolean> {
         return await this.client.connectToTwitch();
     }
 

@@ -100,7 +100,7 @@ export default class HotClipsController {
             this.checkForSpikes(this.spikeValue);
         }, this.spikeTime);
         this.reduceTimer = setInterval(() => {
-            this.monitorTwitchChat.decreaseHits(this.reduceValue);
+            this.monitorTwitchChat.decreaseHitsByAmount(this.reduceValue);
         }, this.reduceTime);
     }
 

@@ -1,4 +1,4 @@
-import { Stream } from './Interfaces';
+import { Clip, Stream } from './Interfaces';
 
 let config: {
     spikeValue: number;
@@ -129,10 +129,11 @@ export default class HotClipsController {
     private async clipIt(streamer: string): Promise<void> {
         this.cooldownStreamer(streamer);
         this.resetHits(streamer);
-        const clip: any = await this.createClip(streamer);
 
-        if (clip.created) {
-            this.delayAddingClip(clip.data.id);
+        const clip = await this.createClip(streamer);
+
+        if (typeof clip !== 'undefined') {
+            this.delayAddingClip(clip.id);
         }
     }
 
@@ -168,7 +169,7 @@ export default class HotClipsController {
         this.clipList.addClip(clip);
     }
 
-    private async createClip(streamer: string) {
+    private async createClip(streamer: string): Promise<Clip | undefined> {
         const broadcasterID = await this.clipper.getBroadcasterID(streamer);
         return this.clipper.createClip(streamer, broadcasterID);
     }

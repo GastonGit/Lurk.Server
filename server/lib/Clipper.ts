@@ -30,7 +30,7 @@ export default class Clipper {
     public async createClip(
         streamer: string,
         broadcasterID: string,
-    ): Promise<any> {
+    ): Promise<Clip | undefined> {
         const response = (await getResponse(
             'https://api.twitch.tv/helix/clips?broadcaster_id=' +
                 broadcasterID.toLowerCase(),
@@ -45,7 +45,7 @@ export default class Clipper {
                 '\x1b[32m%s\x1b[0m',
                 'createClip :: SUCCESS :: ' + streamer,
             );
-            return { created: true, data };
+            return data;
         } else {
             console.log(
                 '\x1b[45m%s\x1b[0m',
@@ -55,7 +55,7 @@ export default class Clipper {
                     status +
                     ')',
             );
-            return { created: false, data: undefined };
+            return undefined;
         }
     }
 

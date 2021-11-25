@@ -160,7 +160,8 @@ export default class HotClipsController {
     }
 
     async createClip(streamer: string) {
-        return this.clipper.createClip(streamer);
+        const broadcasterID = await this.clipper.getBroadcasterID(streamer);
+        return this.clipper.createClip(streamer, broadcasterID);
     }
 
     resetHits(streamer: string) {

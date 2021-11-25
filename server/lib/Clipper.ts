@@ -30,7 +30,7 @@ export default class Clipper {
     public async createClip(
         streamer: string,
         broadcasterID: string,
-    ): Promise<CreateClipResponse> {
+    ): Promise<any> {
         const response = (await getResponse(
             'https://api.twitch.tv/helix/clips?broadcaster_id=' +
                 broadcasterID.toLowerCase(),

@@ -53,24 +53,34 @@ export default class TwitchClient {
         this.client.on('message', messageHandler);
     }
 
-    async joinChannels(channels: Array<any>): Promise<boolean> {
+    async joinChannels(channels: Array<string>): Promise<boolean> {
         console.log(
             '\x1b[44m%s\x1b[0m',
             '\n--- TwitchClient :: Joining channels...',
         );
+        let success = false;
 
-        const client = this.client;
-        const promises = channels.map(async (channel) => {
-            return await client.join(channel);
-        });
+        try {
+            const client = this.client;
+            const promises = channels.map(async (channel) => {
+                return await client.join(channel);
+            });
 
-        const result = await Promise.allSettled(promises);
-        console.log(result.map((promise) => promise.status));
+            const result = await Promise.allSettled(promises);
 
-        console.log(
-            '\x1b[44m%s\x1b[0m',
-            '\n--- TwitchClient :: ...Joined channels',
-        );
+            console.log(result.map((promise) => promise.status));
+
+            console.log(
+                '\x1b[44m%s\x1b[0m',
+                '\n--- TwitchClient :: ...Joined channels',
+            );
+
+            success = true;
+        } catch (e) {
+            console.error(e);
+        }
+
+        return success;
     }
 
     async leaveChannels(channels: Array<any>): Promise<boolean> {

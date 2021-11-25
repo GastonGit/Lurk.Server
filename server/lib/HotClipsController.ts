@@ -133,7 +133,7 @@ export default class HotClipsController {
         const clip = await this.createClip(streamer);
 
         if (typeof clip !== 'undefined') {
-            this.delayAddingClip(clip.id);
+            this.addClipWithDelay(clip.id);
         }
     }
 
@@ -141,7 +141,7 @@ export default class HotClipsController {
         return (await this.clipper.getVideoUrl(slug)) as string;
     }
 
-    private delayAddingClip(id: any): void {
+    private addClipWithDelay(id: any): void {
         setTimeout(async () => {
             const videoURL: any = await this.getVideoUrl(id);
 

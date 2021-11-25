@@ -57,9 +57,9 @@ export default class HotClipsController {
     updateTimeInMinutes: number = config.updateTimeInMinutes * 60000;
 
     public async start(): Promise<void> {
-        const setupResult = await this.setupConnection();
+        const setupSuccess = await this.setupConnection();
 
-        if (setupResult) {
+        if (setupSuccess) {
             this.startTimers();
         } else {
             throw Error('Connection setup failed');

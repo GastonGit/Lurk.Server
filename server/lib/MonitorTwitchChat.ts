@@ -25,24 +25,32 @@ export default class MonitorTwitchChat {
         return await this.client.connectToTwitch();
     }
 
-    async updateChannels() {
-        await this.leaveChannels();
+    public async updateChannels(): Promise<boolean> {
+        const leaveChannelsSuccess = await this.leaveChannels();
+        const updateStreamListSuccess = await this.updateStreamList();
+        const joinChannelsSuccess = await this.joinChannels();
 
-        await this.updateStreamList();
-        this.updateCompactStreamList();
-        await this.client.joinChannels(this.getCompactStreamList());
+        return (
+            leaveChannelsSuccess &&
+            updateStreamListSuccess &&
+            joinChannelsSuccess
+        );
     }
 
-    async leaveChannels() {
-        await this.client.leaveChannels(this.getCompactStreamList());
+    private async leaveChannels(): Promise<boolean> {
+        return await this.client.leaveChannels(this.getCompactStreamList());
     }
 
-    public joinChannels(): void {
-        this.updateCompactStreamList();
-
+    public setupConnectedEvent(): void {
         this.client.client.on('connected', () => {
-            this.client.joinChannels(this.getCompactStreamList());
+            this.joinChannels();
         });
+    }
+
+    public joinChannels(): Promise<boolean> {
+        this.updateCompactStreamList();
+
+        return this.client.joinChannels(this.getCompactStreamList());
     }
 
     public decreaseHitsByAmount(amount: number): void {

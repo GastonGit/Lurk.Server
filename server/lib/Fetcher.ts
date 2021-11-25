@@ -25,8 +25,15 @@ interface Clip {
 
 interface FetcherResponse {
     status: number;
-    data: Array<Clip | Clip> | undefined;
+    data: unknown;
     pagination: { cursor: string } | undefined;
+}
+
+interface Stream {
+    user_name: string;
+    viewer_count: number;
+    hits: number;
+    cooldown: boolean;
 }
 
 interface Data {
@@ -34,7 +41,7 @@ interface Data {
 }
 
 interface JSON {
-    data: Array<Clip | Clip>;
+    data: unknown;
     pagination: { cursor: string } | undefined;
 }
 
@@ -64,7 +71,7 @@ async function fetcherFetch(url: string): Promise<FetcherResponse> {
         const json = (await response.json()) as JSON;
 
         fullResponse.status = response.status;
-        fullResponse.data = json.data || undefined;
+        fullResponse.data = json.data;
         fullResponse.pagination = json.pagination || undefined;
     } catch (e) {
         console.error(e);

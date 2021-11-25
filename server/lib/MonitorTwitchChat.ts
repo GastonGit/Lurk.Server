@@ -1,7 +1,26 @@
-import { getJSON, getStatus } from './Fetcher';
+import { getJSON, getStatus, fetch } from './Fetcher';
+import { response } from 'express';
+
+interface Stream {
+    user_name: string;
+    viewer_count: number;
+    hits: number;
+    cooldown: boolean;
+}
+
+interface Streams {
+    success: boolean;
+    streams: Array<Stream>;
+}
+
+interface fetchResult {
+    success: boolean;
+    data: Array<Stream>;
+    pagination: { cursor: string } | undefined;
+}
 
 export default class MonitorTwitchChat {
-    streamList: Array<any>;
+    streamList: Array<Stream>;
     requestCount;
     validMessages;
     client;
@@ -119,11 +138,15 @@ export default class MonitorTwitchChat {
         return this.streamList.indexOf(userObject);
     }
 
-    async updateStreamList(): Promise<boolean> {
-        this.streamList = await this.requestStreams();
+    public async updateStreamList(): Promise<boolean> {
+        const result = await this.requestStreams();
+
+        this.streamList = result.streams;
+
+        return result.success;
     }
 
-    async requestStreams() {
+    private async requestStreams(): Promise<Streams> {
         const validAAT = await this.validAppAccessToken();
 
         /* istanbul ignore if */
@@ -134,20 +157,17 @@ export default class MonitorTwitchChat {
         // TODO: Temp solution. Add to config.
         const blockedStreamers = ['nymn'];
 
-        const streams: {
-            user_name: any;
-            viewer_count: number;
-            hits: number;
-            cooldown: boolean;
-        }[] = [];
+        const streams: Array<Stream> = [];
         let pagination = undefined;
+        let success = true;
 
         for (let i = 0; i < this.requestCount; i++) {
-            const fetchedStreams: any = await this.request100Streams(
-                pagination,
-            );
+            const requestedStreams: fetchResult =
+                await MonitorTwitchChat.request100Streams(pagination);
+            const fetchedStreams: Array<Stream> = requestedStreams.data;
+            success = requestedStreams.success;
 
-            fetchedStreams.data.forEach(function (streamer: any) {
+            fetchedStreams.forEach(function (streamer: any) {
                 if (
                     !blockedStreamers.includes(
                         streamer.user_login.toLowerCase(),
@@ -162,19 +182,27 @@ export default class MonitorTwitchChat {
                 }
             });
 
-            pagination = fetchedStreams.pagination.cursor;
+            pagination = requestedStreams.pagination?.cursor;
         }
 
-        return streams;
+        return { success: success, streams: streams };
     }
 
-    async request100Streams(pagination: any) {
+    private static async request100Streams(
+        pagination: string | undefined,
+    ): Promise<fetchResult> {
         let url = 'https://api.twitch.tv/helix/streams?first=100&language=en';
 
         if (pagination) {
             url += '&after=' + pagination;
         }
 
-        return await getJSON(url);
+        const response = await fetch(url);
+
+        return {
+            success: response.status === 200,
+            data: response.data as Array<Stream>,
+            pagination: response.pagination,
+        };
     }
 }

@@ -96,14 +96,6 @@ export default class MonitorTwitchChat {
         }
     }
 
-    async validAppAccessToken() {
-        const status = await getStatus(
-            'https://api.twitch.tv/helix/users?id=141981764',
-        );
-
-        return status !== 401;
-    }
-
     resetStreamer(channel: any) {
         this.streamList[this.getStreamerIndex(channel)].hits = 0;
     }

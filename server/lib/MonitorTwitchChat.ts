@@ -48,8 +48,8 @@ export default class MonitorTwitchChat {
         });
     }
 
-    decreaseHits(amount: number) {
-        this.streamList.forEach(function (streamer) {
+    public decreaseHitsByAmount(amount: number): void {
+        this.streamList.forEach(function (streamer: Stream) {
             if (streamer.hits - amount >= 0) {
                 streamer.hits = streamer.hits - amount;
             } else {

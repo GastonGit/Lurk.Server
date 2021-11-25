@@ -89,22 +89,22 @@ export default class MonitorTwitchChat {
         return this.streamList;
     }
 
-    cooldownStreamer(streamer: string, timeInSeconds: number) {
-        const index = this.getStreamerIndex(streamer);
+    public cooldownStreamer(channel: string, timeInSeconds: number): void {
+        const result = this.getStreamerIndex(channel);
 
-        if (typeof this.streamList[index] !== 'undefined') {
-            this.streamList[index].cooldown = true;
+        if (result.success) {
+            this.streamList[result.streamerIndex].cooldown = true;
             setTimeout(() => {
-                this.removeCooldownForStreamer(streamer);
+                this.removeCooldownForStreamer(channel);
             }, timeInSeconds);
         }
     }
 
-    removeCooldownForStreamer(streamer: string) {
-        const index = this.getStreamerIndex(streamer);
+    private removeCooldownForStreamer(channel: string): void {
+        const result = this.getStreamerIndex(channel);
 
-        if (typeof this.streamList[index] !== 'undefined') {
-            this.streamList[index].cooldown = false;
+        if (result.success) {
+            this.streamList[result.streamerIndex].cooldown = false;
         }
     }
 

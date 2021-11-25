@@ -83,23 +83,32 @@ export default class TwitchClient {
         return success;
     }
 
-    async leaveChannels(channels: Array<any>): Promise<boolean> {
+    async leaveChannels(channels: Array<string>): Promise<boolean> {
         console.log(
             '\x1b[44m%s\x1b[0m',
             '\n--- TwitchClient :: Leaving channels...',
         );
+        let success = false;
 
-        const client = this.client;
-        const promises = channels.map(async (channel) => {
-            return await client.part(channel);
-        });
+        try {
+            const client = this.client;
+            const promises = channels.map(async (channel) => {
+                return await client.part(channel);
+            });
 
-        const result = await Promise.allSettled(promises);
-        console.log(result.map((promise) => promise.status));
+            const result = await Promise.allSettled(promises);
+            console.log(result.map((promise) => promise.status));
 
-        console.log(
-            '\x1b[44m%s\x1b[0m',
-            '--- TwitchClient :: ...Left channels',
-        );
+            console.log(
+                '\x1b[44m%s\x1b[0m',
+                '--- TwitchClient :: ...Left channels',
+            );
+
+            success = true;
+        } catch (e) {
+            console.error(e);
+        }
+
+        return success;
     }
 }

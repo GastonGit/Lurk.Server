@@ -72,10 +72,10 @@ export default class HotClipsController {
 
     private async setupConnection(): Promise<boolean> {
         const updateResult = await this.monitorTwitchChat.updateStreamList();
-        const joinResult = await this.monitorTwitchChat.joinChannels();
+        this.monitorTwitchChat.joinChannels();
         const connectResult = await this.monitorTwitchChat.connectToTwitch();
 
-        return updateResult && joinResult && connectResult;
+        return updateResult && connectResult;
     }
 
     private startTimers(): void {

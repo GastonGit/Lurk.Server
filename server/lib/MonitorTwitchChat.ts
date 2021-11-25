@@ -56,8 +56,9 @@ export default class MonitorTwitchChat {
         await this.client.leaveChannels(this.getCompactStreamList());
     }
 
-    async joinChannels(): Promise<boolean> {
+    public joinChannels(): void {
         this.updateCompactStreamList();
+
         this.client.client.on('connected', () => {
             this.client.joinChannels(this.getCompactStreamList());
         });
@@ -73,11 +74,11 @@ export default class MonitorTwitchChat {
         });
     }
 
-    updateCompactStreamList() {
+    private updateCompactStreamList(): void {
         this.compactStreamList = [];
-        const compactStreamList = this.compactStreamList;
-        this.streamList.forEach(function (streamer) {
-            compactStreamList.push(streamer.user_name);
+
+        this.streamList.forEach((streamer: Stream) => {
+            this.compactStreamList.push(streamer.user_name);
         });
     }
 

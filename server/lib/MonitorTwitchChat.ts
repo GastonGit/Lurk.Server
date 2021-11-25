@@ -16,7 +16,7 @@ export default class MonitorTwitchChat {
         this.client.setMessageHandler(this.onMessageHandler.bind(this));
     }
 
-    async connectToTwitch() {
+    async connectToTwitch(): Promise<boolean> {
         await this.client.connectToTwitch();
     }
 
@@ -32,7 +32,7 @@ export default class MonitorTwitchChat {
         await this.client.leaveChannels(this.getCompactStreamList());
     }
 
-    async joinChannels() {
+    async joinChannels(): Promise<boolean> {
         this.updateCompactStreamList();
         this.client.client.on('connected', () => {
             this.client.joinChannels(this.getCompactStreamList());
@@ -119,7 +119,7 @@ export default class MonitorTwitchChat {
         return this.streamList.indexOf(userObject);
     }
 
-    async updateStreamList() {
+    async updateStreamList(): Promise<boolean> {
         this.streamList = await this.requestStreams();
     }
 

@@ -96,15 +96,33 @@ export default class MonitorTwitchChat {
         }
     }
 
-    resetStreamer(channel: any) {
-        this.streamList[this.getStreamerIndex(channel)].hits = 0;
+    public resetStreamer(channel: string): void {
+        const result = this.getStreamerIndex(channel);
+
+        if (result.success) {
+            this.streamList[result.streamerIndex].hits = 0;
+        }
     }
 
-    getStreamerIndex(channel: any) {
-        const userObject = this.streamList.find(
-            (streamer) => streamer.user_name === channel.toLowerCase(),
+    private getStreamerIndex(channel: string): {
+        success: boolean;
+        streamerIndex: number;
+    } {
+        const streamerFound: Stream | undefined = this.streamList.find(
+            (streamer: Stream) => streamer.user_name === channel.toLowerCase(),
         );
-        return this.streamList.indexOf(userObject);
+
+        if (typeof streamerFound !== 'undefined') {
+            return {
+                success: true,
+                streamerIndex: this.streamList.indexOf(streamerFound),
+            };
+        } else {
+            return {
+                success: false,
+                streamerIndex: -1,
+            };
+        }
     }
 
     public async updateStreamList(): Promise<boolean> {

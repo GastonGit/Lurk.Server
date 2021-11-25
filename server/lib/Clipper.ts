@@ -3,13 +3,6 @@ dotenv.config({ path: __dirname + '../.env' });
 import fetch, { Response } from 'node-fetch';
 import { getResponse, getClip } from './Fetcher';
 
-interface Credentials {
-    id: string;
-    secret: string;
-    code: string;
-    refresh: string;
-}
-
 interface Clip {
     id: string;
     url: string;

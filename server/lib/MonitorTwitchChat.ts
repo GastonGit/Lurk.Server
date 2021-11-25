@@ -70,12 +70,12 @@ export default class MonitorTwitchChat {
         return this.compactStreamList;
     }
 
-    onMessageHandler(
+    private onMessageHandler(
         channel: string,
         _userstate: ChatUserstate,
         message: string,
         _self: boolean,
-    ) {
+    ): void {
         if (!this.validMessages.includes(message)) {
             return;
         }

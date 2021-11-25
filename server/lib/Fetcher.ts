@@ -5,6 +5,28 @@ import {
     getResponse as getResponseDev,
 } from './dev/FetcherDev';
 
+interface Data {
+    data: Array<any>;
+}
+
+interface Clip {
+    id: string;
+    url: string;
+    embed_url: string;
+    broadcaster_id: string;
+    broadcaster_name: string;
+    creator_id: string;
+    creator_name: string;
+    video_id: string;
+    game_id: string;
+    language: string;
+    title: string;
+    view_count: number;
+    created_at: string;
+    thumbnail_url: string;
+    duration: number;
+}
+
 /*
     TODO: CLIENT_APP_ACCESS_TOKEN MIGHT NEED TO BE REFRESHED EVERY CALL
      (SEE FOR MORE: https://github.com/GastonGit/Hot-Twitch-Clips/commit/a2f77b0e19785414eb0693e01306aff074431441)
@@ -43,6 +65,19 @@ async function getJSON(url: string): Promise<unknown> {
     }
 
     return json;
+}
+
+async function getClip(url: string): Promise<Clip> {
+    let clip;
+
+    try {
+        const response = (await getJSON(url)) as Data;
+        clip = response.data[0];
+    } catch (e) {
+        console.error(e);
+    }
+
+    return clip;
 }
 
 let getStatusExport: (url: string) => Promise<number>;

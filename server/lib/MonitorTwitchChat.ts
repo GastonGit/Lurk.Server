@@ -92,7 +92,7 @@ export default class MonitorTwitchChat {
         }
     }
 
-    getStreamList() {
+    public getStreamList(): Stream[] {
         return this.streamList;
     }
 

@@ -1,3 +1,5 @@
+import { Stream } from './Interfaces';
+
 let config: {
     spikeValue: number;
     spikeTime: number;
@@ -112,10 +114,7 @@ export default class HotClipsController {
 
         for (let i = 0; i < list.length; i++) {
             if (!list[i].cooldown) {
-                if (
-                    list[i].hits >=
-                    spike + parseInt(list[i].viewer_count) / 5000
-                ) {
+                if (list[i].hits >= spike + list[i].viewer_count / 5000) {
                     this.clipIt(list[i].user_name).catch((error) => {
                         console.error(
                             '\x1b[31m%s\x1b[0m',
@@ -161,7 +160,7 @@ export default class HotClipsController {
         );
     }
 
-    private getStreamList(): any[] {
+    private getStreamList(): Stream[] {
         return this.monitorTwitchChat.getStreamList();
     }
 

@@ -1,15 +1,15 @@
 let config: {
-    spikeValue: any;
-    spikeTime: any;
-    reduceValue: any;
-    reduceTime: any;
+    spikeValue: number;
+    spikeTime: number;
+    reduceValue: number;
+    reduceTime: number;
     cooldownLengthInSeconds: number;
-    addClipDelay: any;
+    addClipDelay: number;
     removeClipTimeInMinutes: number;
     updateTimeInMinutes: number;
-    joinTimeout: any;
-    requestCount: any;
-    validMessages: any;
+    joinTimeout: number;
+    requestCount: number;
+    validMessages: string[];
 };
 
 /* istanbul ignore else */
@@ -56,20 +56,20 @@ export default class HotClipsController {
     removeClipTimeInMinutes: number = config.removeClipTimeInMinutes * 60000;
     updateTimeInMinutes: number = config.updateTimeInMinutes * 60000;
 
-    async setupConnection() {
+    public async setupConnection(): Promise<void> {
         await this.monitorTwitchChat.updateStreamList();
         await this.monitorTwitchChat.joinChannels();
         await this.monitorTwitchChat.connectToTwitch();
     }
 
-    start() {
+    public start(): void {
         this.startMonitorTimers();
         this.updateTimer = setInterval(() => {
             this.updateChannels();
         }, this.updateTimeInMinutes);
     }
 
-    async updateChannels() {
+    private async updateChannels(): Promise<void> {
         this.endAllMonitorTimers();
 
         await this.monitorTwitchChat.updateChannels();
@@ -77,7 +77,7 @@ export default class HotClipsController {
         this.startMonitorTimers();
     }
 
-    startMonitorTimers() {
+    private startMonitorTimers(): void {
         this.checkTimer = setInterval(() => {
             this.checkForSpikes(this.spikeValue);
         }, this.spikeTime);
@@ -86,12 +86,12 @@ export default class HotClipsController {
         }, this.reduceTime);
     }
 
-    endAllMonitorTimers() {
+    private endAllMonitorTimers(): void {
         clearInterval(<NodeJS.Timeout>this.checkTimer);
         clearInterval(<NodeJS.Timeout>this.reduceTimer);
     }
 
-    checkForSpikes(spike: number) {
+    private checkForSpikes(spike: number): void {
         const list = [...this.getStreamList()];
 
         for (let i = 0; i < list.length; i++) {
@@ -111,7 +111,7 @@ export default class HotClipsController {
         }
     }
 
-    async clipIt(streamer: string) {
+    private async clipIt(streamer: string): Promise<void> {
         this.cooldownStreamer(streamer);
         this.resetHits(streamer);
         const clip: any = await this.createClip(streamer);
@@ -121,11 +121,11 @@ export default class HotClipsController {
         }
     }
 
-    async getVideoUrl(slug: string) {
-        return this.clipper.getVideoUrl(slug);
+    private async getVideoUrl(slug: string): Promise<string> {
+        return (await this.clipper.getVideoUrl(slug)) as string;
     }
 
-    delayAddingClip(id: any) {
+    private delayAddingClip(id: any): void {
         setTimeout(async () => {
             const videoURL: any = await this.getVideoUrl(id);
 
@@ -138,31 +138,27 @@ export default class HotClipsController {
         }, this.addClipDelay);
     }
 
-    cooldownStreamer(streamer: string) {
+    private cooldownStreamer(streamer: string): void {
         this.monitorTwitchChat.cooldownStreamer(
             streamer,
             this.cooldownLengthInSeconds,
         );
     }
 
-    getStreamList() {
+    private getStreamList(): any[] {
         return this.monitorTwitchChat.getStreamList();
     }
 
-    addClip(clip: string) {
+    private addClip(clip: string): void {
         this.clipList.addClip(clip);
     }
 
-    async createClip(streamer: string) {
+    private async createClip(streamer: string) {
         const broadcasterID = await this.clipper.getBroadcasterID(streamer);
         return this.clipper.createClip(streamer, broadcasterID);
     }
 
-    resetHits(streamer: string) {
+    private resetHits(streamer: string): void {
         this.monitorTwitchChat.resetStreamer(streamer);
-    }
-
-    getList() {
-        return this.clipList.getList();
     }
 }

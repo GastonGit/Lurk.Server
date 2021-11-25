@@ -69,6 +69,10 @@ export default class HotClipsController {
         }, this.updateTimeInMinutes);
     }
 
+    getList() {
+        return this.clipList.getList();
+    }
+
     private async updateChannels(): Promise<void> {
         this.endAllMonitorTimers();
 

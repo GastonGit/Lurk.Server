@@ -1,38 +1,9 @@
 import { Clip, Stream } from './Interfaces';
-
-let config: {
-    spikeValue: number;
-    spikeTime: number;
-    reduceValue: number;
-    reduceTime: number;
-    cooldownLengthInSeconds: number;
-    addClipDelay: number;
-    removeClipTimeInMinutes: number;
-    updateTimeInMinutes: number;
-    joinTimeout: number;
-    requestCount: number;
-    validMessages: string[];
-};
-
-/* istanbul ignore else */
-if (process.env.NODE_ENV === 'test') {
-    console.log(
-        '\x1b[44m%s\x1b[0m',
-        '\n--- HotClipsController :: Using settings from configTest.json\n',
-    );
-    config = require('./settings/configTest.json');
-} else {
-    console.log(
-        '\x1b[44m%s\x1b[0m',
-        '\n--- HotClipsController :: Using settings from config.json\n',
-    );
-    config = require('./settings/config.json');
-}
-
 import ClipList from './ClipList';
 import MonitorTwitchChat from './MonitorTwitchChat';
 import TwitchClient from './TwitchClient';
 import Clipper from './Clipper';
+import config from './settings/config.json';
 
 export default class HotClipsController {
     clipList: ClipList = new ClipList();

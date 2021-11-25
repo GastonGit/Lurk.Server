@@ -5,10 +5,6 @@ import {
     getResponse as getResponseDev,
 } from './dev/FetcherDev';
 
-interface Data {
-    data: Array<any>;
-}
-
 interface Clip {
     id: string;
     url: string;
@@ -27,6 +23,21 @@ interface Clip {
     duration: number;
 }
 
+interface FetcherResponse {
+    status: number;
+    data: Array<Clip | Clip> | undefined;
+    pagination: { cursor: string } | undefined;
+}
+
+interface Data {
+    data: Array<any>;
+}
+
+interface JSON {
+    data: Array<Clip | Clip>;
+    pagination: { cursor: string } | undefined;
+}
+
 /*
     TODO: CLIENT_APP_ACCESS_TOKEN MIGHT NEED TO BE REFRESHED EVERY CALL
      (SEE FOR MORE: https://github.com/GastonGit/Hot-Twitch-Clips/commit/a2f77b0e19785414eb0693e01306aff074431441)
@@ -39,6 +50,27 @@ async function fetchWrapper(url: string): Promise<Response> {
             Authorization: ' Bearer ' + process.env.CLIENT_APP_ACCESS_TOKEN,
         },
     });
+}
+
+async function fetcherFetch(url: string): Promise<FetcherResponse> {
+    const fullResponse = {
+        status: -1,
+        data: undefined,
+        pagination: undefined,
+    } as FetcherResponse;
+
+    try {
+        const response = await fetchWrapper(url);
+        const json = (await response.json()) as JSON;
+
+        fullResponse.status = response.status;
+        fullResponse.data = json.data || undefined;
+        fullResponse.pagination = json.pagination || undefined;
+    } catch (e) {
+        console.error(e);
+    }
+
+    return fullResponse;
 }
 
 async function getStatus(url: string): Promise<number> {
@@ -98,3 +130,4 @@ export { getStatusExport as getStatus };
 export { getJSONExport as getJSON };
 export { getResponseExport as getResponse };
 export { getClip as getClip };
+export { fetcherFetch as fetch };

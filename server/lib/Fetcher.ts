@@ -97,3 +97,4 @@ if (process.env.NODE_ENV === 'development') {
 export { getStatusExport as getStatus };
 export { getJSONExport as getJSON };
 export { getResponseExport as getResponse };
+export { getClip as getClip };

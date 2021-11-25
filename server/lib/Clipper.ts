@@ -27,15 +27,14 @@ export default class Clipper {
         };
     }
 
-    async createClip(streamer: string): Promise<CreateClipResponse> {
-        const broadcasterID: string = await this.getBroadcasterID(streamer);
-
-        const url: string =
+    public async createClip(
+        streamer: string,
+        broadcasterID: string,
+    ): Promise<CreateClipResponse> {
+        const response = (await getResponse(
             'https://api.twitch.tv/helix/clips?broadcaster_id=' +
-            broadcasterID.toLowerCase();
-
-        const response = (await getResponse(url)) as Response;
-
+                broadcasterID.toLowerCase(),
+        )) as Response;
         const status = response.status;
 
         if (status === 200 || status === 202) {

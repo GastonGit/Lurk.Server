@@ -8,6 +8,11 @@ interface Stream {
     cooldown: boolean;
 }
 
+interface FetchedStreams {
+    user_login: string;
+    viewer_count: string;
+}
+
 interface Streams {
     success: boolean;
     streams: Array<Stream>;
@@ -15,7 +20,7 @@ interface Streams {
 
 interface fetchResult {
     success: boolean;
-    data: Array<Stream>;
+    data: Array<FetchedStreams>;
     pagination: { cursor: string } | undefined;
 }
 
@@ -147,13 +152,6 @@ export default class MonitorTwitchChat {
     }
 
     private async requestStreams(): Promise<Streams> {
-        const validAAT = await this.validAppAccessToken();
-
-        /* istanbul ignore if */
-        if (!validAAT) {
-            throw Error('Current App Access Token is invalid');
-        }
-
         // TODO: Temp solution. Add to config.
         const blockedStreamers = ['nymn'];
 
@@ -164,10 +162,10 @@ export default class MonitorTwitchChat {
         for (let i = 0; i < this.requestCount; i++) {
             const requestedStreams: fetchResult =
                 await MonitorTwitchChat.request100Streams(pagination);
-            const fetchedStreams: Array<Stream> = requestedStreams.data;
+            const fetchedStreams: Array<FetchedStreams> = requestedStreams.data;
             success = requestedStreams.success;
 
-            fetchedStreams.forEach(function (streamer: any) {
+            fetchedStreams.forEach(function (streamer: FetchedStreams) {
                 if (
                     !blockedStreamers.includes(
                         streamer.user_login.toLowerCase(),
@@ -192,7 +190,6 @@ export default class MonitorTwitchChat {
         pagination: string | undefined,
     ): Promise<fetchResult> {
         let url = 'https://api.twitch.tv/helix/streams?first=100&language=en';
-
         if (pagination) {
             url += '&after=' + pagination;
         }
@@ -201,7 +198,7 @@ export default class MonitorTwitchChat {
 
         return {
             success: response.status === 200,
-            data: response.data as Array<Stream>,
+            data: response.data as Array<FetchedStreams>,
             pagination: response.pagination,
         };
     }

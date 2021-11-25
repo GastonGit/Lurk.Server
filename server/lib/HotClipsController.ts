@@ -99,7 +99,7 @@ export default class HotClipsController {
 
     private async clipIt(streamer: string): Promise<void> {
         this.cooldownStreamer(streamer);
-        this.resetHits(streamer);
+        this.monitorTwitchChat.resetStreamer(streamer);
 
         const clip = await this.createClip(streamer);
 
@@ -143,9 +143,5 @@ export default class HotClipsController {
     private async createClip(streamer: string): Promise<Clip | undefined> {
         const broadcasterID = await this.clipper.getBroadcasterID(streamer);
         return this.clipper.createClip(streamer, broadcasterID);
-    }
-
-    private resetHits(streamer: string): void {
-        this.monitorTwitchChat.resetStreamer(streamer);
     }
 }

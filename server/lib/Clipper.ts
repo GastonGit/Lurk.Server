@@ -1,13 +1,31 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ path: __dirname + '../.env' });
 import fetch, { Response } from 'node-fetch';
-import { getResponse } from './Fetcher';
+import { getResponse, getClip } from './Fetcher';
 
 interface Credentials {
     id: string;
     secret: string;
     code: string;
     refresh: string;
+}
+
+interface Clip {
+    id: string;
+    url: string;
+    embed_url: string;
+    broadcaster_id: string;
+    broadcaster_name: string;
+    creator_id: string;
+    creator_name: string;
+    video_id: string;
+    game_id: string;
+    language: string;
+    title: string;
+    view_count: number;
+    created_at: string;
+    thumbnail_url: string;
+    duration: number;
 }
 
 interface CreateClipResponse {
@@ -59,29 +77,8 @@ export default class Clipper {
         }
     }
 
-    async getClip(slug: string): Promise<any> {
-        if (process.env.NODE_ENV === 'development') {
-            return {
-                thumbnail_url:
-                    'https://clips-media-assets2.twitch.tv/AT-cm%7C1140679825-preview-480x272.jpg',
-            };
-        }
-
-        const url = 'https://api.twitch.tv/helix/clips?id=' + slug;
-        //const accessToken = await this.getAccessToken();
-        const accessToken = 'temp';
-
-        const response = await fetch(url, {
-            method: 'get',
-            headers: {
-                'Client-ID': this.credentials.id,
-                Authorization: 'Bearer ' + accessToken,
-            },
-        });
-
-        const result: any = await response.json();
-
-        return result.data[0];
+    async getClip(slug: string): Promise<Clip> {
+        return await getClip('https://api.twitch.tv/helix/clips?id=' + slug);
     }
 
     async getVideoUrl(slug: string): Promise<unknown> {

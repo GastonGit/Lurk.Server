@@ -1,11 +1,5 @@
 import { fetch } from './Fetcher';
-import {
-    Config,
-    FetchedStreams,
-    fetchResult,
-    Stream,
-    Streams,
-} from './Interfaces';
+import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
 import TwitchClient from './TwitchClient';
 import { ChatUserstate } from 'tmi.js';
 
@@ -17,7 +11,10 @@ export default class MonitorTwitchChat {
     streamList: Array<Stream> = [];
     compactStreamList: Array<string> = [];
 
-    constructor(client: TwitchClient, options: Config) {
+    constructor(
+        client: TwitchClient,
+        options: { requestCount: number; validMessages: string[] },
+    ) {
         this.client = client;
         this.requestCount = options.requestCount || 1;
         this.validMessages = options.validMessages || ['OMEGALUL'];

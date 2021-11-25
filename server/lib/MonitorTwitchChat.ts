@@ -71,7 +71,7 @@ export default class MonitorTwitchChat {
         });
     }
 
-    getCompactStreamList() {
+    private getCompactStreamList(): string[] {
         return this.compactStreamList;
     }
 

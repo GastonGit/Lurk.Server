@@ -61,7 +61,7 @@ export default class HotClipsController {
         this.startTimers();
     }
 
-    getList() {
+    public getList(): string[] {
         return this.clipList.getList();
     }
 

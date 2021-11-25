@@ -42,14 +42,14 @@ export default class TwitchClient {
             });
     }
 
-    setMessageHandler(
+    public setMessageHandler(
         messageHandler: (
             channel: string,
             userstate: ChatUserstate,
             message: string,
             self: boolean,
         ) => void,
-    ) {
+    ): void {
         this.client.on('message', messageHandler);
     }
 

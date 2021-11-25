@@ -1,4 +1,4 @@
-import { getStatus, fetch } from './Fetcher';
+import { fetch } from './Fetcher';
 import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
 
 export default class MonitorTwitchChat {

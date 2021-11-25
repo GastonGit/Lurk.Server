@@ -81,8 +81,15 @@ export default class MonitorTwitchChat {
         }
 
         channel = channel.substring(channel.indexOf('#') + 1);
+        this.increaseHitsByOne(channel);
+    }
 
-        this.streamList[this.getStreamerIndex(channel)].hits += 1;
+    private increaseHitsByOne(channel: string): void {
+        const result = this.getStreamerIndex(channel);
+
+        if (result.success) {
+            this.streamList[result.streamerIndex].hits += 1;
+        }
     }
 
     getStreamList() {

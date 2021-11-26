@@ -81,7 +81,7 @@ export default class HotClipsController {
     }
 
     private checkForSpikes(spike: number): void {
-        const list = [...this.getStreamList()];
+        const list = [...this.monitorTwitchChat.getStreamList()];
 
         for (let i = 0; i < list.length; i++) {
             if (!list[i].cooldown) {
@@ -130,10 +130,6 @@ export default class HotClipsController {
             streamer,
             this.cooldownLengthInSeconds,
         );
-    }
-
-    private getStreamList(): Stream[] {
-        return this.monitorTwitchChat.getStreamList();
     }
 
     private async createClip(streamer: string): Promise<Clip | undefined> {

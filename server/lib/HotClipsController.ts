@@ -117,7 +117,7 @@ export default class HotClipsController {
             const url: string = await this.getVideoUrl(slug);
 
             if (typeof url !== 'undefined') {
-                this.addClip(url);
+                this.clipList.addClip(url);
                 setTimeout(() => {
                     this.clipList.removeClip();
                 }, this.removeClipTimeInMinutes);
@@ -134,10 +134,6 @@ export default class HotClipsController {
 
     private getStreamList(): Stream[] {
         return this.monitorTwitchChat.getStreamList();
-    }
-
-    private addClip(clip: string): void {
-        this.clipList.addClip(clip);
     }
 
     private async createClip(streamer: string): Promise<Clip | undefined> {

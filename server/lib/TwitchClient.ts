@@ -53,7 +53,7 @@ export default class TwitchClient {
         this.client.on('message', messageHandler);
     }
 
-    async joinChannels(channels: Array<string>): Promise<boolean> {
+    public async joinChannels(channels: Array<string>): Promise<boolean> {
         console.log(
             '\x1b[44m%s\x1b[0m',
             '\n--- TwitchClient :: Joining channels...',
@@ -83,7 +83,7 @@ export default class TwitchClient {
         return success;
     }
 
-    async leaveChannels(channels: Array<string>): Promise<boolean> {
+    public async leaveChannels(channels: Array<string>): Promise<boolean> {
         console.log(
             '\x1b[44m%s\x1b[0m',
             '\n--- TwitchClient :: Leaving channels...',

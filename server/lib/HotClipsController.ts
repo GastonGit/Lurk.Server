@@ -130,6 +130,11 @@ export default class HotClipsController {
 
     private async createClip(streamer: string): Promise<Clip | undefined> {
         const broadcasterID = await this.clipper.getBroadcasterID(streamer);
-        return this.clipper.createClip(streamer, broadcasterID);
+
+        if (typeof broadcasterID !== 'undefined') {
+            return this.clipper.createClip(streamer, broadcasterID);
+        } else {
+            return undefined;
+        }
     }
 }

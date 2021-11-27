@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: __dirname + '../.env' });
 import fetch, { Response } from 'node-fetch';
 import { getResponse, fetch as fetcherFetch } from './Fetcher';
+import { User } from './Interfaces';
 
 interface Clip {
     id: string;
@@ -86,38 +87,27 @@ export default class Clipper {
         return 'https://clips-media-assets2.twitch.tv/' + videoID + '.mp4';
     }
 
-    public async getBroadcasterID(id: string): Promise<string> {
-        const user: any = await this.getUser(id);
+    public async getBroadcasterID(id: string): Promise<string | undefined> {
+        const user: User | undefined = await Clipper.getUser(id);
 
-        return user.data[0].id;
+        return user?.id;
     }
 
-    private async getUser(name: string): Promise<unknown> {
-        if (process.env.NODE_ENV === 'development') {
-            return { data: ['shit'] };
-        }
-
+    /*
+        TODO: MIGHT NEED UPDATED/SPECIAL ACCESS TOKEN DURING FETCHING
+     */
+    private static async getUser(name: string): Promise<User | undefined> {
         const url =
             'https://api.twitch.tv/helix/users?' +
             'login=' +
             name.toLowerCase();
-        //const accessToken = await this.getAccessToken();
-        const accessToken = 'temp';
 
-        const response = await fetch(url, {
-            method: 'get',
-            headers: {
-                'Client-ID': 'temp',
-                Authorization: 'Bearer ' + accessToken,
-            },
-        });
+        const fetchResult = await fetcherFetch(url);
 
-        const status = await response.status;
-
-        if (status !== 200) {
-            throw new Error('getUser - status code is: ' + status);
+        if (fetchResult.status === 200) {
+            return fetchResult.data?.shift();
+        } else {
+            return undefined;
         }
-
-        return await response.json();
     }
 }

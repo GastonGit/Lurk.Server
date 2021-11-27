@@ -5,6 +5,7 @@ import TwitchClient from './TwitchClient';
 import Clipper from './Clipper';
 import config from './settings/config.json';
 import Logger from './Logger';
+import Timers from './Timers';
 
 export default class HotClipsController {
     clipList: ClipList = new ClipList();
@@ -16,25 +17,21 @@ export default class HotClipsController {
             validMessages: config.validMessages,
         },
     );
-    checkTimer: NodeJS.Timer | undefined;
-    reduceTimer: NodeJS.Timer | undefined;
-    updateTimer: NodeJS.Timer | undefined;
-
-    spikeValue: number = config.spikeValue;
-    spikeTime: number = config.spikeTime;
-    reduceValue: number = config.reduceValue;
-    reduceTime: number = config.reduceTime;
+    timers: Timers = new Timers(
+        this.monitorTwitchChat.updateChannels,
+        this.checkForSpikes,
+        this.monitorTwitchChat.decreaseHitsByAmount,
+    );
 
     cooldownLengthInSeconds: number = config.cooldownLengthInSeconds * 1000;
     addClipDelay: number = config.addClipDelay;
     removeClipTimeInMinutes: number = config.removeClipTimeInMinutes * 60000;
-    updateTimeInMinutes: number = config.updateTimeInMinutes * 60000;
 
     public async start(): Promise<void> {
         const setupSuccess = await this.monitorTwitchChat.setupConnection();
 
         if (setupSuccess) {
-            this.startTimers();
+            this.timers.startMainTimer();
         } else {
             throw Error('Connection setup failed');
         }
@@ -42,35 +39,6 @@ export default class HotClipsController {
 
     public getList(): string[] {
         return this.clipList.getList();
-    }
-
-    private startTimers(): void {
-        this.startMonitorTimers();
-        this.updateTimer = setInterval(() => {
-            this.updateChannels();
-        }, this.updateTimeInMinutes);
-    }
-
-    private async updateChannels(): Promise<void> {
-        this.endAllMonitorTimers();
-
-        await this.monitorTwitchChat.updateChannels();
-
-        this.startMonitorTimers();
-    }
-
-    private startMonitorTimers(): void {
-        this.checkTimer = setInterval(() => {
-            this.checkForSpikes(this.spikeValue);
-        }, this.spikeTime);
-        this.reduceTimer = setInterval(() => {
-            this.monitorTwitchChat.decreaseHitsByAmount(this.reduceValue);
-        }, this.reduceTime);
-    }
-
-    private endAllMonitorTimers(): void {
-        clearInterval(<NodeJS.Timeout>this.checkTimer);
-        clearInterval(<NodeJS.Timeout>this.reduceTimer);
     }
 
     private checkForSpikes(spike: number): void {

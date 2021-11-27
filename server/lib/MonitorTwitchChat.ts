@@ -4,12 +4,12 @@ import TwitchClient from './TwitchClient';
 import { ChatUserstate } from 'tmi.js';
 
 export default class MonitorTwitchChat {
-    client: TwitchClient;
-    requestCount: number;
-    validMessages: string[];
+    private client: TwitchClient;
+    private readonly requestCount: number;
+    private readonly validMessages: string[];
 
-    streamList: Array<Stream> = [];
-    compactStreamList: Array<string> = [];
+    private streamList: Array<Stream> = [];
+    private compactStreamList: Array<string> = [];
 
     constructor(
         client: TwitchClient,

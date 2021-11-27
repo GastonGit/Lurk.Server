@@ -2,33 +2,37 @@ import { fetch } from './Fetcher';
 import { User, Clip } from './Interfaces';
 
 export default class Clipper {
-    public async createClip(
-        streamer: string,
-        broadcasterID: string,
-    ): Promise<Clip | undefined> {
-        const fetchResponse = await fetch(
-            'https://api.twitch.tv/helix/clips?broadcaster_id=' +
-                broadcasterID.toLowerCase(),
-        );
+    public async createClip(streamer: string): Promise<Clip | undefined> {
+        const broadcasterID = await this.getBroadcasterID(streamer);
 
-        if (
-            (fetchResponse.status === 200 || fetchResponse.status === 202) &&
-            typeof fetchResponse.data !== 'undefined'
-        ) {
-            console.log(
-                '\x1b[32m%s\x1b[0m',
-                'createClip :: SUCCESS :: ' + streamer,
+        if (typeof broadcasterID !== 'undefined') {
+            const fetchResponse = await fetch(
+                'https://api.twitch.tv/helix/clips?broadcaster_id=' +
+                    broadcasterID.toLowerCase(),
             );
-            return fetchResponse.data[0];
+
+            if (
+                (fetchResponse.status === 200 ||
+                    fetchResponse.status === 202) &&
+                typeof fetchResponse.data !== 'undefined'
+            ) {
+                console.log(
+                    '\x1b[32m%s\x1b[0m',
+                    'createClip :: SUCCESS :: ' + streamer,
+                );
+                return fetchResponse.data[0];
+            } else {
+                console.log(
+                    '\x1b[45m%s\x1b[0m',
+                    'createClip :: FAILURE :: ' +
+                        streamer +
+                        ' (status code ' +
+                        fetchResponse.status +
+                        ')',
+                );
+                return undefined;
+            }
         } else {
-            console.log(
-                '\x1b[45m%s\x1b[0m',
-                'createClip :: FAILURE :: ' +
-                    streamer +
-                    ' (status code ' +
-                    fetchResponse.status +
-                    ')',
-            );
             return undefined;
         }
     }

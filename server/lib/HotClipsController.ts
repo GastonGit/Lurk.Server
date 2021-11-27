@@ -101,7 +101,7 @@ export default class HotClipsController {
         this.cooldownStreamer(streamer);
         this.monitorTwitchChat.resetStreamer(streamer);
 
-        const clip = await this.createClip(streamer);
+        const clip = await this.clipper.createClip(streamer);
 
         if (typeof clip !== 'undefined') {
             this.addClipWithDelay(clip.id);
@@ -126,15 +126,5 @@ export default class HotClipsController {
             streamer,
             this.cooldownLengthInSeconds,
         );
-    }
-
-    private async createClip(streamer: string): Promise<Clip | undefined> {
-        const broadcasterID = await this.clipper.getBroadcasterID(streamer);
-
-        if (typeof broadcasterID !== 'undefined') {
-            return this.clipper.createClip(streamer, broadcasterID);
-        } else {
-            return undefined;
-        }
     }
 }

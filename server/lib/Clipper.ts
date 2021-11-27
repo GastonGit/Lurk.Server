@@ -63,7 +63,7 @@ export default class Clipper {
         return await getClip('https://api.twitch.tv/helix/clips?id=' + slug);
     }
 
-    async getVideoUrl(slug: string): Promise<string | undefined> {
+    public async getVideoUrl(slug: string): Promise<string | undefined> {
         const clip = await this.getClip(slug);
 
         if (typeof clip !== 'undefined') {

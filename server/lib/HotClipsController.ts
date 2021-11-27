@@ -1,4 +1,4 @@
-import { Clip, Stream } from './Interfaces';
+import { Clip } from './Interfaces';
 import ClipList from './ClipList';
 import MonitorTwitchChat from './MonitorTwitchChat';
 import TwitchClient from './TwitchClient';

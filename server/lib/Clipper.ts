@@ -32,28 +32,27 @@ export default class Clipper {
         streamer: string,
         broadcasterID: string,
     ): Promise<Clip | undefined> {
-        const response = (await getResponse(
+        const fetchResponse = await fetcherFetch(
             'https://api.twitch.tv/helix/clips?broadcaster_id=' +
                 broadcasterID.toLowerCase(),
-        )) as Response;
-        const status = response.status;
+        );
 
-        if (status === 200 || status === 202) {
-            const json: any = await response.json();
-            const data = json.data[0];
-
+        if (
+            (fetchResponse.status === 200 || fetchResponse.status === 202) &&
+            typeof fetchResponse.data !== 'undefined'
+        ) {
             console.log(
                 '\x1b[32m%s\x1b[0m',
                 'createClip :: SUCCESS :: ' + streamer,
             );
-            return data;
+            return fetchResponse.data[0];
         } else {
             console.log(
                 '\x1b[45m%s\x1b[0m',
                 'createClip :: FAILURE :: ' +
                     streamer +
                     ' (status code ' +
-                    status +
+                    fetchResponse.status +
                     ')',
             );
             return undefined;

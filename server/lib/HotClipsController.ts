@@ -11,7 +11,11 @@ export default class HotClipsController {
     clipList: ClipList = new ClipList();
     clipper: Clipper = new Clipper();
     monitorTwitchChat: MonitorTwitchChat = new MonitorTwitchChat(
-        new TwitchClient(config.joinTimeout),
+        new TwitchClient(
+            process.env.BOT_NAME || '',
+            process.env.BOT_AUTH || '',
+            config.joinTimeout,
+        ),
         {
             requestCount: config.requestCount,
             validMessages: config.validMessages,

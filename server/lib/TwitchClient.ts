@@ -6,7 +6,7 @@ export default class TwitchClient {
     client;
     joinTimeout;
 
-    constructor(joinTimeout: number) {
+    constructor(username: string, password: string, joinTimeout: number) {
         this.client = new tmi.client({
             connection: {
                 reconnect: true,
@@ -15,8 +15,8 @@ export default class TwitchClient {
                 maxReconnectInverval: 120000,
             },
             identity: {
-                username: process.env.BOT_NAME,
-                password: process.env.BOT_AUTH,
+                username: username,
+                password: password,
             },
         });
         this.joinTimeout = joinTimeout || 200;

@@ -32,7 +32,9 @@ export default class MonitorTwitchChat {
     }
 
     public async updateChannels(): Promise<boolean> {
-        const leaveChannelsSuccess = await this.leaveChannels();
+        const leaveChannelsSuccess = await this.client.leaveChannels(
+            this.compactStreamList,
+        );
         const updateStreamListSuccess = await this.updateStreamList();
         const joinChannelsSuccess = await this.joinChannels();
 
@@ -41,10 +43,6 @@ export default class MonitorTwitchChat {
             updateStreamListSuccess &&
             joinChannelsSuccess
         );
-    }
-
-    private async leaveChannels(): Promise<boolean> {
-        return await this.client.leaveChannels(this.compactStreamList);
     }
 
     public joinChannels(): Promise<boolean> {

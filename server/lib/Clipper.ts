@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ path: __dirname + '../.env' });
-import { fetch as fetcherFetch } from './Fetcher';
+import { fetch } from './Fetcher';
 import { User, Clip } from './Interfaces';
 
 export default class Clipper {
@@ -8,7 +8,7 @@ export default class Clipper {
         streamer: string,
         broadcasterID: string,
     ): Promise<Clip | undefined> {
-        const fetchResponse = await fetcherFetch(
+        const fetchResponse = await fetch(
             'https://api.twitch.tv/helix/clips?broadcaster_id=' +
                 broadcasterID.toLowerCase(),
         );
@@ -36,7 +36,7 @@ export default class Clipper {
     }
 
     private static async getClip(slug: string): Promise<Clip | undefined> {
-        const fetchResult = await fetcherFetch(
+        const fetchResult = await fetch(
             'https://api.twitch.tv/helix/clips?id=' + slug,
         );
 
@@ -77,7 +77,7 @@ export default class Clipper {
             'login=' +
             name.toLowerCase();
 
-        const fetchResult = await fetcherFetch(url);
+        const fetchResult = await fetch(url);
 
         if (fetchResult.status === 200) {
             return fetchResult.data?.shift();

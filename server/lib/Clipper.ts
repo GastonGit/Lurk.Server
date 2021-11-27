@@ -1,31 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ path: __dirname + '../.env' });
-import fetch, { Response } from 'node-fetch';
-import { getResponse, fetch as fetcherFetch } from './Fetcher';
-import { User } from './Interfaces';
-
-interface Clip {
-    id: string;
-    url: string;
-    embed_url: string;
-    broadcaster_id: string;
-    broadcaster_name: string;
-    creator_id: string;
-    creator_name: string;
-    video_id: string;
-    game_id: string;
-    language: string;
-    title: string;
-    view_count: number;
-    created_at: string;
-    thumbnail_url: string;
-    duration: number;
-}
-
-interface CreateClipResponse {
-    created: boolean;
-    data: Array<{ id: string; edit_url: string }> | undefined;
-}
+import { fetch as fetcherFetch } from './Fetcher';
+import { User, Clip } from './Interfaces';
 
 export default class Clipper {
     public async createClip(

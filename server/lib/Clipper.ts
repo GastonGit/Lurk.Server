@@ -3,7 +3,7 @@ import { User, Clip } from './Interfaces';
 
 export default class Clipper {
     public async createClip(streamer: string): Promise<Clip | undefined> {
-        const broadcasterID = await this.getBroadcasterID(streamer);
+        const broadcasterID = await Clipper.getBroadcasterID(streamer);
 
         if (typeof broadcasterID !== 'undefined') {
             const fetchResponse = await fetch(
@@ -64,7 +64,9 @@ export default class Clipper {
         return 'https://clips-media-assets2.twitch.tv/' + videoID + '.mp4';
     }
 
-    public async getBroadcasterID(id: string): Promise<string | undefined> {
+    private static async getBroadcasterID(
+        id: string,
+    ): Promise<string | undefined> {
         const user: User | undefined = await Clipper.getUser(id);
 
         return user?.id;

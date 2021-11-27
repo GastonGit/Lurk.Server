@@ -90,7 +90,10 @@ export default class HotClipsController {
     }
 
     private async clipIt(streamer: string): Promise<void> {
-        this.cooldownStreamer(streamer);
+        this.monitorTwitchChat.cooldownStreamer(
+            streamer,
+            this.cooldownLengthInSeconds,
+        );
         this.monitorTwitchChat.resetStreamer(streamer);
 
         const clip: Clip | undefined = await this.clipper.createClip(streamer);
@@ -111,12 +114,5 @@ export default class HotClipsController {
                 }, this.removeClipTimeInMinutes);
             }
         }, this.addClipDelay);
-    }
-
-    private cooldownStreamer(streamer: string): void {
-        this.monitorTwitchChat.cooldownStreamer(
-            streamer,
-            this.cooldownLengthInSeconds,
-        );
     }
 }

@@ -38,7 +38,7 @@ export default class MonitorTwitchChat {
     }
 
     private async leaveChannels(): Promise<boolean> {
-        return await this.client.leaveChannels(this.getCompactStreamList());
+        return await this.client.leaveChannels(this.compactStreamList);
     }
 
     public setupConnectedEvent(): void {
@@ -50,7 +50,7 @@ export default class MonitorTwitchChat {
     public joinChannels(): Promise<boolean> {
         this.updateCompactStreamList();
 
-        return this.client.joinChannels(this.getCompactStreamList());
+        return this.client.joinChannels(this.compactStreamList);
     }
 
     public decreaseHitsByAmount(amount: number): void {
@@ -69,10 +69,6 @@ export default class MonitorTwitchChat {
         this.streamList.forEach((streamer: Stream) => {
             this.compactStreamList.push(streamer.user_name);
         });
-    }
-
-    private getCompactStreamList(): string[] {
-        return this.compactStreamList;
     }
 
     private onMessageHandler(

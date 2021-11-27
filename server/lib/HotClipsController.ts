@@ -30,7 +30,7 @@ export default class HotClipsController {
     updateTimeInMinutes: number = config.updateTimeInMinutes * 60000;
 
     public async start(): Promise<void> {
-        const setupSuccess = await this.setupConnection();
+        const setupSuccess = await this.monitorTwitchChat.setupConnection();
 
         if (setupSuccess) {
             this.startTimers();
@@ -41,14 +41,6 @@ export default class HotClipsController {
 
     public getList(): string[] {
         return this.clipList.getList();
-    }
-
-    private async setupConnection(): Promise<boolean> {
-        const updateResult = await this.monitorTwitchChat.updateStreamList();
-        this.monitorTwitchChat.setupConnectedEvent();
-        const connectResult = await this.monitorTwitchChat.connectToTwitch();
-
-        return updateResult && connectResult;
     }
 
     private startTimers(): void {

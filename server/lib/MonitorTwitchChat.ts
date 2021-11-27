@@ -21,6 +21,14 @@ export default class MonitorTwitchChat {
         this.client.setMessageHandler(this.onMessageHandler.bind(this));
     }
 
+    public async setupConnection(): Promise<boolean> {
+        const updateResult = await this.updateStreamList();
+        this.setupConnectedEvent();
+        const connectResult = await this.connectToTwitch();
+
+        return updateResult && connectResult;
+    }
+
     public async connectToTwitch(): Promise<boolean> {
         return await this.client.connectToTwitch();
     }

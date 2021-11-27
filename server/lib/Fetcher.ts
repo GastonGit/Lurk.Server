@@ -32,7 +32,7 @@ async function fetcherFetch(url: string): Promise<FetcherResponse> {
         const json = (await response.json()) as JSON;
 
         fullResponse.status = response.status;
-        fullResponse.data = json.data;
+        fullResponse.data = json.data as Array<any>;
         fullResponse.pagination = json.pagination || undefined;
     } catch (e) {
         console.error(e);

@@ -41,7 +41,7 @@ export interface Clip {
 
 export interface FetcherResponse {
     status: number;
-    data: unknown;
+    data: Array<any> | undefined;
     pagination: { cursor: string } | undefined;
 }
 

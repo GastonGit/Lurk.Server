@@ -93,7 +93,7 @@ export default class HotClipsController {
         this.cooldownStreamer(streamer);
         this.monitorTwitchChat.resetStreamer(streamer);
 
-        const clip = await this.clipper.createClip(streamer);
+        const clip: Clip | undefined = await this.clipper.createClip(streamer);
 
         if (typeof clip !== 'undefined') {
             this.addClipWithDelay(clip.id);

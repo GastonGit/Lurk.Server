@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ path: __dirname + '../.env' });
 import fetch, { Response } from 'node-fetch';
-import { getResponse, getClip } from './Fetcher';
+import { getResponse, fetch as fetcherFetch } from './Fetcher';
 
 interface Clip {
     id: string;
@@ -59,12 +59,16 @@ export default class Clipper {
         }
     }
 
-    private async getClip(slug: string): Promise<Clip> {
-        return await getClip('https://api.twitch.tv/helix/clips?id=' + slug);
+    private static async getClip(slug: string): Promise<Clip | undefined> {
+        const fetchResult = await fetcherFetch(
+            'https://api.twitch.tv/helix/clips?id=' + slug,
+        );
+
+        return fetchResult.data?.shift();
     }
 
     public async getVideoUrl(slug: string): Promise<string | undefined> {
-        const clip = await this.getClip(slug);
+        const clip = await Clipper.getClip(slug);
 
         if (typeof clip !== 'undefined') {
             return this.formatVideoUrl(clip.thumbnail_url);

@@ -1,10 +1,6 @@
 import fetch, { Response } from 'node-fetch';
-import {
-    getStatus as getStatusDev,
-    getJSON as getJSONDev,
-    getResponse as getResponseDev,
-} from './dev/FetcherDev';
-import { Clip, Data, FetcherResponse, JSON } from './Interfaces';
+import { fetcherFetch as fetcherFetchDev } from './dev/FetcherDev';
+import { FetcherResponse, JSON } from './Interfaces';
 
 /*
     TODO: CLIENT_APP_ACCESS_TOKEN MIGHT NEED TO BE REFRESHED EVERY CALL
@@ -41,61 +37,10 @@ async function fetcherFetch(url: string): Promise<FetcherResponse> {
     return fullResponse;
 }
 
-async function getStatus(url: string): Promise<number> {
-    let status = -1;
-
-    try {
-        const response = await fetchWrapper(url);
-        status = response.status;
-    } catch (e) {
-        console.error(e);
-    }
-
-    return status;
-}
-
-async function getJSON(url: string): Promise<unknown> {
-    let json;
-
-    try {
-        const response = await fetchWrapper(url);
-        json = response.json();
-    } catch (e) {
-        console.error(e);
-    }
-
-    return json;
-}
-
-async function getClip(url: string): Promise<Clip> {
-    let clip;
-
-    try {
-        const response = (await getJSON(url)) as Data;
-        clip = response.data[0];
-    } catch (e) {
-        console.error(e);
-    }
-
-    return clip;
-}
-
-let getStatusExport: (url: string) => Promise<number>;
-let getJSONExport: (url: string) => Promise<unknown>;
-let getResponseExport: (url: string) => Promise<unknown>;
-
+let fetcherFetchExport: (url: string) => Promise<FetcherResponse>;
 if (process.env.NODE_ENV === 'development') {
-    getStatusExport = getStatusDev as typeof getStatus;
-    getJSONExport = getJSONDev as typeof getJSON;
-    getResponseExport = getResponseDev as typeof fetchWrapper;
+    fetcherFetchExport = fetcherFetchDev;
 } else {
-    getStatusExport = getStatus;
-    getJSONExport = getJSON;
-    getResponseExport = fetchWrapper;
+    fetcherFetchExport = fetcherFetch;
 }
-
-export { getStatusExport as getStatus };
-export { getJSONExport as getJSON };
-export { getResponseExport as getResponse };
-export { getClip as getClip };
-export { fetcherFetch as fetch };
+export { fetcherFetchExport as fetch };

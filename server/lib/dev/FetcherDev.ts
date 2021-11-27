@@ -1,22 +1,11 @@
-async function getStatus(url: string): Promise<number> {
-    console.log(url);
-    return 400;
-}
+import { FetcherResponse } from '../Interfaces';
 
-async function getJSON(url: string): Promise<unknown> {
-    console.log(url);
-    return { data: [] };
-}
-
-async function fetchWrapper(url: string): Promise<unknown> {
-    console.log(url);
-    const result = { data: [{ id: '121059319' }] };
-    return Promise.resolve({
-        json: () => Promise.resolve(result),
+async function fetcherFetch(url: string): Promise<FetcherResponse> {
+    return {
         status: 200,
-    });
+        data: [url],
+        pagination: undefined,
+    } as FetcherResponse;
 }
 
-export { getStatus as getStatus };
-export { getJSON as getJSON };
-export { fetchWrapper as getResponse };
+export { fetcherFetch };

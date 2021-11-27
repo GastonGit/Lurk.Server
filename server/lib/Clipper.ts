@@ -59,7 +59,7 @@ export default class Clipper {
         }
     }
 
-    async getClip(slug: string): Promise<Clip> {
+    private async getClip(slug: string): Promise<Clip> {
         return await getClip('https://api.twitch.tv/helix/clips?id=' + slug);
     }
 
@@ -73,7 +73,7 @@ export default class Clipper {
         }
     }
 
-    formatVideoUrl(thumbnail_url: string): string {
+    private formatVideoUrl(thumbnail_url: string): string {
         const videoID = thumbnail_url.substring(
             thumbnail_url.indexOf('.tv/') + 4,
             thumbnail_url.indexOf('-preview'),
@@ -82,13 +82,13 @@ export default class Clipper {
         return 'https://clips-media-assets2.twitch.tv/' + videoID + '.mp4';
     }
 
-    async getBroadcasterID(id: string): Promise<string> {
+    public async getBroadcasterID(id: string): Promise<string> {
         const user: any = await this.getUser(id);
 
         return user.data[0].id;
     }
 
-    async getUser(name: string): Promise<unknown> {
+    private async getUser(name: string): Promise<unknown> {
         if (process.env.NODE_ENV === 'development') {
             return { data: ['shit'] };
         }

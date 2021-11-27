@@ -71,13 +71,13 @@ export default class Clipper {
         const clip = await Clipper.getClip(slug);
 
         if (typeof clip !== 'undefined') {
-            return this.formatVideoUrl(clip.thumbnail_url);
+            return Clipper.formatVideoUrl(clip.thumbnail_url);
         } else {
             return undefined;
         }
     }
 
-    private formatVideoUrl(thumbnail_url: string): string {
+    private static formatVideoUrl(thumbnail_url: string): string {
         const videoID = thumbnail_url.substring(
             thumbnail_url.indexOf('.tv/') + 4,
             thumbnail_url.indexOf('-preview'),

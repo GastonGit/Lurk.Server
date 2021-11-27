@@ -4,6 +4,7 @@ import MonitorTwitchChat from './MonitorTwitchChat';
 import TwitchClient from './TwitchClient';
 import Clipper from './Clipper';
 import config from './settings/config.json';
+import Logger from './Logger';
 
 export default class HotClipsController {
     clipList: ClipList = new ClipList();
@@ -78,11 +79,8 @@ export default class HotClipsController {
         for (let i = 0; i < list.length; i++) {
             if (!list[i].cooldown) {
                 if (list[i].hits >= spike + list[i].viewer_count / 5000) {
-                    this.clipIt(list[i].user_name).catch((error) => {
-                        console.error(
-                            '\x1b[31m%s\x1b[0m',
-                            'clipIt :: ' + error,
-                        );
+                    this.clipIt(list[i].user_name).catch((err) => {
+                        Logger.error('clipIt', 'UNABLE TO CLIP IT', err);
                     });
                 }
             }

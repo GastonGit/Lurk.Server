@@ -1,5 +1,6 @@
 import tmi from './dev/tmiDev';
 import { ChatUserstate } from 'tmi.js';
+import Logger from './Logger';
 
 export default class TwitchClient {
     client;
@@ -23,11 +24,8 @@ export default class TwitchClient {
 
     public async connectToTwitch(): Promise<boolean> {
         /* istanbul ignore next */
-        this.client.on('disconnected', (reason: string) => {
-            console.error(
-                '\x1b[45m%s\x1b[0m',
-                'TMI.JS :: DISCONNECT :: ' + reason,
-            );
+        this.client.on('disconnected', (err: string) => {
+            Logger.special('TMI.JS', 'DISCONNECTED', err);
             throw Error('UNABLE TO CONNECT');
         });
 
@@ -37,7 +35,7 @@ export default class TwitchClient {
                 return true;
             })
             .catch((err: string) => {
-                console.log('Error connecting to Twitch: ' + err);
+                Logger.error('TMI.JS', 'FAILED TO CONNECT', err);
                 return false;
             });
     }
@@ -54,10 +52,7 @@ export default class TwitchClient {
     }
 
     public async joinChannels(channels: Array<string>): Promise<boolean> {
-        console.log(
-            '\x1b[44m%s\x1b[0m',
-            '\n--- TwitchClient :: Joining channels...',
-        );
+        Logger.info('TwitchClient', 'Joining channels...');
         let success = false;
 
         try {
@@ -66,28 +61,23 @@ export default class TwitchClient {
                 return await client.join(channel);
             });
 
-            const result = await Promise.allSettled(promises);
+            await Promise.allSettled(promises);
 
-            console.log(result.map((promise) => promise.status));
-
-            console.log(
-                '\x1b[44m%s\x1b[0m',
-                '\n--- TwitchClient :: ...Joined channels',
-            );
-
+            Logger.info('TwitchClient', '...Joined channels');
             success = true;
-        } catch (e) {
-            console.error(e);
+        } catch (err) {
+            Logger.error(
+                'TwitchClient',
+                'UNABLE TO JOIN CHANNELS',
+                err as string,
+            );
         }
 
         return success;
     }
 
     public async leaveChannels(channels: Array<string>): Promise<boolean> {
-        console.log(
-            '\x1b[44m%s\x1b[0m',
-            '\n--- TwitchClient :: Leaving channels...',
-        );
+        Logger.info('TwitchClient', 'Leaving channels...');
         let success = false;
 
         try {
@@ -96,17 +86,16 @@ export default class TwitchClient {
                 return await client.part(channel);
             });
 
-            const result = await Promise.allSettled(promises);
-            console.log(result.map((promise) => promise.status));
+            await Promise.allSettled(promises);
 
-            console.log(
-                '\x1b[44m%s\x1b[0m',
-                '--- TwitchClient :: ...Left channels',
-            );
-
+            Logger.info('TwitchClient', '...Left channels');
             success = true;
-        } catch (e) {
-            console.error(e);
+        } catch (err) {
+            Logger.error(
+                'TwitchClient',
+                'UNABLE TO LEAVE CHANNELS',
+                err as string,
+            );
         }
 
         return success;

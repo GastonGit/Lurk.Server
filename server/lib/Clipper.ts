@@ -1,5 +1,6 @@
 import { fetch } from './Fetcher';
 import { User, Clip } from './Interfaces';
+import Logger from './Logger';
 
 export default class Clipper {
     public async createClip(streamer: string): Promise<Clip | undefined> {
@@ -16,19 +17,13 @@ export default class Clipper {
                     fetchResponse.status === 202) &&
                 typeof fetchResponse.data !== 'undefined'
             ) {
-                console.log(
-                    '\x1b[32m%s\x1b[0m',
-                    'createClip :: SUCCESS :: ' + streamer,
-                );
+                Logger.success('createClip', streamer);
                 return fetchResponse.data[0];
             } else {
-                console.log(
-                    '\x1b[45m%s\x1b[0m',
-                    'createClip :: FAILURE :: ' +
-                        streamer +
-                        ' (status code ' +
-                        fetchResponse.status +
-                        ')',
+                Logger.failure(
+                    'createClip',
+                    streamer,
+                    'StatusCode=' + fetchResponse.status,
                 );
                 return undefined;
             }

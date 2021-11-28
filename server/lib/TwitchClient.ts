@@ -3,8 +3,8 @@ import { ChatUserstate } from 'tmi.js';
 import Logger from './Logger';
 
 export default class TwitchClient {
-    client;
-    joinTimeout;
+    private readonly client;
+    private joinTimeout;
 
     constructor(username: string, password: string, joinTimeout: number) {
         this.client = new tmi.client({
@@ -22,8 +22,11 @@ export default class TwitchClient {
         this.joinTimeout = joinTimeout || 200;
     }
 
-    public async connectToTwitch(): Promise<boolean> {
-        /* istanbul ignore next */
+    public async connectToTwitch(channelList: Array<string>): Promise<boolean> {
+        this.client.on('connected', () => {
+            this.joinChannels(channelList);
+        });
+
         this.client.on('disconnected', (err: string) => {
             Logger.special('TMI.JS', 'DISCONNECTED', err);
             throw Error('UNABLE TO CONNECT');

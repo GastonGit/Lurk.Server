@@ -22,7 +22,7 @@ export default class MonitorTwitchChat {
     }
 
     public async setupConnection(): Promise<boolean> {
-        const updateResult = await this.updateStreamList();
+        const updateResult = await this.updateLists();
         const connectResult = await this.client.connectToTwitch(
             this.compactStreamList,
         );
@@ -34,15 +34,13 @@ export default class MonitorTwitchChat {
         const leaveChannelsSuccess = await this.client.leaveChannels(
             this.compactStreamList,
         );
-        const updateStreamListSuccess = await this.updateStreamList();
+        const updateListsSuccess = await this.updateLists();
         const joinChannelsSuccess = await this.client.joinChannels(
             this.compactStreamList,
         );
 
         return (
-            leaveChannelsSuccess &&
-            updateStreamListSuccess &&
-            joinChannelsSuccess
+            leaveChannelsSuccess && updateListsSuccess && joinChannelsSuccess
         );
     }
 
@@ -53,14 +51,6 @@ export default class MonitorTwitchChat {
             } else {
                 streamer.hits = 0;
             }
-        });
-    }
-
-    private updateCompactStreamList(): void {
-        this.compactStreamList = [];
-
-        this.streamList.forEach((streamer: Stream) => {
-            this.compactStreamList.push(streamer.user_name);
         });
     }
 
@@ -136,6 +126,21 @@ export default class MonitorTwitchChat {
                 streamerIndex: -1,
             };
         }
+    }
+
+    private updateLists(): Promise<boolean> {
+        const updateStreamListResult = this.updateStreamList();
+        this.updateCompactStreamList();
+
+        return updateStreamListResult;
+    }
+
+    private updateCompactStreamList(): void {
+        this.compactStreamList = [];
+
+        this.streamList.forEach((streamer: Stream) => {
+            this.compactStreamList.push(streamer.user_name);
+        });
     }
 
     private async updateStreamList(): Promise<boolean> {

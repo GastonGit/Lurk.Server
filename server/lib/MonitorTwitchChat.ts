@@ -165,22 +165,26 @@ export default class MonitorTwitchChat {
             const fetchedStreams: Array<FetchedStreams> = requestedStreams.data;
             success = requestedStreams.success;
 
-            fetchedStreams.forEach(function (streamer: FetchedStreams) {
-                if (
-                    !blockedStreamers.includes(
-                        streamer.user_login.toLowerCase(),
-                    )
-                ) {
-                    streams.push({
-                        user_name: streamer.user_login.toLowerCase(),
-                        viewer_count: parseInt(streamer.viewer_count),
-                        hits: 0,
-                        cooldown: false,
-                    });
-                }
-            });
+            if (success) {
+                fetchedStreams.forEach(function (streamer: FetchedStreams) {
+                    if (
+                        !blockedStreamers.includes(
+                            streamer.user_login.toLowerCase(),
+                        )
+                    ) {
+                        streams.push({
+                            user_name: streamer.user_login.toLowerCase(),
+                            viewer_count: parseInt(streamer.viewer_count),
+                            hits: 0,
+                            cooldown: false,
+                        });
+                    }
+                });
 
-            pagination = requestedStreams.pagination?.cursor;
+                pagination = requestedStreams.pagination?.cursor;
+            } else {
+                return { success: success, streams: streams };
+            }
         }
 
         return { success: success, streams: streams };

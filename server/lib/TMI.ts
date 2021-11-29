@@ -1,5 +1,5 @@
 import tmi from 'tmi.js';
-import client from '../../stubs/tmiClientStub';
+import client from '../stubs/tmiClientStub';
 let tmiExport;
 
 if (process.env.NODE_ENV === 'development') {

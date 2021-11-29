@@ -1,4 +1,4 @@
-import tmi from './dev/tmiDev';
+import tmi from './TMI';
 import { ChatUserstate } from 'tmi.js';
 import Logger from './Logger';
 

@@ -20,7 +20,7 @@ async function fetcherFetch(url: string): Promise<FetcherResponse> {
     if (process.env.NODE_ENV === 'development') {
         return {
             status: 200,
-            data: [url] as Array<any>,
+            data: [] as Array<any>,
             pagination: undefined,
         } as FetcherResponse;
     }

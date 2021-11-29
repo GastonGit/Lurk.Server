@@ -1,4 +1,4 @@
-import tmi from 'tmi.js';
+import tmi, { ChatUserstate } from 'tmi.js';
 import client from '../stubs/tmiClientStub';
 let tmiExport;
 
@@ -11,3 +11,4 @@ if (process.env.NODE_ENV === 'development') {
     tmiExport = tmi;
 }
 export default tmiExport as typeof tmi;
+export type { ChatUserstate };

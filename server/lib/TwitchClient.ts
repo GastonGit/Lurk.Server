@@ -1,5 +1,4 @@
-import tmi from './TMI';
-import { ChatUserstate } from 'tmi.js';
+import tmi, { ChatUserstate } from './TMI';
 import Logger from './Logger';
 
 export default class TwitchClient {

@@ -1,5 +1,4 @@
 import fetch, { Response } from 'node-fetch';
-import { fetcherFetch as fetcherFetchDev } from './dev/FetcherDev';
 import { FetcherResponse, JSON } from './Interfaces';
 import Logger from './Logger';
 
@@ -18,6 +17,14 @@ async function fetchWrapper(url: string): Promise<Response> {
 }
 
 async function fetcherFetch(url: string): Promise<FetcherResponse> {
+    if (process.env.NODE_ENV === 'development') {
+        return {
+            status: 200,
+            data: [url],
+            pagination: undefined,
+        } as FetcherResponse;
+    }
+
     const fullResponse = {
         status: -1,
         data: undefined,
@@ -38,10 +45,4 @@ async function fetcherFetch(url: string): Promise<FetcherResponse> {
     return fullResponse;
 }
 
-let fetcherFetchExport: (url: string) => Promise<FetcherResponse>;
-if (process.env.NODE_ENV === 'development') {
-    fetcherFetchExport = fetcherFetchDev;
-} else {
-    fetcherFetchExport = fetcherFetch;
-}
-export { fetcherFetchExport as fetch };
+export { fetcherFetch as fetch };

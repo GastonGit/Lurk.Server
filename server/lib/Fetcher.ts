@@ -20,14 +20,14 @@ async function fetcherFetch(url: string): Promise<FetcherResponse> {
     if (process.env.NODE_ENV === 'development') {
         return {
             status: 200,
-            data: [url],
+            data: [url] as Array<any>,
             pagination: undefined,
         } as FetcherResponse;
     }
 
     const fullResponse = {
         status: -1,
-        data: undefined,
+        data: [],
         pagination: undefined,
     } as FetcherResponse;
 
@@ -36,7 +36,7 @@ async function fetcherFetch(url: string): Promise<FetcherResponse> {
         const json = (await response.json()) as JSON;
 
         fullResponse.status = response.status;
-        fullResponse.data = json.data as Array<any>;
+        fullResponse.data = (json.data as Array<any>) || [];
         fullResponse.pagination = json.pagination || undefined;
     } catch (err) {
         Logger.error('fetcherFetch', 'UNABLE TO COMPLETE FETCH', err as string);

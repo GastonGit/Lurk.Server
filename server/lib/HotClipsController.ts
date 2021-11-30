@@ -51,6 +51,8 @@ export default class HotClipsController {
             case 'reduce':
                 this.monitorTwitchChat.decreaseHitsByAmount(this.reduceValue);
                 break;
+            default:
+                throw Error('eventSystem - Unknown case: ' + event);
         }
     }
 

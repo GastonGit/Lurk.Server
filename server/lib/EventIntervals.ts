@@ -46,4 +46,10 @@ export default class EventIntervals {
         }
         this.constrainedIntervals = [];
     }
+
+    public startIndependentInterval(event: string, timer: number): void {
+        setInterval(() => {
+            this.callMe(event);
+        }, timer);
+    }
 }

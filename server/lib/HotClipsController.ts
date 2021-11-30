@@ -35,10 +35,13 @@ export default class HotClipsController {
         event: 'hit',
         timer: config.spikeTime,
     };
-
     private reduceCI = {
         event: 'reduce',
         timer: config.reduceTime,
+    };
+    private removeClipII = {
+        event: 'remove',
+        timer: config.removeClipTimeInMinutes * 60000,
     };
 
     private spikeValue: number = config.spikeValue;
@@ -64,6 +67,11 @@ export default class HotClipsController {
             this.reduceCI.timer,
         );
 
+        this.timers.startIndependentInterval(
+            this.removeClipII.event,
+            this.removeClipII.timer,
+        );
+
         this.timers.startSuperInterval(
             this.superInterval.event,
             this.superInterval.timer,
@@ -80,6 +88,11 @@ export default class HotClipsController {
                 break;
             case this.reduceCI.event:
                 this.monitorTwitchChat.decreaseHitsByAmount(this.reduceValue);
+                break;
+            case this.removeClipII.event:
+                if (this.clipList.getList().length > 20) {
+                    this.clipList.removeClip();
+                }
                 break;
             default:
                 throw Error('eventSystem - Unknown case: ' + event);
@@ -124,9 +137,6 @@ export default class HotClipsController {
 
             if (typeof url !== 'undefined') {
                 this.clipList.addClip(url);
-                setTimeout(() => {
-                    this.clipList.removeClip();
-                }, this.removeClipTimeInMinutes);
             }
         }, this.addClipDelay);
     }

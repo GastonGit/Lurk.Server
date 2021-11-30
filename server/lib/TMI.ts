@@ -1,5 +1,5 @@
 import tmi, { ChatUserstate } from 'tmi.js';
-import client from '../stubs/tmiClientStub';
+import client from './dev/tmi.dev';
 let tmiExport;
 
 if (process.env.NODE_ENV === 'development') {

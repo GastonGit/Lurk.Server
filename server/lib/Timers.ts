@@ -1,8 +1,4 @@
-import config from './settings/config.json';
-
 export default class Timers {
-    private updateTimer: NodeJS.Timer | undefined;
-
     private callMe;
 
     private constrainedIntervals: Array<NodeJS.Timer> = [];

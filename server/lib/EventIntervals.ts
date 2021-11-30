@@ -5,6 +5,10 @@ export default class EventIntervals {
     private superInterval: NodeJS.Timer | undefined;
     private constrainedIntervals: Array<NodeJS.Timer> = [];
     private constrainedEvents: Array<{ event: string; timer: number }> = [];
+    private independentEvents: Array<{
+        event: string;
+        interval: NodeJS.Timer;
+    }> = [];
 
     constructor(callMe: (event: string) => void) {
         this.callMe = callMe;
@@ -48,8 +52,28 @@ export default class EventIntervals {
     }
 
     public startIndependentInterval(event: string, timer: number): void {
-        setInterval(() => {
-            this.callMe(event);
-        }, timer);
+        this.independentEvents.push({
+            event: event,
+            interval: setInterval(() => {
+                this.callMe(event);
+            }, timer),
+        });
+    }
+
+    public endIndependentInterval(event: string): void {
+        const found = this.independentEvents.find(
+            (independentEvent) => independentEvent.event === event,
+        );
+
+        if (typeof found !== 'undefined') {
+            clearInterval(found.interval);
+        }
+    }
+
+    public endAllIndependentIntervals(): void {
+        for (let i = 0; i < this.independentEvents.length; i++) {
+            clearInterval(this.independentEvents[i].interval);
+        }
+        this.independentEvents = [];
     }
 }

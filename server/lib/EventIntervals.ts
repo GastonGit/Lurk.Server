@@ -17,7 +17,7 @@ export default class EventIntervals {
     public startSuperInterval(event: string, timer: number): void {
         if (typeof this.superInterval === 'undefined') {
             this.superInterval = setInterval(() => {
-                this.endConstrainedIntervals();
+                this.endAllConstrainedIntervals();
                 this.callMe(event);
                 this.startConstrainedIntervals();
             }, timer);
@@ -44,7 +44,7 @@ export default class EventIntervals {
         }
     }
 
-    private endConstrainedIntervals(): void {
+    private endAllConstrainedIntervals(): void {
         for (let i = 0; i < this.constrainedIntervals.length; i++) {
             clearInterval(this.constrainedIntervals[i]);
         }

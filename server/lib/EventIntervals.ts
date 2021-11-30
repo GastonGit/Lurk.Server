@@ -26,6 +26,11 @@ export default class EventIntervals {
         }
     }
 
+    public endSuperInterval(): void {
+        clearInterval(<NodeJS.Timeout>this.superInterval);
+        this.superInterval = undefined;
+    }
+
     public createConstrainedInterval(event: string, timer: number): void {
         this.constrainedEvents.push({ event: event, timer: timer });
     }
@@ -74,7 +79,7 @@ export default class EventIntervals {
     }
 
     public endAllIntervals(): void {
-        clearInterval(<NodeJS.Timeout>this.superInterval);
+        this.endSuperInterval();
         this.endAllConstrainedIntervals();
         this.endAllIndependentIntervals();
     }

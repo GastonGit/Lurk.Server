@@ -27,10 +27,22 @@ export default class HotClipsController {
     addClipDelay: number = config.addClipDelay;
     removeClipTimeInMinutes: number = config.removeClipTimeInMinutes * 60000;
 
-    private updateTimeInMinutes: number = config.updateTimeInMinutes * 60000;
-
-    private spikeTime: number = config.spikeTime;
-    private reduceTime: number = config.reduceTime;
+    private AllIntervals = {
+        superInterval: {
+            event: 'main',
+            timer: config.updateTimeInMinutes * 60000,
+        },
+        constrainedIntervals: [
+            {
+                event: 'hit',
+                timer: config.spikeTime,
+            },
+            {
+                event: 'reduce',
+                timer: config.reduceTime,
+            },
+        ],
+    };
 
     private spikeValue: number = config.spikeValue;
     private reduceValue: number = config.reduceValue;
@@ -39,23 +51,38 @@ export default class HotClipsController {
         const setupSuccess = await this.monitorTwitchChat.setupConnection();
 
         if (setupSuccess) {
-            this.timers.createConstrainedInterval('hit', this.spikeTime);
-            this.timers.createConstrainedInterval('reduce', this.reduceTime);
-            this.timers.startSuperInterval('main', this.updateTimeInMinutes);
+            this.startIntervals();
         } else {
             throw Error('Connection setup failed');
         }
     }
 
+    private startIntervals(): void {
+        for (
+            let i = 0;
+            i < this.AllIntervals.constrainedIntervals.length;
+            i++
+        ) {
+            this.timers.createConstrainedInterval(
+                this.AllIntervals.constrainedIntervals[i].event,
+                this.AllIntervals.constrainedIntervals[i].timer,
+            );
+        }
+        this.timers.startSuperInterval(
+            this.AllIntervals.superInterval.event,
+            this.AllIntervals.superInterval.timer,
+        );
+    }
+
     private async eventSystem(event: string) {
         switch (event) {
-            case 'main':
+            case this.AllIntervals.superInterval.event:
                 await this.monitorTwitchChat.updateChannels();
                 return;
-            case 'hit':
+            case this.AllIntervals.constrainedIntervals[0].event:
                 this.checkForSpikes(this.spikeValue);
                 break;
-            case 'reduce':
+            case this.AllIntervals.constrainedIntervals[1].event:
                 this.monitorTwitchChat.decreaseHitsByAmount(this.reduceValue);
                 break;
             default:

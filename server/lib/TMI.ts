@@ -2,7 +2,7 @@ import tmi, { ChatUserstate } from 'tmi.js';
 import client from './dev/tmi.dev';
 let tmiExport;
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
     tmiExport = {
         client,
         Client: client,

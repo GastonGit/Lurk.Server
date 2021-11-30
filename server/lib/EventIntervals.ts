@@ -76,4 +76,10 @@ export default class EventIntervals {
         }
         this.independentEvents = [];
     }
+
+    public endAllIntervals(): void {
+        clearInterval(<NodeJS.Timeout>this.superInterval);
+        this.endAllConstrainedIntervals();
+        this.endAllIndependentIntervals();
+    }
 }

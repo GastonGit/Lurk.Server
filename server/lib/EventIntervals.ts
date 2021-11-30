@@ -1,4 +1,4 @@
-export default class Timers {
+export default class EventIntervals {
     private callMe;
 
     private constrainedIntervals: Array<NodeJS.Timer> = [];

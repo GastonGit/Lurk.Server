@@ -5,7 +5,7 @@ import TwitchClient from './TwitchClient';
 import Clipper from './Clipper';
 import config from './settings/config.json';
 import Logger from './Logger';
-import Timers from './Timers';
+import EventIntervals from './EventIntervals';
 
 export default class HotClipsController {
     clipList: ClipList = new ClipList();
@@ -21,7 +21,7 @@ export default class HotClipsController {
             validMessages: config.validMessages,
         },
     );
-    timers: Timers = new Timers(this.eventSystem.bind(this));
+    timers: EventIntervals = new EventIntervals(this.eventSystem.bind(this));
 
     cooldownLengthInSeconds: number = config.cooldownLengthInSeconds * 1000;
     addClipDelay: number = config.addClipDelay;

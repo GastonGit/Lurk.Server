@@ -27,6 +27,9 @@ export default class HotClipsController {
     addClipDelay: number = config.addClipDelay;
     removeClipTimeInMinutes: number = config.removeClipTimeInMinutes * 60000;
 
+    private spikeTime: number = config.spikeTime;
+    private reduceTime: number = config.reduceTime;
+
     private spikeValue: number = config.spikeValue;
     private reduceValue: number = config.reduceValue;
 
@@ -34,6 +37,8 @@ export default class HotClipsController {
         const setupSuccess = await this.monitorTwitchChat.setupConnection();
 
         if (setupSuccess) {
+            this.timers.createConstrainedInterval('hit', this.spikeTime);
+            this.timers.createConstrainedInterval('reduce', this.reduceTime);
             this.timers.startMainTimer();
         } else {
             throw Error('Connection setup failed');

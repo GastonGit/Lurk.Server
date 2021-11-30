@@ -7,6 +7,8 @@ export default class Timers {
 
     private callMe;
 
+    private constrainedIntervals: Array<NodeJS.Timer> = [];
+
     private updateTimeInMinutes: number = config.updateTimeInMinutes * 60000;
 
     private spikeTime: number = config.spikeTime;
@@ -23,6 +25,14 @@ export default class Timers {
             await this.callMe('main');
             this.startMonitorTimers();
         }, this.updateTimeInMinutes);
+    }
+
+    public createConstrainedInterval(event: string, timer: number): void {
+        this.constrainedIntervals.push(
+            setInterval(() => {
+                this.callMe(event);
+            }, timer),
+        );
     }
 
     private startMonitorTimers(): void {

@@ -35,6 +35,13 @@ export default class Timers {
         );
     }
 
+    private endConstrainedIntervals(): void {
+        for (let i = 0; i < this.constrainedIntervals.length; i++) {
+            clearInterval(this.constrainedIntervals[i]);
+        }
+        this.constrainedIntervals = [];
+    }
+
     private startMonitorTimers(): void {
         this.checkTimer = setInterval(() => {
             this.callMe('hit');

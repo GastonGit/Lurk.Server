@@ -8,9 +8,9 @@ import Logger from './Logger';
 import EventIntervals from './EventIntervals';
 
 export default class HotClipsController {
-    clipList: ClipList = new ClipList();
-    clipper: Clipper = new Clipper();
-    monitorTwitchChat: MonitorTwitchChat = new MonitorTwitchChat(
+    private clipList: ClipList = new ClipList();
+    private clipper: Clipper = new Clipper();
+    private monitorTwitchChat: MonitorTwitchChat = new MonitorTwitchChat(
         new TwitchClient(
             process.env.BOT_NAME || '',
             process.env.BOT_AUTH || '',
@@ -21,11 +21,13 @@ export default class HotClipsController {
             validMessages: config.validMessages,
         },
     );
-    timers: EventIntervals = new EventIntervals(this.eventSystem.bind(this));
+    private eventIntervals: EventIntervals = new EventIntervals(
+        this.eventSystem.bind(this),
+    );
 
-    cooldownLengthInSeconds: number = config.cooldownLengthInSeconds * 1000;
-    addClipDelay: number = config.addClipDelay;
-    removeClipTimeInMinutes: number = config.removeClipTimeInMinutes * 60000;
+    private cooldownLengthInSeconds: number =
+        config.cooldownLengthInSeconds * 1000;
+    private addClipDelay: number = config.addClipDelay;
 
     private superInterval = {
         event: 'main',
@@ -58,21 +60,21 @@ export default class HotClipsController {
     }
 
     private startIntervals(): void {
-        this.timers.createConstrainedInterval(
+        this.eventIntervals.createConstrainedInterval(
             this.hitCI.event,
             this.hitCI.timer,
         );
-        this.timers.createConstrainedInterval(
+        this.eventIntervals.createConstrainedInterval(
             this.reduceCI.event,
             this.reduceCI.timer,
         );
 
-        this.timers.startIndependentInterval(
+        this.eventIntervals.startIndependentInterval(
             this.removeClipII.event,
             this.removeClipII.timer,
         );
 
-        this.timers.startSuperInterval(
+        this.eventIntervals.startSuperInterval(
             this.superInterval.event,
             this.superInterval.timer,
         );

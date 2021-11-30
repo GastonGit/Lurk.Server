@@ -27,6 +27,8 @@ export default class HotClipsController {
     addClipDelay: number = config.addClipDelay;
     removeClipTimeInMinutes: number = config.removeClipTimeInMinutes * 60000;
 
+    private updateTimeInMinutes: number = config.updateTimeInMinutes * 60000;
+
     private spikeTime: number = config.spikeTime;
     private reduceTime: number = config.reduceTime;
 
@@ -39,7 +41,7 @@ export default class HotClipsController {
         if (setupSuccess) {
             this.timers.createConstrainedInterval('hit', this.spikeTime);
             this.timers.createConstrainedInterval('reduce', this.reduceTime);
-            this.timers.startMainTimer();
+            this.timers.startSuperInterval('main', this.updateTimeInMinutes);
         } else {
             throw Error('Connection setup failed');
         }

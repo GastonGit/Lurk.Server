@@ -8,19 +8,20 @@ export default class Timers {
     private constrainedIntervals: Array<NodeJS.Timer> = [];
     private constrainedEvents: Array<{ event: string; timer: number }> = [];
 
-    private updateTimeInMinutes: number = config.updateTimeInMinutes * 60000;
+    private superIntervals: Array<NodeJS.Timer> = [];
 
     constructor(callMe: (event: string) => void) {
         this.callMe = callMe;
     }
 
-    public startMainTimer(): void {
-        this.startConstrainedIntervals();
-        this.updateTimer = setInterval(async () => {
-            this.endConstrainedIntervals();
-            await this.callMe('main');
-            this.startConstrainedIntervals();
-        }, this.updateTimeInMinutes);
+    public startSuperInterval(event: string, timer: number): void {
+        this.superIntervals.push(
+            setInterval(() => {
+                this.endConstrainedIntervals();
+                this.callMe(event);
+                this.startConstrainedIntervals();
+            }, timer),
+        );
     }
 
     public createConstrainedInterval(event: string, timer: number): void {

@@ -1,5 +1,3 @@
-import Logger from './Logger';
-
 export default class EventIntervals {
     private readonly callMe;
     private superInterval: NodeJS.Timer | undefined;
@@ -22,10 +20,8 @@ export default class EventIntervals {
                 this.startConstrainedIntervals();
             }, timer);
         } else {
-            Logger.error(
-                'startSuperInterval',
-                'Only one super interval is allowed',
-                'startSuperInterval called but superInterval is not undefined',
+            throw Error(
+                'startSuperInterval - Only one super interval is allowed - superInterval is not undefined',
             );
         }
     }

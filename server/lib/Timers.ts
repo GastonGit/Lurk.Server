@@ -5,42 +5,32 @@ export default class Timers {
     private reduceTimer: NodeJS.Timer | undefined;
     private updateTimer: NodeJS.Timer | undefined;
 
-    private mainRoutine;
-    private hitChecker;
-    private reducer;
+    private callMe;
 
     private updateTimeInMinutes: number = config.updateTimeInMinutes * 60000;
 
-    private spikeValue: number = config.spikeValue;
     private spikeTime: number = config.spikeTime;
-    private reduceValue: number = config.reduceValue;
     private reduceTime: number = config.reduceTime;
 
-    constructor(
-        mainRoutine: () => Promise<boolean>,
-        hitChecker: (spikeValue: number) => void,
-        reducer: (reduceValue: number) => void,
-    ) {
-        this.mainRoutine = mainRoutine;
-        this.hitChecker = hitChecker;
-        this.reducer = reducer;
+    constructor(callMe: (event: string) => void) {
+        this.callMe = callMe;
     }
 
     public startMainTimer(): void {
         this.startMonitorTimers();
         this.updateTimer = setInterval(async () => {
             this.endAllMonitorTimers();
-            await this.mainRoutine();
+            await this.callMe('main');
             this.startMonitorTimers();
         }, this.updateTimeInMinutes);
     }
 
     private startMonitorTimers(): void {
         this.checkTimer = setInterval(() => {
-            this.hitChecker(this.spikeValue);
+            this.callMe('hit');
         }, this.spikeTime);
         this.reduceTimer = setInterval(() => {
-            this.reducer(this.reduceValue);
+            this.callMe('reduce');
         }, this.reduceTime);
     }
 

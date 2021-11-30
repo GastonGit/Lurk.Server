@@ -21,15 +21,14 @@ export default class HotClipsController {
             validMessages: config.validMessages,
         },
     );
-    timers: Timers = new Timers(
-        this.monitorTwitchChat.updateChannels,
-        this.checkForSpikes,
-        this.monitorTwitchChat.decreaseHitsByAmount,
-    );
+    timers: Timers = new Timers(this.eventSystem.bind(this));
 
     cooldownLengthInSeconds: number = config.cooldownLengthInSeconds * 1000;
     addClipDelay: number = config.addClipDelay;
     removeClipTimeInMinutes: number = config.removeClipTimeInMinutes * 60000;
+
+    private spikeValue: number = config.spikeValue;
+    private reduceValue: number = config.reduceValue;
 
     public async start(): Promise<void> {
         const setupSuccess = await this.monitorTwitchChat.setupConnection();
@@ -38,6 +37,20 @@ export default class HotClipsController {
             this.timers.startMainTimer();
         } else {
             throw Error('Connection setup failed');
+        }
+    }
+
+    private async eventSystem(event: string) {
+        switch (event) {
+            case 'main':
+                await this.monitorTwitchChat.updateChannels();
+                return;
+            case 'hit':
+                this.checkForSpikes(this.spikeValue);
+                break;
+            case 'reduce':
+                this.monitorTwitchChat.decreaseHitsByAmount(this.reduceValue);
+                break;
         }
     }
 

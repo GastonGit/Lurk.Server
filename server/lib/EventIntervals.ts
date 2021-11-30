@@ -1,23 +1,29 @@
-export default class EventIntervals {
-    private callMe;
+import Logger from './Logger';
 
+export default class EventIntervals {
+    private readonly callMe;
+    private superInterval: NodeJS.Timer | undefined;
     private constrainedIntervals: Array<NodeJS.Timer> = [];
     private constrainedEvents: Array<{ event: string; timer: number }> = [];
-
-    private superIntervals: Array<NodeJS.Timer> = [];
 
     constructor(callMe: (event: string) => void) {
         this.callMe = callMe;
     }
 
     public startSuperInterval(event: string, timer: number): void {
-        this.superIntervals.push(
-            setInterval(() => {
+        if (typeof this.superInterval === 'undefined') {
+            this.superInterval = setInterval(() => {
                 this.endConstrainedIntervals();
                 this.callMe(event);
                 this.startConstrainedIntervals();
-            }, timer),
-        );
+            }, timer);
+        } else {
+            Logger.error(
+                'startSuperInterval',
+                'Only one super interval is allowed',
+                'startSuperInterval called but superInterval is not undefined',
+            );
+        }
     }
 
     public createConstrainedInterval(event: string, timer: number): void {

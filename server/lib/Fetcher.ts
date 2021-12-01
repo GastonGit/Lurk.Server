@@ -1,6 +1,5 @@
 import fetch, { Response } from 'node-fetch';
-import { FetcherResponse, JSON } from './Interfaces';
-import Logger from './Logger';
+import { FetcherResponse } from './Interfaces';
 
 /*
     TODO: CLIENT_APP_ACCESS_TOKEN MIGHT NEED TO BE REFRESHED EVERY CALL
@@ -33,13 +32,13 @@ async function fetcherFetch(url: string): Promise<FetcherResponse> {
 
     try {
         const response = await fetchWrapper(url);
-        const json = (await response.json()) as JSON;
+        const json = await response.json();
 
         fullResponse.status = response.status;
         fullResponse.data = (json.data as Array<any>) || [];
         fullResponse.pagination = json.pagination || undefined;
     } catch (err) {
-        Logger.error('fetcherFetch', 'UNABLE TO COMPLETE FETCH', err as string);
+        throw Error('fetcherFetch :: UNABLE TO COMPLETE FETCH :: ' + err);
     }
 
     return fullResponse;

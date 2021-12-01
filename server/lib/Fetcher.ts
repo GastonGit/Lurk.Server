@@ -17,10 +17,7 @@ async function fetchWrapper(url: string): Promise<Response> {
 }
 
 async function fetcherFetch(url: string): Promise<FetcherResponse> {
-    if (
-        process.env.NODE_ENV === 'development' ||
-        process.env.NODE_ENV === 'test'
-    ) {
+    if (process.env.NODE_ENV === 'development') {
         return {
             status: 200,
             data: [] as Array<any>,

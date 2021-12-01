@@ -1,4 +1,4 @@
-import { fetch } from './Fetcher';
+import Fetcher from './Fetcher';
 import { User, Clip } from './Interfaces';
 import Logger from './Logger';
 
@@ -7,7 +7,7 @@ export default class Clipper {
         const broadcasterID = await Clipper.getBroadcasterID(streamer);
 
         if (typeof broadcasterID !== 'undefined') {
-            const fetchResponse = await fetch(
+            const fetchResponse = await Fetcher.fetch(
                 'https://api.twitch.tv/helix/clips?broadcaster_id=' +
                     broadcasterID.toLowerCase(),
             );
@@ -33,7 +33,7 @@ export default class Clipper {
     }
 
     private static async getClip(slug: string): Promise<Clip | undefined> {
-        const fetchResult = await fetch(
+        const fetchResult = await Fetcher.fetch(
             'https://api.twitch.tv/helix/clips?id=' + slug,
         );
 
@@ -76,7 +76,7 @@ export default class Clipper {
             'login=' +
             name.toLowerCase();
 
-        const fetchResult = await fetch(url);
+        const fetchResult = await Fetcher.fetch(url);
 
         if (fetchResult.status === 200) {
             return fetchResult.data?.shift();

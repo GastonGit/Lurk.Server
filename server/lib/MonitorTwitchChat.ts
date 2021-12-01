@@ -1,4 +1,4 @@
-import { fetch } from './Fetcher';
+import Fetcher from './Fetcher';
 import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
 import TwitchClient from './TwitchClient';
 import { ChatUserstate } from 'tmi.js';
@@ -198,7 +198,7 @@ export default class MonitorTwitchChat {
             url += '&after=' + pagination;
         }
 
-        const response = await fetch(url);
+        const response = await Fetcher.fetch(url);
 
         return {
             success: response.status === 200,

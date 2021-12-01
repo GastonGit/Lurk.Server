@@ -4,7 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 import sinon from 'sinon';
 import fetch from 'node-fetch';
-import { fetch as fetcherFetch } from '../lib/Fetcher';
+import Fetcher from '../lib/Fetcher';
 
 describe('Fetcher suite', function () {
     beforeEach(() => {
@@ -24,13 +24,13 @@ describe('Fetcher suite', function () {
     });
     describe('Fetch', () => {
         it('should return a FetcherResponse', async () => {
-            const result = await fetcherFetch('test_url');
+            const result = await Fetcher.fetch('test_url');
             expect(result).to.have.keys('status', 'data', 'pagination');
         });
         it('should return predicted response during development', async () => {
             process.env.NODE_ENV = 'development';
 
-            const result = await fetcherFetch('test_url');
+            const result = await Fetcher.fetch('test_url');
             expect(result).to.deep.equal({
                 status: 200,
                 data: [],
@@ -51,7 +51,7 @@ describe('Fetcher suite', function () {
                     }),
                 status: 200,
             });
-            const result = await fetcherFetch('test_url');
+            const result = await Fetcher.fetch('test_url');
 
             expect(result).to.deep.equal({
                 status: 200,
@@ -65,7 +65,7 @@ describe('Fetcher suite', function () {
             // @ts-ignore
             sinon.stub(fetch, 'Promise').resolves({ status: 200 });
 
-            await expect(fetcherFetch('test_url')).to.be.rejectedWith(
+            await expect(Fetcher.fetch('test_url')).to.be.rejectedWith(
                 'fetcherFetch :: UNABLE TO COMPLETE FETCH :: TypeError: response.json is not a function',
             );
         });

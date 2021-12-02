@@ -84,26 +84,6 @@ describe('Clipper suite', () => {
 
             expect(result).to.be.equal(clip1);
         });
-        it('should still return a clip if clip creation fetch response status is 202', async () => {
-            const fakeFetch = sinon.stub(Fetcher, 'fetch');
-
-            fakeFetch.onCall(0).resolves({
-                status: 200,
-                data: [{ id: '1337' }] as Array<any>,
-                pagination: undefined,
-            });
-            fakeFetch.onCall(1).resolves({
-                status: 202,
-                data: [clip1] as Array<any>,
-                pagination: undefined,
-            });
-
-            const result = await clipper.createClip(
-                'this string does not matter here',
-            );
-
-            expect(result).to.be.equal(clip1);
-        });
         it('should return undefined if clip creation fetch does not work', async () => {
             const fakeFetch = sinon.stub(Fetcher, 'fetch');
 

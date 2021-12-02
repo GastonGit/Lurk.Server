@@ -4,12 +4,13 @@ import Logger from './Logger';
 
 export default class Clipper {
     public async createClip(streamer: string): Promise<Clip | undefined> {
-        const broadcasterID = await Clipper.getBroadcasterID(streamer);
+        const user = await Clipper.getUser(streamer);
+        const userID = user?.id;
 
-        if (typeof broadcasterID !== 'undefined') {
+        if (typeof userID !== 'undefined') {
             const fetchResponse = await Fetcher.fetch(
                 'https://api.twitch.tv/helix/clips?broadcaster_id=' +
-                    broadcasterID.toLowerCase(),
+                    userID.toLowerCase(),
             );
 
             if (
@@ -57,14 +58,6 @@ export default class Clipper {
         );
 
         return 'https://clips-media-assets2.twitch.tv/' + videoID + '.mp4';
-    }
-
-    private static async getBroadcasterID(
-        id: string,
-    ): Promise<string | undefined> {
-        const user: User | undefined = await Clipper.getUser(id);
-
-        return user?.id;
     }
 
     /*

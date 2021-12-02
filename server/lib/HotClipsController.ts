@@ -76,7 +76,7 @@ export default class HotClipsController {
         }
     }
 
-    private async eventSystem(event: string) {
+    public async eventSystem(event: string) {
         switch (event) {
             case this.superInterval.event:
                 await this.monitorTwitchChat.updateChannels();
@@ -108,7 +108,7 @@ export default class HotClipsController {
             if (!list[i].cooldown) {
                 if (list[i].hits >= spike + list[i].viewer_count / 5000) {
                     this.clipIt(list[i].user_name).catch((err) => {
-                        Logger.error('clipIt', 'UNABLE TO CLIP IT', err);
+                        throw Error('clipIT :: UNABLE TO CLIP IT :: ' + err);
                     });
                 }
             }

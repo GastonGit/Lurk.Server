@@ -53,31 +53,27 @@ export default class HotClipsController {
         const setupSuccess = await this.monitorTwitchChat.setupConnection();
 
         if (setupSuccess) {
-            this.startIntervals();
+            this.eventIntervals.createConstrainedInterval(
+                this.hitCI.event,
+                this.hitCI.timer,
+            );
+            this.eventIntervals.createConstrainedInterval(
+                this.reduceCI.event,
+                this.reduceCI.timer,
+            );
+
+            this.eventIntervals.startIndependentInterval(
+                this.removeClipII.event,
+                this.removeClipII.timer,
+            );
+
+            this.eventIntervals.startSuperInterval(
+                this.superInterval.event,
+                this.superInterval.timer,
+            );
         } else {
             throw Error('Connection setup failed');
         }
-    }
-
-    private startIntervals(): void {
-        this.eventIntervals.createConstrainedInterval(
-            this.hitCI.event,
-            this.hitCI.timer,
-        );
-        this.eventIntervals.createConstrainedInterval(
-            this.reduceCI.event,
-            this.reduceCI.timer,
-        );
-
-        this.eventIntervals.startIndependentInterval(
-            this.removeClipII.event,
-            this.removeClipII.timer,
-        );
-
-        this.eventIntervals.startSuperInterval(
-            this.superInterval.event,
-            this.superInterval.timer,
-        );
     }
 
     private async eventSystem(event: string) {

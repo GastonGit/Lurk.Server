@@ -55,24 +55,38 @@ export default class TwitchClient {
 
     public async joinChannels(channels: Array<string>): Promise<boolean> {
         Logger.info('TwitchClient', 'Joining channels...');
-        let success = false;
+        let success: boolean;
 
-        try {
-            const client = this.client;
-            const promises = channels.map(async (channel) => {
-                return await client.join(channel);
-            });
+        const client = this.client;
+        const promises = channels.map(async (channel) => {
+            return await client.join(channel);
+        });
+        const results = {
+            total: channels.length,
+            joined: 0,
+        };
 
-            await Promise.allSettled(promises);
+        const joinResults = await Promise.allSettled(promises);
 
-            Logger.info('TwitchClient', '...Joined channels');
-            success = true;
-        } catch (err) {
-            Logger.error(
+        if (
+            typeof joinResults.find((x) => x.status === 'fulfilled') !==
+            'undefined'
+        ) {
+            results.joined = joinResults.filter(
+                (x) => x.status === 'fulfilled',
+            ).length;
+            Logger.info(
                 'TwitchClient',
-                'UNABLE TO JOIN CHANNELS',
-                err as string,
+                '...Successfully joined ' +
+                    results.joined +
+                    'out of ' +
+                    results.total +
+                    'channels',
             );
+            success = true;
+        } else {
+            Logger.info('TwitchClient', '...Could not join any channels');
+            success = false;
         }
 
         return success;

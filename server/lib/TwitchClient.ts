@@ -96,22 +96,37 @@ export default class TwitchClient {
         Logger.info('TwitchClient', 'Leaving channels...');
         let success = false;
 
-        try {
-            const client = this.client;
-            const promises = channels.map(async (channel) => {
-                return await client.part(channel);
-            });
+        const client = this.client;
+        const promises = channels.map(async (channel) => {
+            return await client.part(channel);
+        });
 
-            await Promise.allSettled(promises);
+        const results = {
+            total: channels.length,
+            left: 0,
+        };
 
-            Logger.info('TwitchClient', '...Left channels');
-            success = true;
-        } catch (err) {
-            Logger.error(
+        const joinResults = await Promise.allSettled(promises);
+
+        if (
+            typeof joinResults.find((x) => x.status === 'fulfilled') !==
+            'undefined'
+        ) {
+            results.left = joinResults.filter(
+                (x) => x.status === 'fulfilled',
+            ).length;
+            Logger.info(
                 'TwitchClient',
-                'UNABLE TO LEAVE CHANNELS',
-                err as string,
+                '...Successfully left ' +
+                    results.left +
+                    'out of ' +
+                    results.total +
+                    'channels',
             );
+            success = true;
+        } else {
+            Logger.info('TwitchClient', '...Could not leave any channels');
+            success = false;
         }
 
         return success;

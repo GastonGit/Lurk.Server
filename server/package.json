@@ -3,7 +3,7 @@
   "version": "0.0.3",
   "private": true,
   "scripts": {
-    "start": "ts-node -r dotenv/config src/app.ts",
+    "start": "set NODE_ENV=production&&ts-node -r dotenv/config src/app.ts",
     "start:watch": "nodemon",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",

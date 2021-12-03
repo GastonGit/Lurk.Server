@@ -54,7 +54,7 @@ export default class MonitorTwitchChat {
         });
     }
 
-    private onMessageHandler(
+    public onMessageHandler(
         channel: string,
         _userstate: ChatUserstate,
         message: string,

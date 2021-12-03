@@ -128,8 +128,8 @@ export default class MonitorTwitchChat {
         }
     }
 
-    private updateLists(): Promise<boolean> {
-        const updateStreamListResult = this.updateStreamList();
+    private async updateLists(): Promise<boolean> {
+        const updateStreamListResult = await this.updateStreamList();
         this.updateCompactStreamList();
 
         return updateStreamListResult;
@@ -137,7 +137,6 @@ export default class MonitorTwitchChat {
 
     private updateCompactStreamList(): void {
         this.compactStreamList = [];
-
         this.streamList.forEach((streamer: Stream) => {
             this.compactStreamList.push(streamer.user_name);
         });

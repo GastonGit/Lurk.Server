@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Options } from 'tmi.js';
 
 export default class client {

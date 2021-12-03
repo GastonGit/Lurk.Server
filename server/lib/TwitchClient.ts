@@ -23,6 +23,7 @@ export default class TwitchClient {
 
     public async connectToTwitch(channelList: Array<string>): Promise<boolean> {
         this.client.on('connected', () => {
+            Logger.success('TMI', 'CONNECTED');
             this.joinChannels(channelList);
         });
 

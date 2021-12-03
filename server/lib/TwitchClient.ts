@@ -80,9 +80,9 @@ export default class TwitchClient {
                 'TwitchClient',
                 '...Successfully joined ' +
                     results.joined +
-                    'out of ' +
+                    ' out of ' +
                     results.total +
-                    'channels',
+                    ' channels',
             );
             success = true;
         } else {

@@ -56,7 +56,6 @@ export default class TwitchClient {
 
     public async joinChannels(channels: Array<string>): Promise<boolean> {
         Logger.info('TwitchClient', 'Joining channels...');
-        let success: boolean;
 
         const client = this.client;
         const promises = channels.map(async (channel) => {
@@ -84,18 +83,15 @@ export default class TwitchClient {
                     results.total +
                     ' channels',
             );
-            success = true;
+            return true;
         } else {
             Logger.info('TwitchClient', '...Could not join any channels');
-            success = false;
+            return false;
         }
-
-        return success;
     }
 
     public async leaveChannels(channels: Array<string>): Promise<boolean> {
         Logger.info('TwitchClient', 'Leaving channels...');
-        let success = false;
 
         const client = this.client;
         const promises = channels.map(async (channel) => {
@@ -124,12 +120,10 @@ export default class TwitchClient {
                     results.total +
                     'channels',
             );
-            success = true;
+            return true;
         } else {
             Logger.info('TwitchClient', '...Could not leave any channels');
-            success = false;
+            return false;
         }
-
-        return success;
     }
 }

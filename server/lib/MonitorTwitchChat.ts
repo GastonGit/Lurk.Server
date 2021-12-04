@@ -16,8 +16,8 @@ export default class MonitorTwitchChat {
         options: { requestCount: number; validMessages: string[] },
     ) {
         this.client = client;
-        this.requestCount = options.requestCount || 1;
-        this.validMessages = options.validMessages || ['OMEGALUL'];
+        this.requestCount = options.requestCount;
+        this.validMessages = options.validMessages;
         this.client.setMessageHandler(this.onMessageHandler.bind(this));
     }
 
@@ -71,6 +71,7 @@ export default class MonitorTwitchChat {
     private increaseHitsByOne(channel: string): void {
         const result = this.getStreamerIndex(channel);
 
+        /* istanbul ignore else */
         if (result.success) {
             this.streamList[result.streamerIndex].hits += 1;
         }
@@ -94,6 +95,7 @@ export default class MonitorTwitchChat {
     private removeCooldownForStreamer(channel: string): void {
         const result = this.getStreamerIndex(channel);
 
+        /* istanbul ignore else */
         if (result.success) {
             this.streamList[result.streamerIndex].cooldown = false;
         }
@@ -166,6 +168,7 @@ export default class MonitorTwitchChat {
 
             if (success) {
                 fetchedStreams.forEach(function (streamer: FetchedStreams) {
+                    /* istanbul ignore else */
                     if (
                         !blockedStreamers.includes(
                             streamer.user_login.toLowerCase(),

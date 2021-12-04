@@ -5,7 +5,7 @@ export default class Logger {
         errorMessage: string,
     ): void {
         console.error(
-            '\x1b[45m%s\x1b[0m',
+            '\x1b[35m%s\x1b[0m',
             poi + ' :: ' + result + ' :: ' + errorMessage,
         );
     }
@@ -22,7 +22,7 @@ export default class Logger {
     }
 
     public static info(poi: string, result: string): void {
-        console.log('\x1b[44m%s\x1b[0m', poi + ' :: ' + result);
+        console.log('\x1b[34m%s\x1b[0m', poi + ' :: ' + result);
     }
 
     public static success(poi: string, result: string): void {
@@ -35,7 +35,7 @@ export default class Logger {
         errorMessage: string,
     ): void {
         console.error(
-            '\x1b[45m%s\x1b[0m',
+            '\x1b[33m%s\x1b[0m',
             poi + ':: FAILURE ::' + result + ' :: ' + errorMessage,
         );
     }

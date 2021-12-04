@@ -1,12 +1,12 @@
 {
   "name": "server",
-  "version": "0.0.3",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "start": "set NODE_ENV=production&&ts-node -r dotenv/config src/app.ts",
     "start:watch": "nodemon",
-    "lint": "eslint . --ext .ts,.tsx",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "lint": "eslint --ext .ts,.tsx",
+    "lint:fix": "eslint --ext .ts,.tsx --fix",
     "dev": "set NODE_ENV=development&&ts-node -r dotenv/config src/app.ts",
     "test": "set NODE_ENV=test&&mocha",
     "test-with-coverage": "set NODE_ENV=test&&nyc mocha"

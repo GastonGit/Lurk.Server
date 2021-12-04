@@ -1,5 +1,5 @@
 export default class EventIntervals {
-    private readonly callMe;
+    private readonly callMe: { (arg0: string): void; (event: string): void };
     private superInterval: NodeJS.Timer | undefined;
     private constrainedIntervals: Array<NodeJS.Timer> = [];
     private constrainedEvents: Array<{ event: string; timer: number }> = [];

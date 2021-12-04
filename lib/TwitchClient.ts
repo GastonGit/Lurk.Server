@@ -2,8 +2,8 @@ import tmi, { ChatUserstate } from './TMI';
 import Logger from './Logger';
 
 export default class TwitchClient {
-    private readonly client;
-    private joinTimeout;
+    private readonly client: import('tmi.js').Client;
+    private joinTimeout: number;
 
     constructor(username: string, password: string, joinTimeout: number) {
         this.client = new tmi.client({

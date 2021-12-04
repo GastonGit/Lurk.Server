@@ -41,6 +41,27 @@ describe('EventIntervals suite', () => {
         });
     });
     describe('Constrained Intervals', () => {
+        it('should be started when SuperInterval is started', (done) => {
+            let CI1 = false;
+            const callMe = (_event: string) => {
+                switch (_event) {
+                    case 'CI1':
+                        CI1 = true;
+                        break;
+                }
+            };
+            const innerEventIntervals = new EventIntervals(callMe);
+            innerEventIntervals.createConstrainedInterval('CI1', 0);
+            innerEventIntervals.startSuperInterval('test1', 10000);
+
+            const checkExpect = function () {
+                innerEventIntervals.endAllIntervals();
+                expect(CI1).to.be.true;
+                done();
+            };
+
+            setTimeout(checkExpect, 35);
+        });
         it('should not throw', () => {
             expect(() => {
                 eventIntervals.createConstrainedInterval('test', 1);

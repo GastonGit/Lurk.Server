@@ -4,7 +4,6 @@ import MonitorTwitchChat from './MonitorTwitchChat';
 import TwitchClient from './TwitchClient';
 import Clipper from './Clipper';
 import config from 'config';
-import Logger from './Logger';
 import EventIntervals from './EventIntervals';
 
 export default class HotClipsController {

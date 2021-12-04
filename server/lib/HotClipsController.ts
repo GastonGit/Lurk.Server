@@ -3,7 +3,7 @@ import ClipList from './ClipList';
 import MonitorTwitchChat from './MonitorTwitchChat';
 import TwitchClient from './TwitchClient';
 import Clipper from './Clipper';
-import config from './settings/config.json';
+import config from 'config';
 import Logger from './Logger';
 import EventIntervals from './EventIntervals';
 
@@ -14,11 +14,11 @@ export default class HotClipsController {
         new TwitchClient(
             process.env.BOT_NAME || '',
             process.env.BOT_AUTH || '',
-            config.joinTimeout,
+            config.get('joinTimeout'),
         ),
         {
-            requestCount: config.requestCount,
-            validMessages: config.validMessages,
+            requestCount: config.get('requestCount'),
+            validMessages: config.get('validMessages'),
         },
     );
     private eventIntervals: EventIntervals = new EventIntervals(
@@ -26,28 +26,28 @@ export default class HotClipsController {
     );
 
     private cooldownLengthInSeconds: number =
-        config.cooldownLengthInSeconds * 1000;
-    private addClipDelay: number = config.addClipDelay;
+        (config.get('cooldownLengthInSeconds') as number) * 1000;
+    private addClipDelay: number = config.get('addClipDelay');
 
     private superInterval = {
         event: 'main',
-        timer: config.updateTimeInMinutes * 60000,
+        timer: (config.get('updateTimeInMinutes') as number) * 60000,
     };
     private hitCI = {
         event: 'hit',
-        timer: config.spikeTime,
+        timer: config.get('spikeTime') as number,
     };
     private reduceCI = {
         event: 'reduce',
-        timer: config.reduceTime,
+        timer: config.get('reduceTime') as number,
     };
     private removeClipII = {
         event: 'remove',
-        timer: config.removeClipTimeInMinutes * 60000,
+        timer: (config.get('removeClipTimeInMinutes') as number) * 60000,
     };
 
-    private spikeValue: number = config.spikeValue;
-    private reduceValue: number = config.reduceValue;
+    private spikeValue: number = config.get('spikeValue');
+    private reduceValue: number = config.get('reduceValue');
 
     public async start(): Promise<void> {
         const setupSuccess = await this.monitorTwitchChat.setupConnection();

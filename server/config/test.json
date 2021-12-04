@@ -1,5 +1,5 @@
 {
-  "requestCount": 2,
+  "requestCount": 3,
   "validMessages": [
     "LUL",
     "LULW",
@@ -18,5 +18,5 @@
   "cooldownLengthInSeconds": 0.0001,
   "addClipDelay": 0,
   "removeClipTimeInMinutes": 0,
-  "updateTimeInMinutes": 0.0001
+  "updateTimeInMinutes": 1
 }

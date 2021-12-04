@@ -12,6 +12,7 @@
     "test-with-coverage": "set NODE_ENV=test&&nyc mocha"
   },
   "dependencies": {
+    "config": "^3.3.6",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "^4.17.1",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@types/chai": "^4.2.22",
     "@types/chai-as-promised": "^7.1.4",
+    "@types/config": "^0.0.40",
     "@types/express": "^4.17.13",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.6.2",

@@ -58,26 +58,3 @@ export interface FetcherResponse {
     data: Array<any>;
     pagination: { cursor: string } | undefined;
 }
-
-export interface Data {
-    data: Array<any>;
-}
-
-export interface JSON {
-    data: unknown;
-    pagination: { cursor: string } | undefined;
-}
-
-export interface Config {
-    spikeValue: number;
-    spikeTime: number;
-    reduceValue: number;
-    reduceTime: number;
-    cooldownLengthInSeconds: number;
-    addClipDelay: number;
-    removeClipTimeInMinutes: number;
-    updateTimeInMinutes: number;
-    joinTimeout: number;
-    requestCount: number;
-    validMessages: string[];
-}

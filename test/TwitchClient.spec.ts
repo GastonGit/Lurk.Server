@@ -6,12 +6,14 @@ import sinon from 'sinon';
 import TwitchClient from '../lib/TwitchClient';
 import TMI from '../lib/TMI';
 import Logger from '../lib/Logger';
+import ExtremeTimer from '../lib/ExtremeTimer';
 
 const twitchClient = new TwitchClient('user', 'pass', 0);
 
 describe('TwitchClient suite', () => {
     before(() => {
         sinon.stub(Logger);
+        sinon.stub(ExtremeTimer);
     });
     beforeEach(() => {
         sinon.stub(TMI.client.prototype);
@@ -51,10 +53,20 @@ describe('TwitchClient suite', () => {
     describe('joinChannels', () => {
         it('should return true if all channels are joined', async () => {
             sinon.restore();
+
             const client = sinon.stub(TMI.client.prototype);
             client.join.resolves([]);
 
             const result = await twitchClient.joinChannels([
+                'tester',
+                'testing',
+                'testingAgain',
+                'tester',
+                'testing',
+                'testingAgain',
+                'tester',
+                'testing',
+                'testingAgain',
                 'tester',
                 'testing',
                 'testingAgain',

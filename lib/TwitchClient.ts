@@ -1,5 +1,6 @@
 import tmi, { ChatUserstate } from './TMI';
 import Logger from './Logger';
+import ExtremeTimer from './ExtremeTimer';
 
 export default class TwitchClient {
     private readonly client: import('tmi.js').Client;
@@ -57,24 +58,38 @@ export default class TwitchClient {
     public async joinChannels(channels: Array<string>): Promise<boolean> {
         Logger.info('TwitchClient', 'Joining channels...');
 
-        const client = this.client;
-        const promises = channels.map(async (channel) => {
-            return await client.join(channel);
-        });
         const results = {
             total: channels.length,
             joined: 0,
         };
 
-        const joinResults = await Promise.allSettled(promises);
+        const staggerAmount = 10;
+        const staggerDelay = 10000;
 
-        if (
-            typeof joinResults.find((x) => x.status === 'fulfilled') !==
-            'undefined'
-        ) {
-            results.joined = joinResults.filter(
-                (x) => x.status === 'fulfilled',
-            ).length;
+        for (let i = 0; i < channels.length; i++) {
+            await this.client
+                .join(channels[i])
+                .then(() => {
+                    results.joined += 1;
+                })
+                .catch((err) => {
+                    Logger.failure(
+                        'joinChannels',
+                        'failed to join: ' + channels[i],
+                        err as string,
+                    );
+                });
+
+            if (i % staggerAmount === 0 && i !== 0) {
+                Logger.info(
+                    'TwitchClient',
+                    '~' + (channels.length - i + 1) + ' seconds remaining...',
+                );
+                await ExtremeTimer.timeOut(staggerDelay);
+            }
+        }
+
+        if (results.joined >= 1) {
             Logger.info(
                 'TwitchClient',
                 '...Successfully joined ' +

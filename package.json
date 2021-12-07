@@ -9,7 +9,8 @@
     "lint:fix": "eslint --ext .ts,.tsx --fix",
     "dev": "set NODE_ENV=development&&ts-node -r dotenv/config src/app.ts",
     "test": "set NODE_ENV=test&&mocha",
-    "test-with-coverage": "set NODE_ENV=test&&nyc mocha"
+    "test-with-coverage": "set NODE_ENV=test&&nyc mocha",
+    "prepare": "husky install"
   },
   "dependencies": {
     "config": "^3.3.6",
@@ -42,7 +43,7 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "husky": "^7.0.1",
+    "husky": "^7.0.4",
     "mocha": "^8.3.1",
     "nodemon": "^2.0.6",
     "nyc": "^15.1.0",

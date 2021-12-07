@@ -17,7 +17,7 @@ describe('EventIntervals suite', () => {
         eventIntervals = new EventIntervals(callMe);
     });
     afterEach(() => {
-        eventIntervals.endAllIntervals();
+        eventIntervals.clearAllIntervals();
         sinon.restore();
     });
     describe('startSuperInterval', () => {
@@ -33,10 +33,10 @@ describe('EventIntervals suite', () => {
                 eventIntervals.startSuperInterval('test2', 0);
             }).to.throw();
 
-            eventIntervals.endSuperInterval();
+            eventIntervals.clearSuperInterval();
             expect(() => {
                 eventIntervals.startSuperInterval('test3', 0);
-                eventIntervals.endSuperInterval();
+                eventIntervals.clearSuperInterval();
                 eventIntervals.startSuperInterval('test4', 0);
             }).to.not.throw();
         });
@@ -63,13 +63,13 @@ describe('EventIntervals suite', () => {
     describe('Independent Intervals', () => {
         it('should not throw if trying to clear an interval that does not exist', () => {
             expect(() => {
-                eventIntervals.endIndependentInterval('test');
+                eventIntervals.clearIndependentInterval('test');
             }).to.not.throw();
         });
         it('should not throw when started and cleared', () => {
             expect(() => {
                 eventIntervals.startIndependentInterval('test', 0);
-                eventIntervals.endIndependentInterval('test');
+                eventIntervals.clearIndependentInterval('test');
             }).to.not.throw();
         });
         it('should call given method', () => {

@@ -12,11 +12,15 @@ export default class EventIntervals {
         this.callMe = callMe;
     }
 
+    public createConstrainedInterval(event: string, timer: number): void {
+        this.constrainedEvents.push({ event: event, timer: timer });
+    }
+
     public startSuperInterval(event: string, timer: number): void {
         if (typeof this.superInterval === 'undefined') {
             this.startConstrainedIntervals();
             this.superInterval = setInterval(() => {
-                this.endAllConstrainedIntervals();
+                this.clearAllConstrainedIntervals();
                 this.callMe(event);
                 this.startConstrainedIntervals();
             }, timer);
@@ -25,15 +29,6 @@ export default class EventIntervals {
                 'startSuperInterval - Only one super interval is allowed - superInterval is not undefined',
             );
         }
-    }
-
-    public endSuperInterval(): void {
-        clearInterval(<NodeJS.Timeout>this.superInterval);
-        this.superInterval = undefined;
-    }
-
-    public createConstrainedInterval(event: string, timer: number): void {
-        this.constrainedEvents.push({ event: event, timer: timer });
     }
 
     private startConstrainedIntervals(): void {
@@ -46,13 +41,6 @@ export default class EventIntervals {
         }
     }
 
-    private endAllConstrainedIntervals(): void {
-        for (let i = 0; i < this.constrainedIntervals.length; i++) {
-            clearInterval(this.constrainedIntervals[i]);
-        }
-        this.constrainedIntervals = [];
-    }
-
     public startIndependentInterval(event: string, timer: number): void {
         this.independentEvents.push({
             event: event,
@@ -62,7 +50,25 @@ export default class EventIntervals {
         });
     }
 
-    public endIndependentInterval(event: string): void {
+    public clearAllIntervals(): void {
+        this.clearSuperInterval();
+        this.clearAllConstrainedIntervals();
+        this.clearAllIndependentIntervals();
+    }
+
+    public clearSuperInterval(): void {
+        clearInterval(<NodeJS.Timeout>this.superInterval);
+        this.superInterval = undefined;
+    }
+
+    private clearAllConstrainedIntervals(): void {
+        for (let i = 0; i < this.constrainedIntervals.length; i++) {
+            clearInterval(this.constrainedIntervals[i]);
+        }
+        this.constrainedIntervals = [];
+    }
+
+    public clearIndependentInterval(event: string): void {
         const found = this.independentEvents.find(
             (independentEvent) => independentEvent.event === event,
         );
@@ -72,16 +78,10 @@ export default class EventIntervals {
         }
     }
 
-    public endAllIndependentIntervals(): void {
+    public clearAllIndependentIntervals(): void {
         for (let i = 0; i < this.independentEvents.length; i++) {
             clearInterval(this.independentEvents[i].interval);
         }
         this.independentEvents = [];
-    }
-
-    public endAllIntervals(): void {
-        this.endSuperInterval();
-        this.endAllConstrainedIntervals();
-        this.endAllIndependentIntervals();
     }
 }

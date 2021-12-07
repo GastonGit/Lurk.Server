@@ -1,32 +1,33 @@
 import { expect } from 'chai';
 import { afterEach } from 'mocha';
+import sinon from 'sinon';
 import EventIntervals from '../lib/EventIntervals';
 
-const callMe = (_event: string) => {
-    return _event;
+let eventResult: string[];
+const callMe = (event: string) => {
+    eventResult.push(event);
 };
-const eventIntervals = new EventIntervals(callMe);
+let eventIntervals: EventIntervals;
+let clock: sinon.SinonFakeTimers;
 
 describe('EventIntervals suite', () => {
-    describe('Super interval', () => {
-        it('superInterval should call given method with correct event', (done) => {
-            let callMeEvent = false;
-            const callMe = (_event: string) => {
-                callMeEvent = _event === 'test1';
-            };
-            const innerEventIntervals = new EventIntervals(callMe);
+    beforeEach(() => {
+        clock = sinon.useFakeTimers();
+        eventResult = [];
+        eventIntervals = new EventIntervals(callMe);
+    });
+    afterEach(() => {
+        eventIntervals.endAllIntervals();
+        sinon.restore();
+    });
+    describe('startSuperInterval', () => {
+        it('should call given method with correct event', () => {
+            eventIntervals.startSuperInterval('test123', 10);
+            clock.tick(100);
 
-            innerEventIntervals.startSuperInterval('test1', 1);
-
-            const checkExpect = function () {
-                innerEventIntervals.endAllIntervals();
-                expect(callMeEvent).to.be.true;
-                done();
-            };
-
-            setTimeout(checkExpect, 10);
+            expect(eventResult).to.include('test123');
         });
-        it('superInterval should throw if called twice without being cleared', () => {
+        it('should throw if called twice without being cleared', () => {
             expect(() => {
                 eventIntervals.startSuperInterval('test1', 0);
                 eventIntervals.startSuperInterval('test2', 0);
@@ -41,66 +42,22 @@ describe('EventIntervals suite', () => {
         });
     });
     describe('Constrained Intervals', () => {
-        it('should be started when SuperInterval is started', (done) => {
-            let CI1 = false;
-            const callMe = (_event: string) => {
-                switch (_event) {
-                    case 'CI1':
-                        CI1 = true;
-                        break;
-                }
-            };
-            const innerEventIntervals = new EventIntervals(callMe);
-            innerEventIntervals.createConstrainedInterval('CI1', 0);
-            innerEventIntervals.startSuperInterval('test1', 10000);
+        it('should be started when SuperInterval is started', () => {
+            eventIntervals.createConstrainedInterval('CI1', 20);
+            eventIntervals.startSuperInterval('test1', 100);
+            clock.tick(1000);
 
-            const checkExpect = function () {
-                innerEventIntervals.endAllIntervals();
-                expect(CI1).to.be.true;
-                done();
-            };
-
-            setTimeout(checkExpect, 35);
+            expect(eventResult).to.include('CI1');
         });
-        it('should not throw', () => {
-            expect(() => {
-                eventIntervals.createConstrainedInterval('test', 1);
-            }).to.not.throw();
-        });
-        it('should all call given method', (done) => {
-            expect(() => {
-                let CI1 = false;
-                let CI2 = false;
-                let CI3 = false;
-                const callMe = (_event: string) => {
-                    switch (_event) {
-                        case 'CI1':
-                            CI1 = true;
-                            break;
-                        case 'CI2':
-                            CI2 = true;
-                            break;
-                        case 'CI3':
-                            CI3 = true;
-                            break;
-                    }
-                };
-                const innerEventIntervals = new EventIntervals(callMe);
+        it('should all call given method', () => {
+            eventIntervals.createConstrainedInterval('CI1', 20);
+            eventIntervals.createConstrainedInterval('CI2', 30);
+            eventIntervals.createConstrainedInterval('CI3', 40);
+            eventIntervals.startSuperInterval('test123', 50);
 
-                innerEventIntervals.startSuperInterval('test1', 1);
+            clock.tick(1000);
 
-                innerEventIntervals.createConstrainedInterval('CI1', 0);
-                innerEventIntervals.createConstrainedInterval('CI2', 0);
-                innerEventIntervals.createConstrainedInterval('CI3', 0);
-
-                const checkExpect = function () {
-                    innerEventIntervals.endAllIntervals();
-                    expect(CI1 && CI2 && CI3).to.be.true;
-                    done();
-                };
-
-                setTimeout(checkExpect, 35);
-            }).to.not.throw();
+            expect(eventResult).to.include.members(['CI1', 'CI2', 'CI3']);
         });
     });
     describe('Independent Intervals', () => {
@@ -115,32 +72,11 @@ describe('EventIntervals suite', () => {
                 eventIntervals.endIndependentInterval('test');
             }).to.not.throw();
         });
-        it('should all call given method', (done) => {
-            expect(() => {
-                let callMeEvent = false;
-                const callMe = (_event: string) => {
-                    callMeEvent = _event === 'testIndependent';
-                };
-                const innerEventIntervals = new EventIntervals(callMe);
+        it('should call given method', () => {
+            eventIntervals.startIndependentInterval('testIndependent', 50);
+            clock.tick(1000);
 
-                innerEventIntervals.startIndependentInterval(
-                    'testIndependent',
-                    1,
-                );
-
-                const checkExpect = function () {
-                    innerEventIntervals.endIndependentInterval(
-                        'testIndependent',
-                    );
-                    expect(callMeEvent).to.be.true;
-                    done();
-                };
-
-                setTimeout(checkExpect, 20);
-            }).to.not.throw();
+            expect(eventResult).to.include('testIndependent');
         });
-    });
-    afterEach(() => {
-        eventIntervals.endAllIntervals();
     });
 });

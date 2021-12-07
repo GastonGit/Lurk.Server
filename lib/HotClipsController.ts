@@ -75,7 +75,7 @@ export default class HotClipsController {
         }
     }
 
-    public async eventSystem(event: string) {
+    public async eventSystem(event: string): Promise<void> {
         switch (event) {
             case this.superInterval.event:
                 await this.monitorTwitchChat.updateChannels();

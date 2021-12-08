@@ -3,61 +3,87 @@ import { afterEach } from 'mocha';
 import sinon from 'sinon';
 import EventIntervals from '../lib/EventIntervals';
 
-let eventResult: string[];
-const callMe = (event: string) => {
-    eventResult.push(event);
-};
 let eventIntervals: EventIntervals;
 let clock: sinon.SinonFakeTimers;
 
 describe('EventIntervals suite', () => {
     beforeEach(() => {
         clock = sinon.useFakeTimers();
-        eventResult = [];
-        eventIntervals = new EventIntervals(callMe);
+        eventIntervals = new EventIntervals();
     });
     afterEach(() => {
         eventIntervals.clearAllIntervals();
         sinon.restore();
     });
     describe('startSuperInterval', () => {
-        it('should call given method with correct event', () => {
-            eventIntervals.startSuperInterval('test123', 10);
+        it('should call given method', () => {
+            const spy = sinon.spy(() => {
+                // do nothing
+            });
+            eventIntervals.startSuperInterval(spy, 10);
             clock.tick(100);
 
-            expect(eventResult).to.include('test123');
+            sinon.assert.called(spy);
         });
         it('should throw if called twice without being cleared', () => {
             expect(() => {
-                eventIntervals.startSuperInterval('test1', 0);
-                eventIntervals.startSuperInterval('test2', 0);
+                eventIntervals.startSuperInterval(() => {
+                    // do nothing
+                }, 0);
+                eventIntervals.startSuperInterval(() => {
+                    // also do nothing
+                }, 0);
             }).to.throw();
 
             eventIntervals.clearSuperInterval();
             expect(() => {
-                eventIntervals.startSuperInterval('test3', 0);
+                eventIntervals.startSuperInterval(() => {
+                    // do nothing
+                }, 0);
                 eventIntervals.clearSuperInterval();
-                eventIntervals.startSuperInterval('test4', 0);
+                eventIntervals.startSuperInterval(() => {
+                    // do nothing again
+                }, 0);
             }).to.not.throw();
         });
     });
     describe('Constrained Intervals', () => {
         it('should be started when SuperInterval is started', () => {
-            eventIntervals.createConstrainedInterval('CI1', 20);
-            eventIntervals.startSuperInterval('test1', 100);
+            const spy = sinon.spy(() => {
+                // do nothing
+            });
+            eventIntervals.createConstrainedInterval(spy, 20);
+            eventIntervals.startSuperInterval(() => {
+                // do nothing but super
+            }, 100);
             clock.tick(1000);
 
-            expect(eventResult).to.include('CI1');
+            sinon.assert.called(spy);
         });
         it('should all call given method', () => {
-            eventIntervals.createConstrainedInterval('CI1', 20);
-            eventIntervals.createConstrainedInterval('CI2', 30);
-            eventIntervals.createConstrainedInterval('CI3', 40);
-            eventIntervals.startSuperInterval('test123', 50);
+            const spy1 = sinon.spy(() => {
+                // do nothing 1
+            });
+            const spy2 = sinon.spy(() => {
+                // do nothing 2
+            });
+            const spy3 = sinon.spy(() => {
+                // do nothing 3
+            });
+
+            eventIntervals.createConstrainedInterval(spy1, 20);
+            eventIntervals.createConstrainedInterval(spy2, 30);
+            eventIntervals.createConstrainedInterval(spy3, 40);
+
+            eventIntervals.startSuperInterval(() => {
+                // do nothing super
+            }, 50);
 
             clock.tick(1000);
 
-            expect(eventResult).to.include.members(['CI1', 'CI2', 'CI3']);
+            sinon.assert.called(spy1);
+            sinon.assert.called(spy2);
+            sinon.assert.called(spy3);
         });
     });
     describe('Independent Intervals', () => {
@@ -68,15 +94,24 @@ describe('EventIntervals suite', () => {
         });
         it('should not throw when started and cleared', () => {
             expect(() => {
-                eventIntervals.startIndependentInterval('test', 0);
+                eventIntervals.startIndependentInterval(
+                    'test',
+                    () => {
+                        // do nothing
+                    },
+                    0,
+                );
                 eventIntervals.clearIndependentInterval('test');
             }).to.not.throw();
         });
         it('should call given method', () => {
-            eventIntervals.startIndependentInterval('testIndependent', 50);
+            const spy = sinon.spy(() => {
+                // do nothing
+            });
+            eventIntervals.startIndependentInterval('testIndependent', spy, 50);
             clock.tick(1000);
 
-            expect(eventResult).to.include('testIndependent');
+            sinon.assert.called(spy);
         });
     });
 });

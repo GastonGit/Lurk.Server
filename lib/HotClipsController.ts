@@ -15,17 +15,13 @@ export default class HotClipsController {
     private readonly cooldownLengthInSeconds: number;
     private readonly addClipDelay: number;
 
-    private superInterval;
-    private hitCI;
-    private reduceCI;
-    private removeClipII;
-
     private readonly spikeValue: number;
     private readonly reduceValue: number;
 
     constructor() {
         this.clipList = new ClipList();
         this.clipper = new Clipper();
+        this.eventIntervals = new EventIntervals();
         this.monitorTwitchChat = new MonitorTwitchChat(
             new TwitchClient(
                 process.env.BOT_NAME || '',
@@ -37,28 +33,10 @@ export default class HotClipsController {
                 validMessages: config.get('validMessages'),
             },
         );
-        this.eventIntervals = new EventIntervals(this.eventSystem.bind(this));
 
         this.cooldownLengthInSeconds =
             (config.get('cooldownLengthInSeconds') as number) * 1000;
         this.addClipDelay = config.get('addClipDelay');
-
-        this.superInterval = {
-            event: 'main',
-            timer: (config.get('updateTimeInMinutes') as number) * 60000,
-        };
-        this.hitCI = {
-            event: 'hit',
-            timer: config.get('spikeTime') as number,
-        };
-        this.reduceCI = {
-            event: 'reduce',
-            timer: config.get('reduceTime') as number,
-        };
-        this.removeClipII = {
-            event: 'remove',
-            timer: (config.get('removeClipTimeInMinutes') as number) * 60000,
-        };
 
         this.spikeValue = config.get('spikeValue');
         this.reduceValue = config.get('reduceValue');
@@ -66,50 +44,32 @@ export default class HotClipsController {
 
     public async start(): Promise<void> {
         const setupSuccess = await this.monitorTwitchChat.setupConnection();
-
         if (setupSuccess) {
-            this.eventIntervals.createConstrainedInterval(
-                this.hitCI.event,
-                this.hitCI.timer,
-            );
-            this.eventIntervals.createConstrainedInterval(
-                this.reduceCI.event,
-                this.reduceCI.timer,
-            );
-
+            this.eventIntervals.createConstrainedInterval(() => {
+                this.checkForSpikes(this.spikeValue);
+            }, parseInt(config.get('spikeTime')));
+            this.eventIntervals.createConstrainedInterval(() => {
+                this.monitorTwitchChat.decreaseHitsByAmount(this.reduceValue);
+            }, parseInt(config.get('reduceTime')));
             this.eventIntervals.startIndependentInterval(
-                this.removeClipII.event,
-                this.removeClipII.timer,
+                'removeClip',
+                () => {
+                    if (this.clipList.getList().length > 20) {
+                        this.clipList.removeClip();
+                    }
+                },
+                parseInt(config.get('removeClipTimeInMinutes')) * 60000,
             );
-
-            this.eventIntervals.startSuperInterval(
-                this.superInterval.event,
-                this.superInterval.timer,
-            );
+            this.eventIntervals.startSuperInterval(async () => {
+                await this.monitorTwitchChat.updateChannels;
+            }, parseInt(config.get('spikeTime')));
         } else {
             throw Error('Connection setup failed');
         }
     }
 
-    public async eventSystem(event: string): Promise<void> {
-        switch (event) {
-            case this.superInterval.event:
-                await this.monitorTwitchChat.updateChannels();
-                return;
-            case this.hitCI.event:
-                this.checkForSpikes(this.spikeValue);
-                break;
-            case this.reduceCI.event:
-                this.monitorTwitchChat.decreaseHitsByAmount(this.reduceValue);
-                break;
-            case this.removeClipII.event:
-                if (this.clipList.getList().length > 20) {
-                    this.clipList.removeClip();
-                }
-                break;
-            default:
-                throw Error('eventSystem - Unknown case: ' + event);
-        }
+    public endTimers(): void {
+        this.eventIntervals.clearAllIntervals();
     }
 
     public getList(): string[] {

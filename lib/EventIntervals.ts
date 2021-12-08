@@ -1,27 +1,26 @@
 export default class EventIntervals {
-    private readonly callMe: { (arg0: string): void; (event: string): void };
     private superInterval: NodeJS.Timer | undefined;
     private constrainedIntervals: Array<NodeJS.Timer> = [];
-    private constrainedEvents: Array<{ event: string; timer: number }> = [];
+    private constrainedEvents: Array<{ callback: () => void; timer: number }> =
+        [];
     private independentEvents: Array<{
-        event: string;
+        name: string;
         interval: NodeJS.Timer;
     }> = [];
 
-    constructor(callMe: (event: string) => void) {
-        this.callMe = callMe;
+    public createConstrainedInterval(
+        callback: () => void,
+        timer: number,
+    ): void {
+        this.constrainedEvents.push({ callback: callback, timer: timer });
     }
 
-    public createConstrainedInterval(event: string, timer: number): void {
-        this.constrainedEvents.push({ event: event, timer: timer });
-    }
-
-    public startSuperInterval(event: string, timer: number): void {
+    public startSuperInterval(callback: () => void, timer: number): void {
         if (typeof this.superInterval === 'undefined') {
             this.startConstrainedIntervals();
-            this.superInterval = setInterval(() => {
+            this.superInterval = setInterval(async () => {
                 this.clearAllConstrainedIntervals();
-                this.callMe(event);
+                await callback();
                 this.startConstrainedIntervals();
             }, timer);
         } else {
@@ -35,17 +34,21 @@ export default class EventIntervals {
         for (let i = 0; i < this.constrainedEvents.length; i++) {
             this.constrainedIntervals.push(
                 setInterval(() => {
-                    this.callMe(this.constrainedEvents[i].event);
+                    this.constrainedEvents[i].callback();
                 }, this.constrainedEvents[i].timer),
             );
         }
     }
 
-    public startIndependentInterval(event: string, timer: number): void {
+    public startIndependentInterval(
+        name: string,
+        callback: () => void,
+        timer: number,
+    ): void {
         this.independentEvents.push({
-            event: event,
+            name: name,
             interval: setInterval(() => {
-                this.callMe(event);
+                callback();
             }, timer),
         });
     }
@@ -68,9 +71,9 @@ export default class EventIntervals {
         this.constrainedIntervals = [];
     }
 
-    public clearIndependentInterval(event: string): void {
+    public clearIndependentInterval(name: string): void {
         const found = this.independentEvents.find(
-            (independentEvent) => independentEvent.event === event,
+            (independentEvent) => independentEvent.name === name,
         );
 
         if (typeof found !== 'undefined') {

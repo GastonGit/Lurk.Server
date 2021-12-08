@@ -17,6 +17,6 @@
 
   "cooldownLengthInSeconds": 0.0001,
   "addClipDelay": 0,
-  "removeClipTimeInMinutes": 0,
-  "updateTimeInMinutes": 1
+  "removeClipTimeInMinutes": 20,
+  "updateTimeInMinutes": 60
 }

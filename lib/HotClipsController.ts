@@ -62,7 +62,7 @@ export default class HotClipsController {
             );
             this.eventIntervals.startSuperInterval(async () => {
                 await this.monitorTwitchChat.updateChannels;
-            }, parseInt(config.get('spikeTime')));
+            }, parseInt(config.get('updateTimeInMinutes')) * 60000);
         } else {
             throw Error('Connection setup failed');
         }

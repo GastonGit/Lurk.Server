@@ -83,6 +83,7 @@ describe('HotClipsController suite', () => {
     describe('Callbacks', () => {
         it('should call callbacks', async () => {
             sinon.restore();
+            const clock = sinon.useFakeTimers();
             hotClipsController = new HotClipsController();
             sinon
                 .stub(MonitorTwitchChat.prototype, 'setupConnection')
@@ -92,10 +93,8 @@ describe('HotClipsController suite', () => {
                 .resolves(true);
             await hotClipsController.start();
 
-            clock.tickAsync(1000000000000);
-            clock.tick(10000000000000);
+            clock.tick(6000000);
 
-            console.log('clock');
             expect(true).to.be.true;
         });
         // it('should not throw if unable to clip', async () => {

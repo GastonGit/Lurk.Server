@@ -8,15 +8,19 @@ import ClipList from '../lib/ClipList';
 import MonitorTwitchChat from '../lib/MonitorTwitchChat';
 import Clipper from '../lib/Clipper';
 import Logger from '../lib/Logger';
+import { Clip, Stream } from '../lib/Interfaces';
 
 let hotClipsController: HotClipsController;
+
 let clock: sinon.SinonFakeTimers;
+let getVideoUrl: sinon.SinonStub<[slug: string], Promise<string | undefined>>;
+let createClip: sinon.SinonStub<[streamer: string], Promise<Clip | undefined>>;
+let getStreamList: sinon.SinonStub<[], Stream[]>;
+let getList: sinon.SinonStub<[], string[]>;
 
 describe('HotClipsController suite', () => {
-    before(() => {
-        clock = sinon.useFakeTimers();
-    });
     beforeEach(() => {
+        clock = sinon.useFakeTimers();
         hotClipsController = new HotClipsController();
         sinon
             .stub(MonitorTwitchChat.prototype, 'setupConnection')
@@ -24,18 +28,20 @@ describe('HotClipsController suite', () => {
         sinon
             .stub(MonitorTwitchChat.prototype, 'updateChannels')
             .resolves(true);
-        sinon.stub(MonitorTwitchChat.prototype, 'getStreamList').returns([
-            {
-                cooldown: false,
-                hits: 10000,
-                viewer_count: 20,
-                user_name: 'ugly221',
-            },
-        ]);
+        getStreamList = sinon
+            .stub(MonitorTwitchChat.prototype, 'getStreamList')
+            .returns([
+                {
+                    cooldown: false,
+                    hits: 10000,
+                    viewer_count: 20,
+                    user_name: 'ugly221',
+                },
+            ]);
         const testArray = ['test'];
         testArray.length = 21;
-        sinon.stub(ClipList.prototype, 'getList').returns(testArray);
-        sinon.stub(Clipper.prototype, 'createClip').resolves({
+        getList = sinon.stub(ClipList.prototype, 'getList').returns(testArray);
+        createClip = sinon.stub(Clipper.prototype, 'createClip').resolves({
             broadcaster_id: '',
             broadcaster_name: '',
             created_at: '',
@@ -52,11 +58,14 @@ describe('HotClipsController suite', () => {
             view_count: 0,
             id: 'test',
         });
-        sinon.stub(Clipper.prototype, 'getVideoUrl').resolves('videoUrl');
-        //sinon.stub(Logger, 'error');
+        getVideoUrl = sinon
+            .stub(Clipper.prototype, 'getVideoUrl')
+            .resolves('videoUrl');
+        sinon.stub(Logger, 'error');
     });
     afterEach(() => {
         hotClipsController.endTimers();
+        clock.restore();
         sinon.restore();
     });
     describe('Getting the clip list', () => {
@@ -68,6 +77,7 @@ describe('HotClipsController suite', () => {
         it('should not throw if monitoring setup is successful', async () => {
             expect(async () => {
                 await hotClipsController.start();
+                clock.tick(100000);
             }).to.not.throw();
         });
         it('should throw if monitoring setup is unsuccessful', async () => {
@@ -80,120 +90,99 @@ describe('HotClipsController suite', () => {
             );
         });
     });
-    describe('Callbacks', () => {
-        it('should call callbacks', async () => {
-            sinon.restore();
-            const clock = sinon.useFakeTimers();
-            hotClipsController = new HotClipsController();
-            sinon
-                .stub(MonitorTwitchChat.prototype, 'setupConnection')
-                .resolves(true);
-            sinon
-                .stub(MonitorTwitchChat.prototype, 'updateChannels')
-                .resolves(true);
-            await hotClipsController.start();
+    describe('Callback Coverage', () => {
+        describe('startIndependentInterval', () => {
+            it('should not remove clips if clip count is too low', async () => {
+                getList.restore();
+                getList = sinon.stub(ClipList.prototype, 'getList').returns([]);
 
-            clock.tick(6000000);
+                await hotClipsController.start();
 
-            expect(true).to.be.true;
+                clock.tick(10000000);
+            });
         });
-        // it('should not throw if unable to clip', async () => {
-        //     sinon.restore();
-        //     sinon.stub(MonitorTwitchChat.prototype, 'getStreamList').returns([
-        //         {
-        //             cooldown: false,
-        //             hits: 10000,
-        //             viewer_count: 20,
-        //             user_name: 'ugly221',
-        //         },
-        //     ]);
-        //     sinon.stub(Clipper.prototype, 'createClip').throws();
-        //     await expect(
-        //         hotClipsController.eventSystem('hit'),
-        //     ).to.not.be.rejectedWith();
-        // });
-        // it('should not throw if channel has cooldown', async () => {
-        //     sinon.restore();
-        //     sinon.stub(MonitorTwitchChat.prototype, 'getStreamList').returns([
-        //         {
-        //             cooldown: true,
-        //             hits: 10000,
-        //             viewer_count: 20,
-        //             user_name: 'ugly221',
-        //         },
-        //     ]);
-        //     await expect(
-        //         hotClipsController.eventSystem('hit'),
-        //     ).to.not.be.rejectedWith();
-        // });
-        // it('should not throw if hits are less then spike requirement', async () => {
-        //     sinon.restore();
-        //     sinon.stub(MonitorTwitchChat.prototype, 'getStreamList').returns([
-        //         {
-        //             cooldown: false,
-        //             hits: 1,
-        //             viewer_count: 50000,
-        //             user_name: 'ugly221',
-        //         },
-        //     ]);
-        //
-        //     await expect(
-        //         hotClipsController.eventSystem('hit'),
-        //     ).to.not.be.rejectedWith();
-        // });
-        // it('should not throw if clip creation fails', async () => {
-        //     sinon.restore();
-        //     sinon.stub(MonitorTwitchChat.prototype, 'getStreamList').returns([
-        //         {
-        //             cooldown: false,
-        //             hits: 20,
-        //             viewer_count: 10,
-        //             user_name: 'ugly221',
-        //         },
-        //     ]);
-        //     sinon.stub(Clipper.prototype, 'createClip').resolves(undefined);
-        //
-        //     await expect(
-        //         hotClipsController.eventSystem('hit'),
-        //     ).to.not.be.rejectedWith();
-        // });
-        // it('should not throw if video url cant be found', async () => {
-        //     sinon.restore();
-        //     sinon.stub(MonitorTwitchChat.prototype, 'getStreamList').returns([
-        //         {
-        //             cooldown: false,
-        //             hits: 20,
-        //             viewer_count: 10,
-        //             user_name: 'ugly221',
-        //         },
-        //     ]);
-        //     sinon.stub(Clipper.prototype, 'createClip').resolves({
-        //         broadcaster_id: '',
-        //         broadcaster_name: '',
-        //         created_at: '',
-        //         creator_id: '',
-        //         creator_name: '',
-        //         duration: 0,
-        //         embed_url: '',
-        //         game_id: '',
-        //         language: '',
-        //         thumbnail_url: '',
-        //         title: '',
-        //         url: '',
-        //         video_id: '',
-        //         view_count: 0,
-        //         id: 'test',
-        //     });
-        //     sinon.stub(Clipper.prototype, 'getVideoUrl').resolves(undefined);
-        //
-        //     const clock = sinon.useFakeTimers();
-        //     await hotClipsController.eventSystem('hit');
-        //     clock.tick(100000);
-        //     await Promise.resolve();
-        //
-        //     await expect(
-        //         hotClipsController.eventSystem('hit'),
-        //     ).to.not.be.rejectedWith();
-        // });
+        describe('checkForSpikes', () => {
+            it('should throw if clipIt fails', async () => {
+                createClip.restore();
+                createClip = sinon
+                    .stub(Clipper.prototype, 'createClip')
+                    .throws();
+
+                await hotClipsController.start();
+
+                clock.tick(100);
+            });
+            it('should not clip streams that are on cooldown', async () => {
+                getStreamList.restore();
+                getStreamList = sinon
+                    .stub(MonitorTwitchChat.prototype, 'getStreamList')
+                    .returns([
+                        {
+                            cooldown: true,
+                            hits: 10000,
+                            viewer_count: 20,
+                            user_name: 'ugly221',
+                        },
+                    ]);
+
+                await hotClipsController.start();
+
+                clock.tick(100);
+            });
+            it('should not clip streams that hit the required spike', async () => {
+                getStreamList.restore();
+                getStreamList = sinon
+                    .stub(MonitorTwitchChat.prototype, 'getStreamList')
+                    .returns([
+                        {
+                            cooldown: false,
+                            hits: 2,
+                            viewer_count: 2000,
+                            user_name: 'ugly221',
+                        },
+                    ]);
+
+                await hotClipsController.start();
+
+                clock.tick(100);
+            });
+            it('should throw if clipIt fails', async () => {
+                createClip.restore();
+                createClip = sinon
+                    .stub(Clipper.prototype, 'createClip')
+                    .throws();
+
+                await hotClipsController.start();
+
+                clock.tick(100);
+            });
+        });
+        describe('clipIt', () => {
+            it('should add undefined clips', async () => {
+                createClip.restore();
+                createClip = sinon
+                    .stub(Clipper.prototype, 'createClip')
+                    .resolves(undefined);
+
+                await hotClipsController.start();
+
+                clock.tick(100);
+            });
+        });
+        describe('addClipWithDelay', () => {
+            it('should add defined clips', async () => {
+                await hotClipsController.start();
+                await expect(clock.tickAsync(10000)).to.not.be.rejectedWith();
+            });
+            it('should not add undefined clips', async () => {
+                getVideoUrl.restore();
+                getVideoUrl = sinon
+                    .stub(Clipper.prototype, 'getVideoUrl')
+                    .resolves(undefined);
+
+                await hotClipsController.start();
+                await expect(clock.tickAsync(100)).to.not.be.rejectedWith();
+            });
+        });
     });
 });

@@ -36,7 +36,7 @@ export default class HotClipsController {
 
         this.cooldownLengthInSeconds =
             (config.get('cooldownLengthInSeconds') as number) * 1000;
-        this.addClipDelay = config.get('addClipDelay');
+        this.addClipDelay = parseInt(config.get('addClipDelay'));
 
         this.spikeValue = config.get('spikeValue');
         this.reduceValue = config.get('reduceValue');

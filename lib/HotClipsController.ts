@@ -7,46 +7,62 @@ import config from 'config';
 import EventIntervals from './EventIntervals';
 
 export default class HotClipsController {
-    private clipList: ClipList = new ClipList();
-    private clipper: Clipper = new Clipper();
-    private monitorTwitchChat: MonitorTwitchChat = new MonitorTwitchChat(
-        new TwitchClient(
-            process.env.BOT_NAME || '',
-            process.env.BOT_AUTH || '',
-            config.get('joinTimeout'),
-        ),
-        {
-            requestCount: config.get('requestCount'),
-            validMessages: config.get('validMessages'),
-        },
-    );
-    private eventIntervals: EventIntervals = new EventIntervals(
-        this.eventSystem.bind(this),
-    );
+    private clipList: ClipList;
+    private clipper: Clipper;
+    private monitorTwitchChat: MonitorTwitchChat;
+    private eventIntervals: EventIntervals;
 
-    private cooldownLengthInSeconds: number =
-        (config.get('cooldownLengthInSeconds') as number) * 1000;
-    private addClipDelay: number = config.get('addClipDelay');
+    private readonly cooldownLengthInSeconds: number;
+    private readonly addClipDelay: number;
 
-    private superInterval = {
-        event: 'main',
-        timer: (config.get('updateTimeInMinutes') as number) * 60000,
-    };
-    private hitCI = {
-        event: 'hit',
-        timer: config.get('spikeTime') as number,
-    };
-    private reduceCI = {
-        event: 'reduce',
-        timer: config.get('reduceTime') as number,
-    };
-    private removeClipII = {
-        event: 'remove',
-        timer: (config.get('removeClipTimeInMinutes') as number) * 60000,
-    };
+    private superInterval;
+    private hitCI;
+    private reduceCI;
+    private removeClipII;
 
-    private spikeValue: number = config.get('spikeValue');
-    private reduceValue: number = config.get('reduceValue');
+    private readonly spikeValue: number;
+    private readonly reduceValue: number;
+
+    constructor() {
+        this.clipList = new ClipList();
+        this.clipper = new Clipper();
+        this.monitorTwitchChat = new MonitorTwitchChat(
+            new TwitchClient(
+                process.env.BOT_NAME || '',
+                process.env.BOT_AUTH || '',
+                config.get('joinTimeout'),
+            ),
+            {
+                requestCount: config.get('requestCount'),
+                validMessages: config.get('validMessages'),
+            },
+        );
+        this.eventIntervals = new EventIntervals(this.eventSystem.bind(this));
+
+        this.cooldownLengthInSeconds =
+            (config.get('cooldownLengthInSeconds') as number) * 1000;
+        this.addClipDelay = config.get('addClipDelay');
+
+        this.superInterval = {
+            event: 'main',
+            timer: (config.get('updateTimeInMinutes') as number) * 60000,
+        };
+        this.hitCI = {
+            event: 'hit',
+            timer: config.get('spikeTime') as number,
+        };
+        this.reduceCI = {
+            event: 'reduce',
+            timer: config.get('reduceTime') as number,
+        };
+        this.removeClipII = {
+            event: 'remove',
+            timer: (config.get('removeClipTimeInMinutes') as number) * 60000,
+        };
+
+        this.spikeValue = config.get('spikeValue');
+        this.reduceValue = config.get('reduceValue');
+    }
 
     public async start(): Promise<void> {
         const setupSuccess = await this.monitorTwitchChat.setupConnection();

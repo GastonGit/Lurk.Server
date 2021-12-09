@@ -68,10 +68,6 @@ export default class HotClipsController {
         }
     }
 
-    public endTimers(): void {
-        this.eventIntervals.clearAllIntervals();
-    }
-
     public getList(): string[] {
         return this.clipList.getList();
     }

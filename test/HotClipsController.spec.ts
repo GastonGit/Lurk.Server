@@ -9,6 +9,7 @@ import MonitorTwitchChat from '../lib/MonitorTwitchChat';
 import Clipper from '../lib/Clipper';
 import Logger from '../lib/Logger';
 import { Clip, Stream } from '../lib/Interfaces';
+import EventIntervals from '../lib/EventIntervals';
 
 let hotClipsController: HotClipsController;
 
@@ -38,6 +39,13 @@ describe('HotClipsController suite', () => {
                     user_name: 'ugly221',
                 },
             ]);
+        sinon
+            .stub(EventIntervals.prototype, 'createConstrainedInterval')
+            .callsArg(0);
+        sinon
+            .stub(EventIntervals.prototype, 'startIndependentInterval')
+            .callsArg(1);
+        sinon.stub(EventIntervals.prototype, 'startSuperInterval').callsArg(0);
         const testArray = ['test'];
         testArray.length = 21;
         getList = sinon.stub(ClipList.prototype, 'getList').returns(testArray);
@@ -64,7 +72,6 @@ describe('HotClipsController suite', () => {
         sinon.stub(Logger, 'error');
     });
     afterEach(() => {
-        hotClipsController.endTimers();
         clock.restore();
         sinon.restore();
     });
@@ -77,7 +84,6 @@ describe('HotClipsController suite', () => {
         it('should not throw if monitoring setup is successful', async () => {
             expect(async () => {
                 await hotClipsController.start();
-                clock.tick(100000);
             }).to.not.throw();
         });
         it('should throw if monitoring setup is unsuccessful', async () => {
@@ -96,9 +102,9 @@ describe('HotClipsController suite', () => {
                 getList.restore();
                 getList = sinon.stub(ClipList.prototype, 'getList').returns([]);
 
-                await hotClipsController.start();
-
-                clock.tick(10000000);
+                expect(async () => {
+                    await hotClipsController.start();
+                }).to.not.throw();
             });
         });
         describe('checkForSpikes', () => {
@@ -108,9 +114,9 @@ describe('HotClipsController suite', () => {
                     .stub(Clipper.prototype, 'createClip')
                     .throws();
 
-                await hotClipsController.start();
-
-                clock.tick(100);
+                expect(async () => {
+                    await hotClipsController.start();
+                }).to.not.throw();
             });
             it('should not clip streams that are on cooldown', async () => {
                 getStreamList.restore();
@@ -125,9 +131,9 @@ describe('HotClipsController suite', () => {
                         },
                     ]);
 
-                await hotClipsController.start();
-
-                clock.tick(100);
+                expect(async () => {
+                    await hotClipsController.start();
+                }).to.not.throw();
             });
             it('should not clip streams that hit the required spike', async () => {
                 getStreamList.restore();
@@ -142,9 +148,9 @@ describe('HotClipsController suite', () => {
                         },
                     ]);
 
-                await hotClipsController.start();
-
-                clock.tick(100);
+                expect(async () => {
+                    await hotClipsController.start();
+                }).to.not.throw();
             });
             it('should throw if clipIt fails', async () => {
                 createClip.restore();
@@ -152,9 +158,9 @@ describe('HotClipsController suite', () => {
                     .stub(Clipper.prototype, 'createClip')
                     .throws();
 
-                await hotClipsController.start();
-
-                clock.tick(100);
+                expect(async () => {
+                    await hotClipsController.start();
+                }).to.not.throw();
             });
         });
         describe('clipIt', () => {

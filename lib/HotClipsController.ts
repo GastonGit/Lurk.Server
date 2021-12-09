@@ -44,6 +44,7 @@ export default class HotClipsController {
 
     public async start(): Promise<void> {
         const setupSuccess = await this.monitorTwitchChat.setupConnection();
+
         if (setupSuccess) {
             this.eventIntervals.createConstrainedInterval(() => {
                 this.checkForSpikes(this.spikeValue);
@@ -51,6 +52,7 @@ export default class HotClipsController {
             this.eventIntervals.createConstrainedInterval(() => {
                 this.monitorTwitchChat.decreaseHitsByAmount(this.reduceValue);
             }, parseInt(config.get('reduceTime')));
+
             this.eventIntervals.startIndependentInterval(
                 'removeClip',
                 () => {
@@ -60,6 +62,7 @@ export default class HotClipsController {
                 },
                 parseInt(config.get('removeClipTimeInMinutes')) * 60000,
             );
+
             this.eventIntervals.startSuperInterval(async () => {
                 await this.monitorTwitchChat.updateChannels;
             }, parseInt(config.get('updateTimeInMinutes')) * 60000);

@@ -5,7 +5,7 @@ chai.use(chaiAsPromised);
 import sinon from 'sinon';
 import HotClipsController from '../lib/HotClipsController';
 import ClipList from '../lib/ClipList';
-import MonitorTwitchChat from '../lib/MonitorTwitchChat';
+import TwitchSupervisor from '../lib/TwitchSupervisor';
 import Clipper from '../lib/Clipper';
 import Logger from '../lib/Logger';
 import { Clip, Stream } from '../lib/Interfaces';
@@ -24,13 +24,11 @@ describe('HotClipsController suite', () => {
         clock = sinon.useFakeTimers();
         hotClipsController = new HotClipsController();
         sinon
-            .stub(MonitorTwitchChat.prototype, 'setupConnection')
+            .stub(TwitchSupervisor.prototype, 'setupConnection')
             .resolves(true);
-        sinon
-            .stub(MonitorTwitchChat.prototype, 'updateChannels')
-            .resolves(true);
+        sinon.stub(TwitchSupervisor.prototype, 'updateChannels').resolves(true);
         getStreamList = sinon
-            .stub(MonitorTwitchChat.prototype, 'getStreamList')
+            .stub(TwitchSupervisor.prototype, 'getStreamList')
             .returns([
                 {
                     cooldown: false,
@@ -89,7 +87,7 @@ describe('HotClipsController suite', () => {
         it('should throw if monitoring setup is unsuccessful', async () => {
             sinon.restore();
             sinon
-                .stub(MonitorTwitchChat.prototype, 'setupConnection')
+                .stub(TwitchSupervisor.prototype, 'setupConnection')
                 .resolves(false);
             await expect(hotClipsController.start()).to.be.rejectedWith(
                 'Connection setup failed',
@@ -121,7 +119,7 @@ describe('HotClipsController suite', () => {
             it('should not clip streams that are on cooldown', async () => {
                 getStreamList.restore();
                 getStreamList = sinon
-                    .stub(MonitorTwitchChat.prototype, 'getStreamList')
+                    .stub(TwitchSupervisor.prototype, 'getStreamList')
                     .returns([
                         {
                             cooldown: true,
@@ -138,7 +136,7 @@ describe('HotClipsController suite', () => {
             it('should not clip streams that hit the required spike', async () => {
                 getStreamList.restore();
                 getStreamList = sinon
-                    .stub(MonitorTwitchChat.prototype, 'getStreamList')
+                    .stub(TwitchSupervisor.prototype, 'getStreamList')
                     .returns([
                         {
                             cooldown: false,

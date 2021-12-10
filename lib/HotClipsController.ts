@@ -1,6 +1,6 @@
 import { Clip } from './Interfaces';
 import ClipList from './ClipList';
-import MonitorTwitchChat from './MonitorTwitchChat';
+import TwitchSupervisor from './TwitchSupervisor';
 import Clipper from './Clipper';
 import config from 'config';
 import EventIntervals from './EventIntervals';
@@ -8,7 +8,7 @@ import EventIntervals from './EventIntervals';
 export default class HotClipsController {
     private clipList: ClipList;
     private clipper: Clipper;
-    private monitorTwitchChat: MonitorTwitchChat;
+    private monitorTwitchChat: TwitchSupervisor;
     private eventIntervals: EventIntervals;
 
     private readonly cooldownLengthInSeconds: number;
@@ -21,7 +21,7 @@ export default class HotClipsController {
         this.clipList = new ClipList();
         this.clipper = new Clipper();
         this.eventIntervals = new EventIntervals();
-        this.monitorTwitchChat = new MonitorTwitchChat(
+        this.monitorTwitchChat = new TwitchSupervisor(
             process.env.BOT_NAME || '',
             process.env.BOT_AUTH || '',
             config.get('joinTimeout'),

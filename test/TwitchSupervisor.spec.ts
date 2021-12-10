@@ -3,16 +3,16 @@ import { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 import sinon from 'sinon';
-import MonitorTwitchChat from '../lib/MonitorTwitchChat';
+import TwitchSupervisor from '../lib/TwitchSupervisor';
 import TwitchClient from '../lib/TwitchClient';
 import Fetcher from '../lib/Fetcher';
 
-const monitorTwitchChat = new MonitorTwitchChat('user', 'pass', 0, {
+const monitorTwitchChat = new TwitchSupervisor('user', 'pass', 0, {
     requestCount: 2,
     validMessages: ['LUL'],
 });
 
-describe('MonitorTwitchChat suite', () => {
+describe('TwitchSupervisor suite', () => {
     beforeEach(() => {
         sinon.stub(TwitchClient.prototype);
         sinon.stub(Fetcher, 'fetch').resolves({

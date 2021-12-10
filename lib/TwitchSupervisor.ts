@@ -3,7 +3,7 @@ import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
 import TwitchClient from './TwitchClient';
 import { ChatUserstate } from 'tmi.js';
 
-export default class MonitorTwitchChat {
+export default class TwitchSupervisor {
     private client: TwitchClient;
     private readonly requestCount: number;
     private readonly validMessages: string[];
@@ -164,7 +164,7 @@ export default class MonitorTwitchChat {
 
         for (let i = 0; i < this.requestCount; i++) {
             const requestedStreams: fetchResult =
-                await MonitorTwitchChat.request100Streams(pagination);
+                await TwitchSupervisor.request100Streams(pagination);
             const fetchedStreams: Array<FetchedStreams> = requestedStreams.data;
             success = requestedStreams.success;
 

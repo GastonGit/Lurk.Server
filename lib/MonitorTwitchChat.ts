@@ -12,10 +12,12 @@ export default class MonitorTwitchChat {
     private compactStreamList: Array<string> = [];
 
     constructor(
-        client: TwitchClient,
+        username: string,
+        password: string,
+        joinTimeout: number,
         options: { requestCount: number; validMessages: string[] },
     ) {
-        this.client = client;
+        this.client = new TwitchClient(username, password, joinTimeout);
         this.requestCount = options.requestCount;
         this.validMessages = options.validMessages;
         this.client.setMessageHandler(this.onMessageHandler.bind(this));

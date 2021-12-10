@@ -7,10 +7,10 @@ import MonitorTwitchChat from '../lib/MonitorTwitchChat';
 import TwitchClient from '../lib/TwitchClient';
 import Fetcher from '../lib/Fetcher';
 
-const monitorTwitcChat = new MonitorTwitchChat(
-    new TwitchClient('user', 'pass', 0),
-    { requestCount: 2, validMessages: ['LUL'] },
-);
+const monitorTwitcChat = new MonitorTwitchChat('user', 'pass', 0, {
+    requestCount: 2,
+    validMessages: ['LUL'],
+});
 
 describe('MonitorTwitchChat suite', () => {
     beforeEach(() => {

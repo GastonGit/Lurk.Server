@@ -7,7 +7,7 @@ import MonitorTwitchChat from '../lib/MonitorTwitchChat';
 import TwitchClient from '../lib/TwitchClient';
 import Fetcher from '../lib/Fetcher';
 
-const monitorTwitcChat = new MonitorTwitchChat('user', 'pass', 0, {
+const monitorTwitchChat = new MonitorTwitchChat('user', 'pass', 0, {
     requestCount: 2,
     validMessages: ['LUL'],
 });
@@ -42,7 +42,7 @@ describe('MonitorTwitchChat suite', () => {
                 pagination: { cursor: 'testPag2' },
             });
 
-            const result = await monitorTwitcChat.setupConnection();
+            const result = await monitorTwitchChat.setupConnection();
             expect(result).to.be.true;
         });
         it('should return false if a updated list cannot be fetched', async () => {
@@ -56,7 +56,7 @@ describe('MonitorTwitchChat suite', () => {
                 pagination: undefined,
             });
 
-            const result = await monitorTwitcChat.setupConnection();
+            const result = await monitorTwitchChat.setupConnection();
             expect(result).to.be.false;
         });
     });
@@ -71,7 +71,7 @@ describe('MonitorTwitchChat suite', () => {
             sinon.stub(TwitchClient.prototype, 'leaveChannels').resolves(true);
             sinon.stub(TwitchClient.prototype, 'joinChannels').resolves(true);
 
-            const result = await monitorTwitcChat.updateChannels();
+            const result = await monitorTwitchChat.updateChannels();
             expect(result).to.be.true;
         });
     });
@@ -86,17 +86,17 @@ describe('MonitorTwitchChat suite', () => {
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });
-            await monitorTwitcChat.setupConnection();
-            monitorTwitcChat.onMessageHandler('Streamzz', {}, 'LUL', true);
+            await monitorTwitchChat.setupConnection();
+            monitorTwitchChat.onMessageHandler('Streamzz', {}, 'LUL', true);
 
             expect(() => {
-                monitorTwitcChat.decreaseHitsByAmount(1);
+                monitorTwitchChat.decreaseHitsByAmount(1);
             }).to.not.throw();
         });
     });
     describe('getStreamList', () => {
         it('should return an array', () => {
-            expect(monitorTwitcChat.getStreamList()).to.be.an('array');
+            expect(monitorTwitchChat.getStreamList()).to.be.an('array');
         });
     });
     describe('cooldownStreamer', () => {
@@ -111,10 +111,10 @@ describe('MonitorTwitchChat suite', () => {
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });
-            await monitorTwitcChat.setupConnection();
+            await monitorTwitchChat.setupConnection();
 
             expect(() => {
-                monitorTwitcChat.cooldownStreamer('Streamzz', 10);
+                monitorTwitchChat.cooldownStreamer('Streamzz', 10);
             }).to.not.throw();
 
             clock.tick(100000);
@@ -132,10 +132,10 @@ describe('MonitorTwitchChat suite', () => {
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });
-            await monitorTwitcChat.setupConnection();
+            await monitorTwitchChat.setupConnection();
 
             expect(() => {
-                monitorTwitcChat.resetStreamer('Streamzz');
+                monitorTwitchChat.resetStreamer('Streamzz');
             }).to.not.throw();
         });
     });
@@ -150,11 +150,16 @@ describe('MonitorTwitchChat suite', () => {
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });
-            await monitorTwitcChat.setupConnection();
+            await monitorTwitchChat.setupConnection();
 
             expect(() => {
-                monitorTwitcChat.onMessageHandler('Streamzz', {}, 'LUL', true);
-                monitorTwitcChat.onMessageHandler('Streamzz', {}, 'test', true);
+                monitorTwitchChat.onMessageHandler('Streamzz', {}, 'LUL', true);
+                monitorTwitchChat.onMessageHandler(
+                    'Streamzz',
+                    {},
+                    'test',
+                    true,
+                );
             }).to.not.throw();
         });
     });

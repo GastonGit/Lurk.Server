@@ -4,7 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 import sinon from 'sinon';
 import TwitchSupervisor from '../lib/TwitchSupervisor';
-import TwitchClient from '../lib/TwitchClient';
+import TwitchChatInterface from '../lib/TwitchChatInterface';
 import Fetcher from '../lib/Fetcher';
 
 const monitorTwitchChat = new TwitchSupervisor('user', 'pass', 0, {
@@ -14,7 +14,7 @@ const monitorTwitchChat = new TwitchSupervisor('user', 'pass', 0, {
 
 describe('TwitchSupervisor suite', () => {
     beforeEach(() => {
-        sinon.stub(TwitchClient.prototype);
+        sinon.stub(TwitchChatInterface.prototype);
         sinon.stub(Fetcher, 'fetch').resolves({
             status: 200,
             data: [],
@@ -28,7 +28,7 @@ describe('TwitchSupervisor suite', () => {
         it('should return true if list gets updated and client connects to twitch', async () => {
             sinon.restore();
             sinon
-                .stub(TwitchClient.prototype, 'connectToTwitch')
+                .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
             const fetch = sinon.stub(Fetcher, 'fetch');
             fetch.onCall(0).resolves({
@@ -48,7 +48,7 @@ describe('TwitchSupervisor suite', () => {
         it('should return false if a updated list cannot be fetched', async () => {
             sinon.restore();
             sinon
-                .stub(TwitchClient.prototype, 'connectToTwitch')
+                .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
             sinon.stub(Fetcher, 'fetch').resolves({
                 status: 404,
@@ -68,8 +68,12 @@ describe('TwitchSupervisor suite', () => {
                 data: [],
                 pagination: undefined,
             });
-            sinon.stub(TwitchClient.prototype, 'leaveChannels').resolves(true);
-            sinon.stub(TwitchClient.prototype, 'joinChannels').resolves(true);
+            sinon
+                .stub(TwitchChatInterface.prototype, 'leaveChannels')
+                .resolves(true);
+            sinon
+                .stub(TwitchChatInterface.prototype, 'joinChannels')
+                .resolves(true);
 
             const result = await monitorTwitchChat.updateChannels();
             expect(result).to.be.true;
@@ -79,7 +83,7 @@ describe('TwitchSupervisor suite', () => {
         it('should not throw', async () => {
             sinon.restore();
             sinon
-                .stub(TwitchClient.prototype, 'connectToTwitch')
+                .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
             sinon.stub(Fetcher, 'fetch').resolves({
                 status: 200,
@@ -104,7 +108,7 @@ describe('TwitchSupervisor suite', () => {
             sinon.restore();
             const clock = sinon.useFakeTimers();
             sinon
-                .stub(TwitchClient.prototype, 'connectToTwitch')
+                .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
             sinon.stub(Fetcher, 'fetch').resolves({
                 status: 200,
@@ -125,7 +129,7 @@ describe('TwitchSupervisor suite', () => {
         it('should not throw', async () => {
             sinon.restore();
             sinon
-                .stub(TwitchClient.prototype, 'connectToTwitch')
+                .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
             sinon.stub(Fetcher, 'fetch').resolves({
                 status: 200,
@@ -143,7 +147,7 @@ describe('TwitchSupervisor suite', () => {
         it('should not throw', async () => {
             sinon.restore();
             sinon
-                .stub(TwitchClient.prototype, 'connectToTwitch')
+                .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
             sinon.stub(Fetcher, 'fetch').resolves({
                 status: 200,

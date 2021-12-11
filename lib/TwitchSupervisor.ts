@@ -1,10 +1,10 @@
 import Fetcher from './Fetcher';
 import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
-import TwitchClient from './TwitchClient';
+import TwitchChatInterface from './TwitchChatInterface';
 import { ChatUserstate } from 'tmi.js';
 
 export default class TwitchSupervisor {
-    private client: TwitchClient;
+    private client: TwitchChatInterface;
     private readonly requestCount: number;
     private readonly validMessages: string[];
 
@@ -17,7 +17,7 @@ export default class TwitchSupervisor {
         joinTimeout: number,
         options: { requestCount: number; validMessages: string[] },
     ) {
-        this.client = new TwitchClient(username, password, joinTimeout);
+        this.client = new TwitchChatInterface(username, password, joinTimeout);
         this.requestCount = options.requestCount;
         this.validMessages = options.validMessages;
         this.client.setMessageHandler(this.onMessageHandler.bind(this));

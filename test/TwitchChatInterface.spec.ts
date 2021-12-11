@@ -3,15 +3,15 @@ import { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 import sinon from 'sinon';
-import TwitchClient from '../lib/TwitchClient';
+import TwitchChatInterface from '../lib/TwitchChatInterface';
 import tmiImport from 'tmi.js';
 import Logger from '../lib/Logger';
 import ExtremeTimer from '../lib/ExtremeTimer';
 
 const tmi = tmiImport.client.prototype;
-const twitchClient = new TwitchClient('user', 'pass', 0);
+const twitchClient = new TwitchChatInterface('user', 'pass', 0);
 
-describe('TwitchClient suite', () => {
+describe('TwitchChatInterface suite', () => {
     before(() => {
         sinon.stub(Logger);
         sinon.stub(ExtremeTimer);

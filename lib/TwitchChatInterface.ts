@@ -2,7 +2,7 @@ import tmi, { ChatUserstate } from 'tmi.js';
 import Logger from './Logger';
 import ExtremeTimer from './ExtremeTimer';
 
-export default class TwitchClient {
+export default class TwitchChatInterface {
     private readonly client: import('tmi.js').Client;
     private joinTimeout: number;
 
@@ -56,7 +56,7 @@ export default class TwitchClient {
     }
 
     public async joinChannels(channels: Array<string>): Promise<boolean> {
-        Logger.info('TwitchClient', 'Joining channels...');
+        Logger.info('TwitchChatInterface', 'Joining channels...');
 
         const results = {
             total: channels.length,
@@ -82,7 +82,7 @@ export default class TwitchClient {
 
             if (i % staggerAmount === 0 && i !== 0) {
                 Logger.info(
-                    'TwitchClient',
+                    'TwitchChatInterface',
                     '~' + (channels.length - i + 1) + ' seconds remaining...',
                 );
                 await ExtremeTimer.timeOut(staggerDelay);
@@ -91,7 +91,7 @@ export default class TwitchClient {
 
         if (results.joined >= 1) {
             Logger.info(
-                'TwitchClient',
+                'TwitchChatInterface',
                 '...Successfully joined ' +
                     results.joined +
                     ' out of ' +
@@ -100,13 +100,16 @@ export default class TwitchClient {
             );
             return true;
         } else {
-            Logger.info('TwitchClient', '...Could not join any channels');
+            Logger.info(
+                'TwitchChatInterface',
+                '...Could not join any channels',
+            );
             return false;
         }
     }
 
     public async leaveChannels(channels: Array<string>): Promise<boolean> {
-        Logger.info('TwitchClient', 'Leaving channels...');
+        Logger.info('TwitchChatInterface', 'Leaving channels...');
 
         const client = this.client;
         const promises = channels.map(async (channel) => {
@@ -128,7 +131,7 @@ export default class TwitchClient {
                 (x) => x.status === 'fulfilled',
             ).length;
             Logger.info(
-                'TwitchClient',
+                'TwitchChatInterface',
                 '...Successfully left ' +
                     results.left +
                     'out of ' +
@@ -137,7 +140,10 @@ export default class TwitchClient {
             );
             return true;
         } else {
-            Logger.info('TwitchClient', '...Could not leave any channels');
+            Logger.info(
+                'TwitchChatInterface',
+                '...Could not leave any channels',
+            );
             return false;
         }
     }

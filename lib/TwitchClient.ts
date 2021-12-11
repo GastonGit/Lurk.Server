@@ -1,4 +1,4 @@
-import tmi, { ChatUserstate } from './TMI';
+import tmi, { ChatUserstate } from 'tmi.js';
 import Logger from './Logger';
 import ExtremeTimer from './ExtremeTimer';
 

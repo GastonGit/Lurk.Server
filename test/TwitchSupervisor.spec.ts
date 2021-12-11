@@ -5,7 +5,7 @@ chai.use(chaiAsPromised);
 import sinon from 'sinon';
 import TwitchSupervisor from '../lib/TwitchSupervisor';
 import TwitchChatInterface from '../lib/TwitchChatInterface';
-import Fetcher from '../lib/Fetcher';
+import TwitchRequests from '../lib/TwitchRequests';
 
 const monitorTwitchChat = new TwitchSupervisor('user', 'pass', 0, {
     requestCount: 2,
@@ -15,11 +15,7 @@ const monitorTwitchChat = new TwitchSupervisor('user', 'pass', 0, {
 describe('TwitchSupervisor suite', () => {
     beforeEach(() => {
         sinon.stub(TwitchChatInterface.prototype);
-        sinon.stub(Fetcher, 'fetch').resolves({
-            status: 200,
-            data: [],
-            pagination: undefined,
-        });
+        sinon.stub(TwitchRequests, 'request100Streams');
     });
     afterEach(() => {
         sinon.restore();
@@ -30,14 +26,17 @@ describe('TwitchSupervisor suite', () => {
             sinon
                 .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
-            const fetch = sinon.stub(Fetcher, 'fetch');
-            fetch.onCall(0).resolves({
-                status: 200,
+            const request100Streams = sinon.stub(
+                TwitchRequests,
+                'request100Streams',
+            );
+            request100Streams.onCall(0).resolves({
+                success: true,
                 data: [{ user_login: 'Streamerzz', viewer_count: 200 }],
                 pagination: { cursor: 'testPag1' },
             });
-            fetch.onCall(1).resolves({
-                status: 200,
+            request100Streams.onCall(1).resolves({
+                success: true,
                 data: [{ user_login: 'Ztream', viewer_count: 100 }],
                 pagination: { cursor: 'testPag2' },
             });
@@ -50,8 +49,8 @@ describe('TwitchSupervisor suite', () => {
             sinon
                 .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
-            sinon.stub(Fetcher, 'fetch').resolves({
-                status: 404,
+            sinon.stub(TwitchRequests, 'request100Streams').resolves({
+                success: false,
                 data: [],
                 pagination: undefined,
             });
@@ -63,8 +62,8 @@ describe('TwitchSupervisor suite', () => {
     describe('updateChannels', () => {
         it('should return true if channels are updated', async () => {
             sinon.restore();
-            sinon.stub(Fetcher, 'fetch').resolves({
-                status: 200,
+            sinon.stub(TwitchRequests, 'request100Streams').resolves({
+                success: true,
                 data: [],
                 pagination: undefined,
             });
@@ -85,8 +84,8 @@ describe('TwitchSupervisor suite', () => {
             sinon
                 .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
-            sinon.stub(Fetcher, 'fetch').resolves({
-                status: 200,
+            sinon.stub(TwitchRequests, 'request100Streams').resolves({
+                success: true,
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });
@@ -110,8 +109,8 @@ describe('TwitchSupervisor suite', () => {
             sinon
                 .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
-            sinon.stub(Fetcher, 'fetch').resolves({
-                status: 200,
+            sinon.stub(TwitchRequests, 'request100Streams').resolves({
+                success: true,
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });
@@ -131,8 +130,8 @@ describe('TwitchSupervisor suite', () => {
             sinon
                 .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
-            sinon.stub(Fetcher, 'fetch').resolves({
-                status: 200,
+            sinon.stub(TwitchRequests, 'request100Streams').resolves({
+                success: true,
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });
@@ -149,8 +148,8 @@ describe('TwitchSupervisor suite', () => {
             sinon
                 .stub(TwitchChatInterface.prototype, 'connectToTwitch')
                 .resolves(true);
-            sinon.stub(Fetcher, 'fetch').resolves({
-                status: 200,
+            sinon.stub(TwitchRequests, 'request100Streams').resolves({
+                success: true,
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });

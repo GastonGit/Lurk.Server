@@ -1,6 +1,6 @@
-import Fetcher from './Fetcher';
 import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
 import TwitchChatInterface from './TwitchChatInterface';
+import TwitchRequests from './TwitchRequests';
 import { ChatUserstate } from 'tmi.js';
 
 export default class TwitchSupervisor {
@@ -164,7 +164,7 @@ export default class TwitchSupervisor {
 
         for (let i = 0; i < this.requestCount; i++) {
             const requestedStreams: fetchResult =
-                await TwitchSupervisor.request100Streams(pagination);
+                await TwitchRequests.request100Streams(pagination);
             const fetchedStreams: Array<FetchedStreams> = requestedStreams.data;
             success = requestedStreams.success;
 
@@ -192,22 +192,5 @@ export default class TwitchSupervisor {
         }
 
         return { success: success, streams: streams };
-    }
-
-    private static async request100Streams(
-        pagination: string | undefined,
-    ): Promise<fetchResult> {
-        let url = 'https://api.twitch.tv/helix/streams?first=100&language=en';
-        if (pagination) {
-            url += '&after=' + pagination;
-        }
-
-        const response = await Fetcher.fetch(url);
-
-        return {
-            success: response.status === 200,
-            data: response.data,
-            pagination: response.pagination,
-        };
     }
 }

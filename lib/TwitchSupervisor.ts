@@ -178,7 +178,7 @@ export default class TwitchSupervisor {
                     ) {
                         streams.push({
                             user_name: streamer.user_login.toLowerCase(),
-                            viewer_count: parseInt(streamer.viewer_count),
+                            viewer_count: streamer.viewer_count,
                             hits: 0,
                             cooldown: false,
                         });

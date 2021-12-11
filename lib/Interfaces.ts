@@ -21,7 +21,7 @@ export interface User {
 
 export interface FetchedStreams {
     user_login: string;
-    viewer_count: string;
+    viewer_count: number;
 }
 
 export interface Streams {

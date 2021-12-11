@@ -11,53 +11,51 @@ import ExtremeTimer from '../lib/ExtremeTimer';
 const tmi = tmiImport.client.prototype;
 const twitchClient = new TwitchChatInterface('user', 'pass', 0);
 
+let connect: sinon.SinonStub<any[], any> | sinon.SinonStub<unknown[], unknown>;
+let on: sinon.SinonStub<any[], any>;
+let join: sinon.SinonStub<any[], any>;
+let part: sinon.SinonStub<any[], any>;
+
 describe('TwitchChatInterface suite', () => {
     before(() => {
         sinon.stub(Logger);
         sinon.stub(ExtremeTimer);
     });
     beforeEach(() => {
-        sinon.stub(tmi);
+        connect = sinon.stub(tmi, 'connect').resolves(['server', 'port']);
+        on = sinon.stub(tmi, 'on').onCall(0).callsArg(1);
+        join = sinon.stub(tmi, 'join').resolves([]);
+        part = sinon.stub(tmi, 'part');
     });
     afterEach(() => {
-        sinon.restore();
+        connect.restore();
+        on.restore();
+        join.restore();
+        part.restore();
     });
     describe('connectToTwitch', () => {
         it('should return false connection fails', async () => {
-            sinon.restore();
-            const client = sinon.stub(tmi);
-            client.connect.rejects('Connection Error');
+            connect.restore();
+            connect = sinon.stub(tmi, 'connect').rejects('Connection Error');
 
             const result = await twitchClient.connectToTwitch([]);
             expect(result).to.be.false;
         });
         it('should return true if connection succeeds', async () => {
-            sinon.restore();
-            const client = sinon.stub(tmi);
-            client.connect.resolves(['server', 'port']);
-            client.on.onCall(0).callsArg(1);
-
             const result = await twitchClient.connectToTwitch([]);
             expect(result).to.be.true;
         });
     });
     describe('Disconnect event', () => {
         it('should throw', async () => {
-            sinon.restore();
-            const client = sinon.stub(tmi);
-            client.connect.resolves(['server', 'port']);
-            client.on.onCall(1).callsArg(1);
+            on.restore();
+            on = sinon.stub(tmi, 'on').onCall(1).callsArg(1);
 
             await expect(twitchClient.connectToTwitch([])).to.rejectedWith();
         });
     });
     describe('joinChannels', () => {
         it('should return true if all channels are joined', async () => {
-            sinon.restore();
-
-            const client = sinon.stub(tmi);
-            client.join.resolves([]);
-
             const result = await twitchClient.joinChannels([
                 'tester',
                 'testing',
@@ -76,9 +74,8 @@ describe('TwitchChatInterface suite', () => {
             expect(result).to.be.true;
         });
         it('should return false if joining is completely unsuccessful', async () => {
-            sinon.restore();
-            const client = sinon.stub(tmi);
-            client.join.rejects();
+            join.restore();
+            join = sinon.stub(tmi, 'join').rejects();
 
             const result = await twitchClient.joinChannels(['tester']);
 
@@ -87,9 +84,8 @@ describe('TwitchChatInterface suite', () => {
     });
     describe('leaveChannels', () => {
         it('should return true if all channels are left', async () => {
-            sinon.restore();
-            const client = sinon.stub(tmi);
-            client.part.resolves([]);
+            part.restore();
+            part = sinon.stub(tmi, 'part').resolves([]);
 
             const result = await twitchClient.leaveChannels([
                 'tester',
@@ -100,9 +96,8 @@ describe('TwitchChatInterface suite', () => {
             expect(result).to.be.true;
         });
         it('should return false if leaving completely is unsuccessful', async () => {
-            sinon.restore();
-            const client = sinon.stub(tmi);
-            client.part.rejects();
+            part.restore();
+            part = sinon.stub(tmi, 'part').rejects();
 
             const result = await twitchClient.leaveChannels(['tester']);
 

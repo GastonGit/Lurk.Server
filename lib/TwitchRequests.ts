@@ -1,4 +1,4 @@
-import { fetchResult, User } from './Interfaces';
+import { Clip, fetchResult, User } from './Interfaces';
 import Fetcher from './Fetcher';
 
 export default class TwitchRequests {
@@ -35,5 +35,13 @@ export default class TwitchRequests {
         } else {
             return undefined;
         }
+    }
+
+    public static async getClip(slug: string): Promise<Clip | undefined> {
+        const fetchResult = await Fetcher.fetch(
+            'https://api.twitch.tv/helix/clips?id=' + slug,
+        );
+
+        return fetchResult.data?.shift();
     }
 }

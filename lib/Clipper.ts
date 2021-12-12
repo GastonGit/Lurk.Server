@@ -1,10 +1,11 @@
 import Fetcher from './Fetcher';
-import { User, Clip } from './Interfaces';
+import { Clip } from './Interfaces';
 import Logger from './Logger';
+import TwitchRequests from './TwitchRequests';
 
 export default class Clipper {
     public async createClip(streamer: string): Promise<Clip | undefined> {
-        const user = await Clipper.getUser(streamer);
+        const user = await TwitchRequests.getUser(streamer);
         const userID = user?.id;
 
         if (typeof userID !== 'undefined') {
@@ -58,23 +59,5 @@ export default class Clipper {
         );
 
         return 'https://clips-media-assets2.twitch.tv/' + videoID + '.mp4';
-    }
-
-    /*
-        TODO: MIGHT NEED UPDATED/SPECIAL ACCESS TOKEN DURING FETCHING
-     */
-    private static async getUser(name: string): Promise<User | undefined> {
-        const url =
-            'https://api.twitch.tv/helix/users?' +
-            'login=' +
-            name.toLowerCase();
-
-        const fetchResult = await Fetcher.fetch(url);
-
-        if (fetchResult.status === 200) {
-            return fetchResult.data?.shift();
-        } else {
-            return undefined;
-        }
     }
 }

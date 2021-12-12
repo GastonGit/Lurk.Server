@@ -1,4 +1,4 @@
-import { fetchResult } from './Interfaces';
+import { fetchResult, User } from './Interfaces';
 import Fetcher from './Fetcher';
 
 export default class TwitchRequests {
@@ -17,5 +17,23 @@ export default class TwitchRequests {
             data: response.data,
             pagination: response.pagination,
         };
+    }
+
+    /*
+        TODO: MIGHT NEED UPDATED/SPECIAL ACCESS TOKEN DURING FETCHING
+     */
+    public static async getUser(name: string): Promise<User | undefined> {
+        const url =
+            'https://api.twitch.tv/helix/users?' +
+            'login=' +
+            name.toLowerCase();
+
+        const fetchResult = await Fetcher.fetch(url);
+
+        if (fetchResult.status === 200) {
+            return fetchResult.data?.shift();
+        } else {
+            return undefined;
+        }
     }
 }

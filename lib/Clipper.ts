@@ -33,23 +33,4 @@ export default class Clipper {
             return undefined;
         }
     }
-
-    public async getVideoUrl(slug: string): Promise<string | undefined> {
-        const clip = await TwitchRequests.getClip(slug);
-
-        if (typeof clip !== 'undefined') {
-            return Clipper.formatVideoUrl(clip.thumbnail_url);
-        } else {
-            return undefined;
-        }
-    }
-
-    private static formatVideoUrl(thumbnail_url: string): string {
-        const videoID = thumbnail_url.substring(
-            thumbnail_url.indexOf('.tv/') + 4,
-            thumbnail_url.indexOf('-preview'),
-        );
-
-        return 'https://clips-media-assets2.twitch.tv/' + videoID + '.mp4';
-    }
 }

@@ -6,6 +6,7 @@ import sinon from 'sinon';
 import TwitchSupervisor from '../lib/TwitchSupervisor';
 import TwitchChatInterface from '../lib/TwitchChatInterface';
 import TwitchRequests from '../lib/TwitchRequests';
+import Fetcher from '../lib/Fetcher';
 
 const monitorTwitchChat = new TwitchSupervisor('user', 'pass', 0, {
     requestCount: 2,
@@ -164,6 +165,17 @@ describe('TwitchSupervisor suite', () => {
                     true,
                 );
             }).to.not.throw();
+        });
+    });
+    describe('getVideoUrl', () => {
+        it('should return a string if TwitchRequests.getVideoUrl is successful', async () => {
+            sinon.restore();
+            sinon.stub(TwitchRequests, 'getVideoUrl').resolves('str');
+            const result = await monitorTwitchChat.getVideoUrl(
+                'this string does not matter here',
+            );
+
+            expect(result).to.be.equal('str');
         });
     });
 });

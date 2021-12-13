@@ -102,7 +102,7 @@ export default class HotClipsController {
 
     private addClipWithDelay(slug: string): void {
         setTimeout(async () => {
-            const url = await this.clipper.getVideoUrl(slug);
+            const url = await this.twitchSupervisor.getVideoUrl(slug);
 
             if (typeof url !== 'undefined') {
                 this.clipList.addClip(url);

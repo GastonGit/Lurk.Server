@@ -132,6 +132,10 @@ export default class TwitchSupervisor {
         }
     }
 
+    public async getVideoUrl(slug: string): Promise<string | undefined> {
+        return await TwitchRequests.getVideoUrl(slug);
+    }
+
     private async updateLists(): Promise<boolean> {
         const updateStreamListResult = await this.updateStreamList();
         this.updateCompactStreamList();

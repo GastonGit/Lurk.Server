@@ -65,7 +65,7 @@ describe('HotClipsController suite', () => {
             id: 'test',
         });
         getVideoUrl = sinon
-            .stub(Clipper.prototype, 'getVideoUrl')
+            .stub(TwitchSupervisor.prototype, 'getVideoUrl')
             .resolves('videoUrl');
         sinon.stub(Logger, 'error');
     });
@@ -181,7 +181,7 @@ describe('HotClipsController suite', () => {
             it('should not add undefined clips', async () => {
                 getVideoUrl.restore();
                 getVideoUrl = sinon
-                    .stub(Clipper.prototype, 'getVideoUrl')
+                    .stub(TwitchSupervisor.prototype, 'getVideoUrl')
                     .resolves(undefined);
 
                 await hotClipsController.start();

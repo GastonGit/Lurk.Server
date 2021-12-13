@@ -18,39 +18,6 @@ describe('Clipper suite', () => {
     afterEach(() => {
         sinon.restore();
     });
-    describe('Getting video url', () => {
-        it('should resolve', async () => {
-            sinon.stub(Fetcher, 'fetch').resolves({
-                status: 200,
-                data: [
-                    {
-                        thumbnail_url:
-                            'https://clips-media-assets2.twitch.tv/AT-cm%7C1140679825-preview-480x272.jpg',
-                    },
-                ] as Array<any>,
-                pagination: undefined,
-            });
-            const result = await clipper.getVideoUrl(
-                'this string does not matter here',
-            );
-
-            expect(result).to.be.equal(
-                'https://clips-media-assets2.twitch.tv/AT-cm%7C1140679825.mp4',
-            );
-        });
-        it('should return undefined if video url does not have a clip', async () => {
-            sinon.stub(Fetcher, 'fetch').resolves({
-                status: 200,
-                data: [] as Array<any>,
-                pagination: undefined,
-            });
-            const result = await clipper.getVideoUrl(
-                'this string does not matter here',
-            );
-
-            expect(result).to.be.equal(undefined);
-        });
-    });
     describe('Creating clips', () => {
         it('should return undefined if streamer can not be found', async () => {
             sinon.stub(Fetcher, 'fetch').resolves({

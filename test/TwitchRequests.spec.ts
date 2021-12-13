@@ -5,7 +5,7 @@ chai.use(chaiAsPromised);
 import sinon from 'sinon';
 import TwitchRequests from '../lib/TwitchRequests';
 import Fetcher from '../lib/Fetcher';
-import { FetcherResponse } from '../lib/Interfaces';
+import { Clip, FetcherResponse } from '../lib/Interfaces';
 
 let fetch: sinon.SinonStub<[url: string], Promise<FetcherResponse>>;
 
@@ -72,4 +72,79 @@ describe('TwitchRequests suite', () => {
             expect(result).to.be.equal(undefined);
         });
     });
+    describe('Creating clips', () => {
+        it('should return undefined if streamer can not be found', async () => {
+            fetch.restore();
+            fetch = sinon.stub(Fetcher, 'fetch').resolves({
+                status: 404,
+                data: [] as Array<any>,
+                pagination: undefined,
+            });
+            const result = await TwitchRequests.createClip(
+                'this string does not matter here',
+            );
+
+            expect(result).to.be.equal(undefined);
+        });
+        it('should return a Clip if streamer is found and clip creation is successful', async () => {
+            fetch.restore();
+            fetch = sinon.stub(Fetcher, 'fetch');
+
+            fetch.onCall(0).resolves({
+                status: 200,
+                data: [{ id: '1337' }] as Array<any>,
+                pagination: undefined,
+            });
+            fetch.onCall(1).resolves({
+                status: 200,
+                data: [clip1] as Array<any>,
+                pagination: undefined,
+            });
+
+            const result = await TwitchRequests.createClip(
+                'this string does not matter here',
+            );
+
+            expect(result).to.be.equal(clip1);
+        });
+        it('should return undefined if clip creation fetch does not work', async () => {
+            fetch.restore();
+            fetch = sinon.stub(Fetcher, 'fetch');
+
+            fetch.onCall(0).resolves({
+                status: 200,
+                data: [{ id: '1337' }] as Array<any>,
+                pagination: undefined,
+            });
+            fetch.onCall(1).resolves({
+                status: 503,
+                data: [] as Array<any>,
+                pagination: undefined,
+            });
+
+            const result = await TwitchRequests.createClip(
+                'this string does not matter here',
+            );
+
+            expect(result).to.be.equal(undefined);
+        });
+    });
 });
+
+const clip1: Clip = {
+    broadcaster_id: '',
+    broadcaster_name: '',
+    created_at: '',
+    creator_id: '',
+    creator_name: '',
+    duration: 0,
+    embed_url: '',
+    game_id: '',
+    language: '',
+    thumbnail_url: '',
+    title: '',
+    url: '',
+    video_id: '',
+    view_count: 0,
+    id: '1337',
+};

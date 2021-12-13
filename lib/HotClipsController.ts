@@ -1,13 +1,11 @@
 import { Clip } from './Interfaces';
 import ClipList from './ClipList';
 import TwitchSupervisor from './TwitchSupervisor';
-import Clipper from './Clipper';
 import config from 'config';
 import EventIntervals from './EventIntervals';
 
 export default class HotClipsController {
     private clipList: ClipList;
-    private clipper: Clipper;
     private twitchSupervisor: TwitchSupervisor;
     private eventIntervals: EventIntervals;
 
@@ -19,7 +17,6 @@ export default class HotClipsController {
 
     constructor() {
         this.clipList = new ClipList();
-        this.clipper = new Clipper();
         this.eventIntervals = new EventIntervals();
         this.twitchSupervisor = new TwitchSupervisor(
             process.env.BOT_NAME || '',
@@ -93,7 +90,9 @@ export default class HotClipsController {
         );
         this.twitchSupervisor.resetStreamer(streamer);
 
-        const clip: Clip | undefined = await this.clipper.createClip(streamer);
+        const clip: Clip | undefined = await this.twitchSupervisor.createClip(
+            streamer,
+        );
 
         if (typeof clip !== 'undefined') {
             this.addClipWithDelay(clip.id);

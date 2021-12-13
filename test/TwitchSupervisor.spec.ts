@@ -7,6 +7,7 @@ import TwitchSupervisor from '../lib/TwitchSupervisor';
 import TwitchChatInterface from '../lib/TwitchChatInterface';
 import TwitchRequests from '../lib/TwitchRequests';
 import Fetcher from '../lib/Fetcher';
+import { Clip } from '../lib/Interfaces';
 
 const monitorTwitchChat = new TwitchSupervisor('user', 'pass', 0, {
     requestCount: 2,
@@ -178,4 +179,33 @@ describe('TwitchSupervisor suite', () => {
             expect(result).to.be.equal('str');
         });
     });
+    describe('createClip', () => {
+        it('should return a clip if TwitchRequests.createClip is successful', async () => {
+            sinon.restore();
+            sinon.stub(TwitchRequests, 'createClip').resolves(clip1);
+            const result = await monitorTwitchChat.createClip(
+                'this string does not matter here',
+            );
+
+            expect(result).to.be.equal(clip1);
+        });
+    });
 });
+
+const clip1: Clip = {
+    broadcaster_id: '',
+    broadcaster_name: '',
+    created_at: '',
+    creator_id: '',
+    creator_name: '',
+    duration: 0,
+    embed_url: '',
+    game_id: '',
+    language: '',
+    thumbnail_url: '',
+    title: '',
+    url: '',
+    video_id: '',
+    view_count: 0,
+    id: '1337',
+};

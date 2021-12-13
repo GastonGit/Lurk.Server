@@ -6,7 +6,6 @@ import sinon from 'sinon';
 import HotClipsController from '../lib/HotClipsController';
 import ClipList from '../lib/ClipList';
 import TwitchSupervisor from '../lib/TwitchSupervisor';
-import Clipper from '../lib/Clipper';
 import Logger from '../lib/Logger';
 import { Clip, Stream } from '../lib/Interfaces';
 import EventIntervals from '../lib/EventIntervals';
@@ -47,23 +46,25 @@ describe('HotClipsController suite', () => {
         const testArray = ['test'];
         testArray.length = 21;
         getList = sinon.stub(ClipList.prototype, 'getList').returns(testArray);
-        createClip = sinon.stub(Clipper.prototype, 'createClip').resolves({
-            broadcaster_id: '',
-            broadcaster_name: '',
-            created_at: '',
-            creator_id: '',
-            creator_name: '',
-            duration: 0,
-            embed_url: '',
-            game_id: '',
-            language: '',
-            thumbnail_url: '',
-            title: '',
-            url: '',
-            video_id: '',
-            view_count: 0,
-            id: 'test',
-        });
+        createClip = sinon
+            .stub(TwitchSupervisor.prototype, 'createClip')
+            .resolves({
+                broadcaster_id: '',
+                broadcaster_name: '',
+                created_at: '',
+                creator_id: '',
+                creator_name: '',
+                duration: 0,
+                embed_url: '',
+                game_id: '',
+                language: '',
+                thumbnail_url: '',
+                title: '',
+                url: '',
+                video_id: '',
+                view_count: 0,
+                id: 'test',
+            });
         getVideoUrl = sinon
             .stub(TwitchSupervisor.prototype, 'getVideoUrl')
             .resolves('videoUrl');
@@ -109,7 +110,7 @@ describe('HotClipsController suite', () => {
             it('should throw if clipIt fails', async () => {
                 createClip.restore();
                 createClip = sinon
-                    .stub(Clipper.prototype, 'createClip')
+                    .stub(TwitchSupervisor.prototype, 'createClip')
                     .throws();
 
                 expect(async () => {
@@ -153,7 +154,7 @@ describe('HotClipsController suite', () => {
             it('should throw if clipIt fails', async () => {
                 createClip.restore();
                 createClip = sinon
-                    .stub(Clipper.prototype, 'createClip')
+                    .stub(TwitchSupervisor.prototype, 'createClip')
                     .throws();
 
                 expect(async () => {
@@ -165,7 +166,7 @@ describe('HotClipsController suite', () => {
             it('should add undefined clips', async () => {
                 createClip.restore();
                 createClip = sinon
-                    .stub(Clipper.prototype, 'createClip')
+                    .stub(TwitchSupervisor.prototype, 'createClip')
                     .resolves(undefined);
 
                 await hotClipsController.start();

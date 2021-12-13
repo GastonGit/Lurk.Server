@@ -1,4 +1,10 @@
-import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
+import {
+    Clip,
+    FetchedStreams,
+    fetchResult,
+    Stream,
+    Streams,
+} from './Interfaces';
 import TwitchChatInterface from './TwitchChatInterface';
 import TwitchRequests from './TwitchRequests';
 import { ChatUserstate } from 'tmi.js';
@@ -134,6 +140,10 @@ export default class TwitchSupervisor {
 
     public async getVideoUrl(slug: string): Promise<string | undefined> {
         return await TwitchRequests.getVideoUrl(slug);
+    }
+
+    public async createClip(streamer: string): Promise<Clip | undefined> {
+        return await TwitchRequests.createClip(streamer);
     }
 
     private async updateLists(): Promise<boolean> {

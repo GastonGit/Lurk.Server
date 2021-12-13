@@ -8,7 +8,7 @@ import EventIntervals from './EventIntervals';
 export default class HotClipsController {
     private clipList: ClipList;
     private clipper: Clipper;
-    private monitorTwitchChat: TwitchSupervisor;
+    private twitchSupervisor: TwitchSupervisor;
     private eventIntervals: EventIntervals;
 
     private readonly cooldownLengthInSeconds: number;
@@ -21,7 +21,7 @@ export default class HotClipsController {
         this.clipList = new ClipList();
         this.clipper = new Clipper();
         this.eventIntervals = new EventIntervals();
-        this.monitorTwitchChat = new TwitchSupervisor(
+        this.twitchSupervisor = new TwitchSupervisor(
             process.env.BOT_NAME || '',
             process.env.BOT_AUTH || '',
             config.get('joinTimeout'),
@@ -40,14 +40,14 @@ export default class HotClipsController {
     }
 
     public async start(): Promise<void> {
-        const setupSuccess = await this.monitorTwitchChat.setupConnection();
+        const setupSuccess = await this.twitchSupervisor.setupConnection();
 
         if (setupSuccess) {
             this.eventIntervals.createConstrainedInterval(() => {
                 this.checkForSpikes(this.spikeValue);
             }, parseInt(config.get('spikeTime')));
             this.eventIntervals.createConstrainedInterval(() => {
-                this.monitorTwitchChat.decreaseHitsByAmount(this.reduceValue);
+                this.twitchSupervisor.decreaseHitsByAmount(this.reduceValue);
             }, parseInt(config.get('reduceTime')));
 
             this.eventIntervals.startIndependentInterval(
@@ -61,7 +61,7 @@ export default class HotClipsController {
             );
 
             this.eventIntervals.startSuperInterval(async () => {
-                await this.monitorTwitchChat.updateChannels;
+                await this.twitchSupervisor.updateChannels;
             }, parseInt(config.get('updateTimeInMinutes')) * 60000);
         } else {
             throw Error('Connection setup failed');
@@ -73,7 +73,7 @@ export default class HotClipsController {
     }
 
     private checkForSpikes(spike: number): void {
-        const list = [...this.monitorTwitchChat.getStreamList()];
+        const list = [...this.twitchSupervisor.getStreamList()];
 
         for (let i = 0; i < list.length; i++) {
             if (!list[i].cooldown) {
@@ -87,11 +87,11 @@ export default class HotClipsController {
     }
 
     private async clipIt(streamer: string): Promise<void> {
-        this.monitorTwitchChat.cooldownStreamer(
+        this.twitchSupervisor.cooldownStreamer(
             streamer,
             this.cooldownLengthInSeconds,
         );
-        this.monitorTwitchChat.resetStreamer(streamer);
+        this.twitchSupervisor.resetStreamer(streamer);
 
         const clip: Clip | undefined = await this.clipper.createClip(streamer);
 

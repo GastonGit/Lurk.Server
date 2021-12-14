@@ -1,4 +1,4 @@
-import fetch, { Response } from 'node-fetch';
+import nodeFetch, { Response } from 'node-fetch';
 import { FetcherResponse } from './Interfaces';
 
 export default class Fetcher {
@@ -6,8 +6,8 @@ export default class Fetcher {
     TODO: CLIENT_APP_ACCESS_TOKEN MIGHT NEED TO BE REFRESHED EVERY CALL
      (SEE FOR MORE: https://github.com/GastonGit/Hot-Twitch-Clips/commit/a2f77b0e19785414eb0693e01306aff074431441)
  */
-    private static async fetchWrapper(url: string): Promise<Response> {
-        return await fetch(url, {
+    private static async nodeFetchWrapper(url: string): Promise<Response> {
+        return await nodeFetch(url, {
             method: 'get',
             headers: {
                 'Client-ID': process.env.CLIENT_ID || '',
@@ -32,7 +32,7 @@ export default class Fetcher {
         } as FetcherResponse;
 
         try {
-            const response = await this.fetchWrapper(url);
+            const response = await this.nodeFetchWrapper(url);
             const json = await response.json();
 
             fullResponse.status = response.status;

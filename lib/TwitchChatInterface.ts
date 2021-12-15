@@ -83,7 +83,9 @@ export default class TwitchChatInterface {
             if (i % staggerAmount === 0 && i !== 0) {
                 Logger.info(
                     'TwitchChatInterface',
-                    '~' + (channels.length - i + 1) + ' seconds remaining...',
+                    '~' +
+                        Math.ceil((channels.length - i) / 10) * 10 +
+                        ' seconds remaining...',
                 );
                 await ExtremeTimer.timeOut(staggerDelay);
             }

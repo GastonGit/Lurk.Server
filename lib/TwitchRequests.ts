@@ -15,18 +15,14 @@ export default class TwitchRequests {
                     userID.toLowerCase(),
             );
 
-            if (
-                (fetchResponse.status === 200 ||
-                    fetchResponse.status === 202) &&
-                typeof fetchResponse.data !== 'undefined'
-            ) {
+            if (fetchResponse.ok && typeof fetchResponse.data !== 'undefined') {
                 Logger.success('createClip', streamer);
                 return fetchResponse.data[0];
             } else {
                 Logger.failure(
                     'createClip',
                     streamer,
-                    'StatusCode=' + fetchResponse.status,
+                    'fetch was unsuccessful',
                 );
                 return undefined;
             }
@@ -46,7 +42,7 @@ export default class TwitchRequests {
         const response = await Fetcher.fetch(url);
 
         return {
-            success: response.status === 200,
+            success: response.ok,
             data: response.data,
             pagination: response.pagination,
         };
@@ -63,7 +59,7 @@ export default class TwitchRequests {
 
         const fetchResult = await Fetcher.fetch(url);
 
-        if (fetchResult.status === 200) {
+        if (fetchResult.ok) {
             return fetchResult.data?.shift();
         } else {
             return undefined;

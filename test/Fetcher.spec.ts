@@ -16,7 +16,7 @@ describe('Fetcher suite', function () {
                     data: [],
                     pagination: undefined,
                 }),
-            status: 200,
+            ok: true,
         });
     });
     afterEach(() => {
@@ -25,14 +25,14 @@ describe('Fetcher suite', function () {
     describe('Fetch', () => {
         it('should return a FetcherResponse', async () => {
             const result = await Fetcher.fetch('test_url');
-            expect(result).to.have.keys('status', 'data', 'pagination');
+            expect(result).to.have.keys('ok', 'data', 'pagination');
         });
         it('should return predicted response during development', async () => {
             process.env.NODE_ENV = 'development';
 
             const result = await Fetcher.fetch('test_url');
             expect(result).to.deep.equal({
-                status: 200,
+                ok: true,
                 data: [],
                 pagination: undefined,
             });
@@ -49,12 +49,12 @@ describe('Fetcher suite', function () {
                         data: undefined,
                         pagination: undefined,
                     }),
-                status: 200,
+                ok: true,
             });
             const result = await Fetcher.fetch('test_url');
 
             expect(result).to.deep.equal({
-                status: 200,
+                ok: true,
                 data: [],
                 pagination: undefined,
             });
@@ -63,7 +63,7 @@ describe('Fetcher suite', function () {
             sinon.restore();
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            sinon.stub(fetch, 'Promise').resolves({ status: 200 });
+            sinon.stub(fetch, 'Promise').resolves({ ok: true });
 
             await expect(Fetcher.fetch('test_url')).to.be.rejectedWith(
                 'fetcherFetch :: UNABLE TO COMPLETE FETCH :: TypeError: response.json is not a function',

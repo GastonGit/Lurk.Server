@@ -12,7 +12,7 @@ let fetch: sinon.SinonStub<[url: string], Promise<FetcherResponse>>;
 describe('TwitchRequests suite', () => {
     beforeEach(() => {
         fetch = sinon.stub(Fetcher, 'fetch').resolves({
-            status: 200,
+            ok: true,
             data: [],
             pagination: undefined,
         });
@@ -41,7 +41,7 @@ describe('TwitchRequests suite', () => {
         it('should resolve', async () => {
             fetch.restore();
             fetch = sinon.stub(Fetcher, 'fetch').resolves({
-                status: 200,
+                ok: true,
                 data: [
                     {
                         thumbnail_url:
@@ -61,7 +61,7 @@ describe('TwitchRequests suite', () => {
         it('should return undefined if video url does not have a clip', async () => {
             fetch.restore();
             fetch = sinon.stub(Fetcher, 'fetch').resolves({
-                status: 200,
+                ok: true,
                 data: [] as Array<any>,
                 pagination: undefined,
             });
@@ -76,7 +76,7 @@ describe('TwitchRequests suite', () => {
         it('should return undefined if streamer can not be found', async () => {
             fetch.restore();
             fetch = sinon.stub(Fetcher, 'fetch').resolves({
-                status: 404,
+                ok: false,
                 data: [] as Array<any>,
                 pagination: undefined,
             });
@@ -91,12 +91,12 @@ describe('TwitchRequests suite', () => {
             fetch = sinon.stub(Fetcher, 'fetch');
 
             fetch.onCall(0).resolves({
-                status: 200,
+                ok: true,
                 data: [{ id: '1337' }] as Array<any>,
                 pagination: undefined,
             });
             fetch.onCall(1).resolves({
-                status: 200,
+                ok: true,
                 data: [clip1] as Array<any>,
                 pagination: undefined,
             });
@@ -112,12 +112,12 @@ describe('TwitchRequests suite', () => {
             fetch = sinon.stub(Fetcher, 'fetch');
 
             fetch.onCall(0).resolves({
-                status: 200,
+                ok: true,
                 data: [{ id: '1337' }] as Array<any>,
                 pagination: undefined,
             });
             fetch.onCall(1).resolves({
-                status: 503,
+                ok: false,
                 data: [] as Array<any>,
                 pagination: undefined,
             });

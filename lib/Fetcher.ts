@@ -19,14 +19,14 @@ export default class Fetcher {
     public static async fetch(url: string): Promise<FetcherResponse> {
         if (process.env.NODE_ENV === 'development') {
             return {
-                status: 200,
+                ok: true,
                 data: [] as Array<any>,
                 pagination: undefined,
             } as FetcherResponse;
         }
 
         const fullResponse = {
-            status: -1,
+            ok: false,
             data: [],
             pagination: undefined,
         } as FetcherResponse;
@@ -35,7 +35,7 @@ export default class Fetcher {
             const response = await this.nodeFetchWrapper(url);
             const json = await response.json();
 
-            fullResponse.status = response.status;
+            fullResponse.ok = response.ok;
             fullResponse.data = (json.data as Array<any>) || [];
             fullResponse.pagination = json.pagination || undefined;
         } catch (err) {

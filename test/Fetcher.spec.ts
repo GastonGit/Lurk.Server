@@ -27,26 +27,14 @@ describe('Fetcher suite', function () {
             const result = await Fetcher.fetch('test_url');
             expect(result).to.have.keys('ok', 'data', 'pagination');
         });
-        it('should return predicted response during development', async () => {
-            process.env.NODE_ENV = 'development';
-
-            const result = await Fetcher.fetch('test_url');
-            expect(result).to.deep.equal({
-                ok: true,
-                data: [],
-                pagination: undefined,
-            });
-            delete process.env.NODE_ENV;
-            process.env.NODE_ENV = 'test';
-        });
-        it('should return an empty array for data key if data was undefined', async () => {
+        it('should return true for successful requests', async () => {
             sinon.restore();
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             sinon.stub(fetch, 'Promise').resolves({
                 json: () =>
                     Promise.resolve({
-                        data: undefined,
+                        data: [],
                         pagination: undefined,
                     }),
                 ok: true,
@@ -59,14 +47,46 @@ describe('Fetcher suite', function () {
                 pagination: undefined,
             });
         });
-        it('should throw if response does not contain a json key function', async () => {
+        it('should return predicted response during development', async () => {
+            process.env.NODE_ENV = 'development';
+
+            const result = await Fetcher.fetch('test_url');
+            expect(result).to.deep.equal({
+                ok: true,
+                data: [],
+                pagination: undefined,
+            });
+            delete process.env.NODE_ENV;
+            process.env.NODE_ENV = 'test';
+        });
+        it('should return false if node-fetch returns a bad status code', async () => {
             sinon.restore();
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            sinon.stub(fetch, 'Promise').resolves({ ok: true });
+            sinon.stub(fetch, 'Promise').resolves({
+                json: () =>
+                    Promise.resolve({
+                        data: undefined,
+                        pagination: undefined,
+                    }),
+                status: 503,
+            });
+            const result = await Fetcher.fetch('test_url');
+
+            expect(result).to.deep.equal({
+                ok: false,
+                data: [],
+                pagination: undefined,
+            });
+        });
+        it('should throw if node-fetch encounters an error', async () => {
+            sinon.restore();
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            sinon.stub(fetch, 'Promise').throws('BAD');
 
             await expect(Fetcher.fetch('test_url')).to.be.rejectedWith(
-                'fetcherFetch :: UNABLE TO COMPLETE FETCH :: TypeError: response.json is not a function',
+                'fetcherFetch :: UNABLE TO COMPLETE FETCH :: BAD',
             );
         });
     });

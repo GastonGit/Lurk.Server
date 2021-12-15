@@ -1,5 +1,6 @@
 import nodeFetch, { Response } from 'node-fetch';
 import { FetcherResponse } from './Interfaces';
+import Logger from './Logger';
 
 export default class Fetcher {
     /*
@@ -25,23 +26,26 @@ export default class Fetcher {
             } as FetcherResponse;
         }
 
-        const fullResponse = {
-            ok: false,
-            data: [],
-            pagination: undefined,
-        } as FetcherResponse;
-
         try {
             const response = await this.nodeFetchWrapper(url);
-            const json = await response.json();
 
-            fullResponse.ok = response.ok;
-            fullResponse.data = (json.data as Array<any>) || [];
-            fullResponse.pagination = json.pagination || undefined;
+            if (response.ok) {
+                const json = await response.json();
+                return {
+                    ok: true,
+                    data: json.data,
+                    pagination: json.pagination,
+                };
+            } else {
+                Logger.failure(
+                    'fetcherFetch',
+                    'unexpected response status code',
+                    response.status.toString(),
+                );
+                return { ok: false, data: [], pagination: undefined };
+            }
         } catch (err) {
             throw Error('fetcherFetch :: UNABLE TO COMPLETE FETCH :: ' + err);
         }
-
-        return fullResponse;
     }
 }

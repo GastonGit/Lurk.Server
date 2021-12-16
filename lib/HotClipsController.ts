@@ -90,11 +90,9 @@ export default class HotClipsController {
         );
         this.twitchSupervisor.resetStreamer(streamer);
 
-        const clip: Clip | undefined = await this.twitchSupervisor.createClip(
-            streamer,
-        );
+        const clip = await this.twitchSupervisor.createClip(streamer);
 
-        if (typeof clip !== 'undefined') {
+        if (clip !== null) {
             this.addClipWithDelay(clip.id);
         }
     }
@@ -103,7 +101,7 @@ export default class HotClipsController {
         setTimeout(async () => {
             const url = await this.twitchSupervisor.getVideoUrl(slug);
 
-            if (typeof url !== 'undefined') {
+            if (url !== null) {
                 this.clipList.addClip(url);
             }
         }, this.addClipDelay);

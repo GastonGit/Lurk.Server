@@ -13,8 +13,8 @@ import EventIntervals from '../lib/EventIntervals';
 let hotClipsController: HotClipsController;
 
 let clock: sinon.SinonFakeTimers;
-let getVideoUrl: sinon.SinonStub<[slug: string], Promise<string | undefined>>;
-let createClip: sinon.SinonStub<[streamer: string], Promise<Clip | undefined>>;
+let getVideoUrl: sinon.SinonStub<[string], Promise<string | null>>;
+let createClip: sinon.SinonStub<[string], Promise<Clip | null>>;
 let getStreamList: sinon.SinonStub<[], Stream[]>;
 let getList: sinon.SinonStub<[], string[]>;
 
@@ -163,14 +163,15 @@ describe('HotClipsController suite', () => {
             });
         });
         describe('clipIt', () => {
-            it('should add undefined clips', async () => {
+            it('should not throw if clip creation returns null', async () => {
                 createClip.restore();
                 createClip = sinon
                     .stub(TwitchSupervisor.prototype, 'createClip')
-                    .resolves(undefined);
+                    .resolves(null);
 
-                await hotClipsController.start();
-
+                await expect(
+                    hotClipsController.start(),
+                ).to.not.be.rejectedWith();
                 clock.tick(100);
             });
         });
@@ -179,11 +180,11 @@ describe('HotClipsController suite', () => {
                 await hotClipsController.start();
                 await expect(clock.tickAsync(10000)).to.not.be.rejectedWith();
             });
-            it('should not add undefined clips', async () => {
+            it('should not throw if video url is null', async () => {
                 getVideoUrl.restore();
                 getVideoUrl = sinon
                     .stub(TwitchSupervisor.prototype, 'getVideoUrl')
-                    .resolves(undefined);
+                    .resolves(null);
 
                 await hotClipsController.start();
                 await expect(clock.tickAsync(100)).to.not.be.rejectedWith();

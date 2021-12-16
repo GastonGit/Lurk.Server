@@ -138,11 +138,11 @@ export default class TwitchSupervisor {
         }
     }
 
-    public async getVideoUrl(slug: string): Promise<string | undefined> {
+    public async getVideoUrl(slug: string): Promise<string | null> {
         return await TwitchRequests.getVideoUrl(slug);
     }
 
-    public async createClip(streamer: string): Promise<Clip | undefined> {
+    public async createClip(streamer: string): Promise<Clip | null> {
         return await TwitchRequests.createClip(streamer);
     }
 

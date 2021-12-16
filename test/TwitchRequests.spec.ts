@@ -58,22 +58,22 @@ describe('TwitchRequests suite', () => {
                 'https://clips-media-assets2.twitch.tv/AT-cm%7C1140679825.mp4',
             );
         });
-        it('should return undefined if video url does not have a clip', async () => {
+        it('should return null if video url does not have a clip', async () => {
             fetch.restore();
             fetch = sinon.stub(Fetcher, 'fetch').resolves({
                 ok: true,
-                data: [] as Array<any>,
+                data: [],
                 pagination: undefined,
             });
             const result = await TwitchRequests.getVideoUrl(
                 'this string does not matter here',
             );
 
-            expect(result).to.be.equal(undefined);
+            expect(result).to.be.equal(null);
         });
     });
     describe('Creating clips', () => {
-        it('should return undefined if streamer can not be found', async () => {
+        it('should return null if streamer can not be found', async () => {
             fetch.restore();
             fetch = sinon.stub(Fetcher, 'fetch').resolves({
                 ok: false,
@@ -84,7 +84,7 @@ describe('TwitchRequests suite', () => {
                 'this string does not matter here',
             );
 
-            expect(result).to.be.equal(undefined);
+            expect(result).to.be.equal(null);
         });
         it('should return a Clip if streamer is found and clip creation is successful', async () => {
             fetch.restore();
@@ -107,7 +107,7 @@ describe('TwitchRequests suite', () => {
 
             expect(result).to.be.equal(clip1);
         });
-        it('should return undefined if clip creation fetch does not work', async () => {
+        it('should return null if clip creation fetch does not work', async () => {
             fetch.restore();
             fetch = sinon.stub(Fetcher, 'fetch');
 
@@ -126,7 +126,7 @@ describe('TwitchRequests suite', () => {
                 'this string does not matter here',
             );
 
-            expect(result).to.be.equal(undefined);
+            expect(result).to.be.equal(null);
         });
     });
 });

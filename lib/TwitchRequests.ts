@@ -3,9 +3,7 @@ import Fetcher from './Fetcher';
 import Logger from './Logger';
 
 export default class TwitchRequests {
-    public static async createClip(
-        streamer: string,
-    ): Promise<Clip | undefined> {
+    public static async createClip(streamer: string): Promise<Clip | null> {
         const user = await TwitchRequests.getUser(streamer);
         const userID = user?.id;
 
@@ -24,10 +22,10 @@ export default class TwitchRequests {
                     streamer,
                     'fetch was unsuccessful',
                 );
-                return undefined;
+                return null;
             }
         } else {
-            return undefined;
+            return null;
         }
     }
 
@@ -51,7 +49,7 @@ export default class TwitchRequests {
     /*
         TODO: MIGHT NEED UPDATED/SPECIAL ACCESS TOKEN DURING FETCHING
      */
-    public static async getUser(name: string): Promise<User | undefined> {
+    public static async getUser(name: string): Promise<User | null> {
         const url =
             'https://api.twitch.tv/helix/users?' +
             'login=' +
@@ -62,25 +60,25 @@ export default class TwitchRequests {
         if (fetchResult.ok) {
             return fetchResult.data?.shift();
         } else {
-            return undefined;
+            return null;
         }
     }
 
-    public static async getClip(slug: string): Promise<Clip | undefined> {
+    public static async getClip(slug: string): Promise<Clip | null> {
         const fetchResult = await Fetcher.fetch(
             'https://api.twitch.tv/helix/clips?id=' + slug,
         );
 
-        return fetchResult.data?.shift();
+        return fetchResult.data?.shift() || null;
     }
 
-    public static async getVideoUrl(slug: string): Promise<string | undefined> {
+    public static async getVideoUrl(slug: string): Promise<string | null> {
         const clip = await TwitchRequests.getClip(slug);
 
-        if (typeof clip !== 'undefined') {
+        if (clip !== null) {
             return TwitchRequests.formatVideoUrl(clip.thumbnail_url);
         } else {
-            return undefined;
+            return null;
         }
     }
 

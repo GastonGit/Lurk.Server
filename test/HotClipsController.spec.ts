@@ -7,14 +7,17 @@ import HotClipsController from '../lib/HotClipsController';
 import ClipList from '../lib/ClipList';
 import TwitchSupervisor from '../lib/TwitchSupervisor';
 import Logger from '../lib/Logger';
-import { Clip, Stream } from '../lib/Interfaces';
+import { Stream } from '../lib/Interfaces';
 import EventIntervals from '../lib/EventIntervals';
 
 let hotClipsController: HotClipsController;
 
 let clock: sinon.SinonFakeTimers;
 let getVideoUrl: sinon.SinonStub<[string], Promise<string | null>>;
-let createClip: sinon.SinonStub<[string], Promise<Clip | null>>;
+let createClip: sinon.SinonStub<
+    [string],
+    Promise<{ id: string; edit_url: string } | null>
+>;
 let getStreamList: sinon.SinonStub<[], Stream[]>;
 let getList: sinon.SinonStub<[], string[]>;
 
@@ -48,23 +51,7 @@ describe('HotClipsController suite', () => {
         getList = sinon.stub(ClipList.prototype, 'getList').returns(testArray);
         createClip = sinon
             .stub(TwitchSupervisor.prototype, 'createClip')
-            .resolves({
-                broadcaster_id: '',
-                broadcaster_name: '',
-                created_at: '',
-                creator_id: '',
-                creator_name: '',
-                duration: 0,
-                embed_url: '',
-                game_id: '',
-                language: '',
-                thumbnail_url: '',
-                title: '',
-                url: '',
-                video_id: '',
-                view_count: 0,
-                id: 'test',
-            });
+            .resolves({ id: 'ccID', edit_url: 'ccEU' });
         getVideoUrl = sinon
             .stub(TwitchSupervisor.prototype, 'getVideoUrl')
             .resolves('videoUrl');

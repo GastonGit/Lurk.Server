@@ -142,7 +142,9 @@ export default class TwitchSupervisor {
         return await TwitchRequests.getVideoUrl(slug);
     }
 
-    public async createClip(streamer: string): Promise<Clip | null> {
+    public async createClip(
+        streamer: string,
+    ): Promise<{ id: string; edit_url: string } | null> {
         return await TwitchRequests.createClip(streamer);
     }
 

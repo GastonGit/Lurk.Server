@@ -86,7 +86,7 @@ describe('TwitchRequests suite', () => {
 
             expect(result).to.be.equal(null);
         });
-        it('should return a Clip if streamer is found and clip creation is successful', async () => {
+        it('should return strings if streamer is found and clip creation is successful', async () => {
             fetch.restore();
             fetch = sinon.stub(Fetcher, 'fetch');
 
@@ -97,7 +97,7 @@ describe('TwitchRequests suite', () => {
             });
             fetch.onCall(1).resolves({
                 ok: true,
-                data: [clip1] as Array<any>,
+                data: [{ id: 'test', edit_url: 'test' }] as Array<any>,
                 pagination: undefined,
             });
 
@@ -105,7 +105,7 @@ describe('TwitchRequests suite', () => {
                 'this string does not matter here',
             );
 
-            expect(result).to.be.equal(clip1);
+            expect(result).to.deep.equal({ id: 'test', edit_url: 'test' });
         });
         it('should return null if clip creation fetch does not work', async () => {
             fetch.restore();
@@ -130,21 +130,3 @@ describe('TwitchRequests suite', () => {
         });
     });
 });
-
-const clip1: Clip = {
-    broadcaster_id: '',
-    broadcaster_name: '',
-    created_at: '',
-    creator_id: '',
-    creator_name: '',
-    duration: 0,
-    embed_url: '',
-    game_id: '',
-    language: '',
-    thumbnail_url: '',
-    title: '',
-    url: '',
-    video_id: '',
-    view_count: 0,
-    id: '1337',
-};

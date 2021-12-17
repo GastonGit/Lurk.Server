@@ -3,7 +3,9 @@ import Fetcher from './Fetcher';
 import Logger from './Logger';
 
 export default class TwitchRequests {
-    public static async createClip(streamer: string): Promise<Clip | null> {
+    public static async createClip(
+        streamer: string,
+    ): Promise<{ id: string; edit_url: string } | null> {
         const user = await TwitchRequests.getUser(streamer);
         const userID = user?.id;
 

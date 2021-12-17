@@ -182,30 +182,14 @@ describe('TwitchSupervisor suite', () => {
     describe('createClip', () => {
         it('should return a clip if TwitchRequests.createClip is successful', async () => {
             sinon.restore();
-            sinon.stub(TwitchRequests, 'createClip').resolves(clip1);
+            sinon
+                .stub(TwitchRequests, 'createClip')
+                .resolves({ id: 'test', edit_url: 'test' });
             const result = await monitorTwitchChat.createClip(
                 'this string does not matter here',
             );
 
-            expect(result).to.be.equal(clip1);
+            expect(result).to.deep.equal({ id: 'test', edit_url: 'test' });
         });
     });
 });
-
-const clip1: Clip = {
-    broadcaster_id: '',
-    broadcaster_name: '',
-    created_at: '',
-    creator_id: '',
-    creator_name: '',
-    duration: 0,
-    embed_url: '',
-    game_id: '',
-    language: '',
-    thumbnail_url: '',
-    title: '',
-    url: '',
-    video_id: '',
-    view_count: 0,
-    id: '1337',
-};

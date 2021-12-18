@@ -1,4 +1,3 @@
-import { Clip } from './Interfaces';
 import ClipList from './ClipList';
 import TwitchSupervisor from './TwitchSupervisor';
 import config from 'config';

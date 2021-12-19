@@ -24,7 +24,7 @@ export default class TwitchChatInterface {
 
     public async connectToTwitch(channelList: Array<string>): Promise<boolean> {
         this.client.on('connected', () => {
-            Logger.success('TMI', 'CONNECTED');
+            Logger.success('TMI.JS', 'CONNECTED');
             this.joinChannels(channelList);
         });
 

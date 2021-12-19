@@ -1,10 +1,4 @@
-import {
-    Clip,
-    FetchedStreams,
-    fetchResult,
-    Stream,
-    Streams,
-} from './Interfaces';
+import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
 import TwitchChatInterface from './TwitchChatInterface';
 import TwitchRequests from './TwitchRequests';
 import { ChatUserstate } from 'tmi.js';

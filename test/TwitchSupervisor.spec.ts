@@ -6,8 +6,6 @@ import sinon from 'sinon';
 import TwitchSupervisor from '../lib/TwitchSupervisor';
 import TwitchChatInterface from '../lib/TwitchChatInterface';
 import TwitchRequests from '../lib/TwitchRequests';
-import Fetcher from '../lib/Fetcher';
-import { Clip } from '../lib/Interfaces';
 
 const monitorTwitchChat = new TwitchSupervisor('user', 'pass', 0, {
     requestCount: 2,

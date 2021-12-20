@@ -5,7 +5,7 @@ chai.use(chaiAsPromised);
 import sinon from 'sinon';
 import TwitchRequests from '../lib/TwitchRequests';
 import Fetcher from '../lib/Fetcher';
-import { Clip, FetcherResponse } from '../lib/Interfaces';
+import { FetcherResponse } from '../lib/Interfaces';
 
 let fetch: sinon.SinonStub<[url: string], Promise<FetcherResponse>>;
 

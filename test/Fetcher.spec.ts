@@ -5,6 +5,7 @@ chai.use(chaiAsPromised);
 import sinon from 'sinon';
 import fetch from 'node-fetch';
 import Fetcher from '../lib/Fetcher';
+import Logger from '../lib/Logger';
 
 describe('Fetcher suite', function () {
     beforeEach(() => {
@@ -61,6 +62,7 @@ describe('Fetcher suite', function () {
         });
         it('should return false if node-fetch returns a bad status code', async () => {
             sinon.restore();
+            sinon.stub(Logger, 'failure');
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             sinon.stub(fetch, 'Promise').resolves({

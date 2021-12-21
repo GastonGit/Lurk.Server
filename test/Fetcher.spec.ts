@@ -23,7 +23,7 @@ describe('Fetcher suite', function () {
     });
     describe('Fetch', () => {
         it('should return a FetcherResponse', async () => {
-            const result = await Fetcher.fetch('test_url', 'get');
+            const result = await Fetcher.fetch('test_url', 'post');
             expect(result).to.have.keys('ok', 'data', 'pagination');
         });
         it('should return true for successful requests', async () => {

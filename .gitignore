@@ -124,8 +124,5 @@ typings/
 # SQLite3
 sqlite3
 
-# Production config
-/config/production.json
-
 # Production
 /dist

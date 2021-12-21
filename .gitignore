@@ -126,3 +126,6 @@ sqlite3
 
 # Production config
 /config/production.json
+
+# Production
+/dist

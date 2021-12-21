@@ -9,9 +9,7 @@ import Logger from '../lib/Logger';
 
 describe('Fetcher suite', function () {
     beforeEach(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        sinon.stub(fetch, 'Promise').resolves({
+        sinon.stub(fetch, 'Promise' as never).resolves({
             json: () =>
                 Promise.resolve({
                     data: [],
@@ -29,17 +27,6 @@ describe('Fetcher suite', function () {
             expect(result).to.have.keys('ok', 'data', 'pagination');
         });
         it('should return true for successful requests', async () => {
-            sinon.restore();
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            sinon.stub(fetch, 'Promise').resolves({
-                json: () =>
-                    Promise.resolve({
-                        data: [],
-                        pagination: undefined,
-                    }),
-                ok: true,
-            });
             const result = await Fetcher.fetch('test_url');
 
             expect(result).to.deep.equal({
@@ -63,9 +50,7 @@ describe('Fetcher suite', function () {
         it('should return false if node-fetch returns a bad status code', async () => {
             sinon.restore();
             sinon.stub(Logger, 'failure');
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            sinon.stub(fetch, 'Promise').resolves({
+            sinon.stub(fetch, 'Promise' as never).resolves({
                 json: () =>
                     Promise.resolve({
                         data: undefined,
@@ -83,9 +68,7 @@ describe('Fetcher suite', function () {
         });
         it('should throw if node-fetch encounters an error', async () => {
             sinon.restore();
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            sinon.stub(fetch, 'Promise').throws('BAD');
+            sinon.stub(fetch, 'Promise' as never).throws('BAD');
 
             await expect(Fetcher.fetch('test_url')).to.be.rejectedWith(
                 'fetcherFetch :: UNABLE TO COMPLETE FETCH :: BAD',

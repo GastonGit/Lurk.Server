@@ -23,11 +23,11 @@ describe('Fetcher suite', function () {
     });
     describe('Fetch', () => {
         it('should return a FetcherResponse', async () => {
-            const result = await Fetcher.fetch('test_url');
+            const result = await Fetcher.fetch('test_url', 'get');
             expect(result).to.have.keys('ok', 'data', 'pagination');
         });
         it('should return true for successful requests', async () => {
-            const result = await Fetcher.fetch('test_url');
+            const result = await Fetcher.fetch('test_url', 'get');
 
             expect(result).to.deep.equal({
                 ok: true,
@@ -38,7 +38,7 @@ describe('Fetcher suite', function () {
         it('should return predicted response during development', async () => {
             process.env.NODE_ENV = 'development';
 
-            const result = await Fetcher.fetch('test_url');
+            const result = await Fetcher.fetch('test_url', 'get');
             expect(result).to.deep.equal({
                 ok: true,
                 data: [],
@@ -58,7 +58,7 @@ describe('Fetcher suite', function () {
                     }),
                 status: 503,
             });
-            const result = await Fetcher.fetch('test_url');
+            const result = await Fetcher.fetch('test_url', 'get');
 
             expect(result).to.deep.equal({
                 ok: false,
@@ -70,8 +70,13 @@ describe('Fetcher suite', function () {
             sinon.restore();
             sinon.stub(fetch, 'Promise' as never).throws('BAD');
 
-            await expect(Fetcher.fetch('test_url')).to.be.rejectedWith(
+            await expect(Fetcher.fetch('test_url', 'get')).to.be.rejectedWith(
                 'fetcherFetch :: UNABLE TO COMPLETE FETCH :: BAD',
+            );
+        });
+        it('should throw if method argument is not get or post', async () => {
+            await expect(Fetcher.fetch('test_url', 'test')).to.be.rejectedWith(
+                'fetcherFetch :: INVALID METHOD',
             );
         });
     });

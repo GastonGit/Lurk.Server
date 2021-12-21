@@ -7,9 +7,12 @@ export default class Fetcher {
     TODO: CLIENT_APP_ACCESS_TOKEN MIGHT NEED TO BE REFRESHED EVERY CALL
      (SEE FOR MORE: https://github.com/GastonGit/Hot-Twitch-Clips/commit/a2f77b0e19785414eb0693e01306aff074431441)
  */
-    private static async nodeFetchWrapper(url: string): Promise<Response> {
+    private static async nodeFetchWrapper(
+        url: string,
+        method: string,
+    ): Promise<Response> {
         return await nodeFetch(url, {
-            method: 'get',
+            method: method,
             headers: {
                 'Client-ID': process.env.CLIENT_ID || '',
                 Authorization: ' Bearer ' + process.env.CLIENT_APP_ACCESS_TOKEN,
@@ -17,7 +20,10 @@ export default class Fetcher {
         });
     }
 
-    public static async fetch(url: string): Promise<FetcherResponse> {
+    public static async fetch(
+        url: string,
+        method: string,
+    ): Promise<FetcherResponse> {
         if (process.env.NODE_ENV === 'development') {
             return {
                 ok: true,
@@ -27,7 +33,10 @@ export default class Fetcher {
         }
 
         try {
-            const response = await this.nodeFetchWrapper(url);
+            if (method !== 'post' && method !== 'get') {
+                throw Error('fetcherFetch :: INVALID METHOD');
+            }
+            const response = await this.nodeFetchWrapper(url, method);
 
             if (response.ok) {
                 const json = await response.json();

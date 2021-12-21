@@ -13,6 +13,7 @@ export default class TwitchRequests {
             const fetchResponse = await Fetcher.fetch(
                 'https://api.twitch.tv/helix/clips?broadcaster_id=' +
                     userID.toLowerCase(),
+                'post',
             );
 
             if (fetchResponse.ok && typeof fetchResponse.data !== 'undefined') {
@@ -39,7 +40,7 @@ export default class TwitchRequests {
             url += '&after=' + pagination;
         }
 
-        const response = await Fetcher.fetch(url);
+        const response = await Fetcher.fetch(url, 'get');
 
         return {
             success: response.ok,
@@ -57,7 +58,7 @@ export default class TwitchRequests {
             'login=' +
             name.toLowerCase();
 
-        const fetchResult = await Fetcher.fetch(url);
+        const fetchResult = await Fetcher.fetch(url, 'get');
 
         if (fetchResult.ok) {
             return fetchResult.data?.shift();
@@ -69,6 +70,7 @@ export default class TwitchRequests {
     public static async getClip(slug: string): Promise<Clip | null> {
         const fetchResult = await Fetcher.fetch(
             'https://api.twitch.tv/helix/clips?id=' + slug,
+            'get',
         );
 
         return fetchResult.data?.shift() || null;

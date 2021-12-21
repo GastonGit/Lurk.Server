@@ -25,7 +25,7 @@ describe('TwitchChatInterface suite', () => {
         connect = sinon.stub(tmi, 'connect').resolves(['server', 'port']);
         on = sinon.stub(tmi, 'on').onCall(0).callsArg(1);
         join = sinon.stub(tmi, 'join').resolves([]);
-        part = sinon.stub(tmi, 'part');
+        part = sinon.stub(tmi, 'part').resolves([]);
     });
     afterEach(() => {
         connect.restore();
@@ -84,10 +84,16 @@ describe('TwitchChatInterface suite', () => {
     });
     describe('leaveChannels', () => {
         it('should return true if all channels are left', async () => {
-            part.restore();
-            part = sinon.stub(tmi, 'part').resolves([]);
-
             const result = await twitchClient.leaveChannels([
+                'tester',
+                'testing',
+                'testingAgain',
+                'tester',
+                'testing',
+                'testingAgain',
+                'tester',
+                'testing',
+                'testingAgain',
                 'tester',
                 'testing',
                 'testingAgain',

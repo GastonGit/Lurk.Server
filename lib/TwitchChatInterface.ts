@@ -113,32 +113,47 @@ export default class TwitchChatInterface {
     public async leaveChannels(channels: Array<string>): Promise<boolean> {
         Logger.info('TwitchChatInterface', 'Leaving channels...');
 
-        const client = this.client;
-        const promises = channels.map(async (channel) => {
-            return await client.part(channel);
-        });
-
         const results = {
             total: channels.length,
             left: 0,
         };
 
-        const joinResults = await Promise.allSettled(promises);
+        const staggerAmount = 10;
+        const staggerDelay = 10000;
 
-        if (
-            typeof joinResults.find((x) => x.status === 'fulfilled') !==
-            'undefined'
-        ) {
-            results.left = joinResults.filter(
-                (x) => x.status === 'fulfilled',
-            ).length;
+        for (let i = 0; i < channels.length; i++) {
+            await this.client
+                .part(channels[i])
+                .then(() => {
+                    results.left += 1;
+                })
+                .catch((err) => {
+                    Logger.failure(
+                        'leavingChannels',
+                        'failed to join: ' + channels[i],
+                        err as string,
+                    );
+                });
+
+            if (i % staggerAmount === 0 && i !== 0) {
+                Logger.info(
+                    'TwitchChatInterface',
+                    '~' +
+                        Math.ceil((channels.length - i) / 10) * 10 +
+                        ' seconds remaining...',
+                );
+                await ExtremeTimer.timeOut(staggerDelay);
+            }
+        }
+
+        if (results.left >= 1) {
             Logger.info(
                 'TwitchChatInterface',
                 '...Successfully left ' +
                     results.left +
-                    'out of ' +
+                    ' out of ' +
                     results.total +
-                    'channels',
+                    ' channels',
             );
             return true;
         } else {

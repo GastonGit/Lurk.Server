@@ -57,7 +57,7 @@ export default class HotClipsController {
             );
 
             this.eventIntervals.startSuperInterval(async () => {
-                await this.twitchSupervisor.updateChannels;
+                await this.twitchSupervisor.updateChannels();
             }, parseInt(config.get('updateTimeInMinutes')) * 60000);
         } else {
             throw Error('Connection setup failed');

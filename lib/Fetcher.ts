@@ -57,22 +57,13 @@ export default class Fetcher {
                 throw Error('fetcherFetch :: INVALID METHOD');
             }
             const response = await this.nodeFetchWrapper(url, method);
+            const json = await response.json?.();
 
-            if (response.ok) {
-                const json = await response.json();
-                return {
-                    ok: true,
-                    data: json.data,
-                    pagination: json.pagination,
-                };
-            } else {
-                Logger.failure(
-                    'fetcherFetch',
-                    'unexpected response status code',
-                    response.status.toString(),
-                );
-                return { ok: false, data: [], pagination: undefined };
-            }
+            return {
+                ok: response.ok,
+                data: json?.data || [],
+                pagination: json?.pagination || undefined,
+            };
         } catch (err) {
             throw Error('fetcherFetch :: UNABLE TO COMPLETE FETCH :: ' + err);
         }

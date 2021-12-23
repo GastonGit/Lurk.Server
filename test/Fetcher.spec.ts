@@ -26,6 +26,47 @@ describe('Fetcher suite', function () {
             const result = await Fetcher.fetch('test_url', 'post');
             expect(result).to.have.keys('ok', 'data', 'pagination');
         });
+        it('should return requested data and pagination', async () => {
+            sinon.restore();
+            sinon.stub(fetch, 'Promise' as never).resolves({
+                json: () =>
+                    Promise.resolve({
+                        data: ['horse', 'cat'],
+                        pagination: { cursor: 'dog' },
+                    }),
+                status: 200,
+                ok: true,
+            });
+            const result = await Fetcher.fetch('goodUrl', 'get');
+
+            expect(result).to.deep.equal({
+                ok: true,
+                data: ['horse', 'cat'],
+                pagination: { cursor: 'dog' },
+            });
+        });
+        it('should not throw if request does not contain a json payload', async () => {
+            sinon.restore();
+            sinon.stub(fetch, 'Promise' as never).resolves({
+                status: 401,
+                ok: false,
+            });
+            await expect(Fetcher.fetch('goodUrl', 'get')).to.not.rejectedWith();
+        });
+        it('should return false if request does not contain a json payload', async () => {
+            sinon.restore();
+            sinon.stub(fetch, 'Promise' as never).resolves({
+                status: 401,
+                ok: false,
+            });
+            const result = await Fetcher.fetch('goodUrl', 'get');
+
+            expect(result).to.deep.equal({
+                ok: false,
+                data: [],
+                pagination: undefined,
+            });
+        });
         it('should return true for successful requests', async () => {
             const result = await Fetcher.fetch('test_url', 'get');
 
@@ -57,6 +98,7 @@ describe('Fetcher suite', function () {
                         pagination: undefined,
                     }),
                 status: 503,
+                ok: false,
             });
             const result = await Fetcher.fetch('test_url', 'get');
 

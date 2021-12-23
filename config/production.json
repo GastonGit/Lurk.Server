@@ -10,8 +10,6 @@
     "Idiot", "Jackass"
   ],
 
-  "joinTimeout": 200,
-
   "spikeValue": 7,
   "spikeTime": 600,
 

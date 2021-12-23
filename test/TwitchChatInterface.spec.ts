@@ -9,7 +9,7 @@ import Logger from '../lib/Logger';
 import ExtremeTimer from '../lib/ExtremeTimer';
 
 const tmi = tmiImport.client.prototype;
-const twitchClient = new TwitchChatInterface('user', 'pass', 0);
+const twitchClient = new TwitchChatInterface('user', 'pass');
 
 let connect: sinon.SinonStub<any[], any> | sinon.SinonStub<unknown[], unknown>;
 let on: sinon.SinonStub<any[], any>;

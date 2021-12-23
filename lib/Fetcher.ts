@@ -1,6 +1,5 @@
 import nodeFetch, { Response } from 'node-fetch';
 import { FetcherResponse } from './Interfaces';
-import Logger from './Logger';
 
 export default class Fetcher {
     /*

@@ -20,7 +20,6 @@ export default class HotClipsController {
         this.twitchSupervisor = new TwitchSupervisor(
             process.env.BOT_NAME || '',
             process.env.BOT_AUTH || '',
-            config.get('joinTimeout'),
             {
                 requestCount: config.get('requestCount'),
                 validMessages: config.get('validMessages'),

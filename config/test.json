@@ -7,8 +7,6 @@
     "LuL"
   ],
 
-  "joinTimeout": 0,
-
   "spikeValue": 4,
   "spikeTime": 20,
 

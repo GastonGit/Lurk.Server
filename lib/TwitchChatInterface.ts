@@ -4,9 +4,8 @@ import ExtremeTimer from './ExtremeTimer';
 
 export default class TwitchChatInterface {
     private readonly client: import('tmi.js').Client;
-    private joinTimeout: number;
 
-    constructor(username: string, password: string, joinTimeout: number) {
+    constructor(username: string, password: string) {
         this.client = new tmi.client({
             connection: {
                 reconnect: true,
@@ -19,7 +18,6 @@ export default class TwitchChatInterface {
                 password: password,
             },
         });
-        this.joinTimeout = joinTimeout || 200;
     }
 
     public async connectToTwitch(channelList: Array<string>): Promise<boolean> {

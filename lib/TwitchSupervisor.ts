@@ -14,10 +14,9 @@ export default class TwitchSupervisor {
     constructor(
         username: string,
         password: string,
-        joinTimeout: number,
         options: { requestCount: number; validMessages: string[] },
     ) {
-        this.client = new TwitchChatInterface(username, password, joinTimeout);
+        this.client = new TwitchChatInterface(username, password);
         this.requestCount = options.requestCount;
         this.validMessages = options.validMessages;
         this.client.setMessageHandler(this.onMessageHandler.bind(this));

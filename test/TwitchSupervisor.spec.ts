@@ -7,7 +7,7 @@ import TwitchSupervisor from '../lib/TwitchSupervisor';
 import TwitchChatInterface from '../lib/TwitchChatInterface';
 import TwitchRequests from '../lib/TwitchRequests';
 
-const monitorTwitchChat = new TwitchSupervisor('user', 'pass', 0, {
+const monitorTwitchChat = new TwitchSupervisor('user', 'pass', {
     requestCount: 2,
     validMessages: ['LUL'],
 });

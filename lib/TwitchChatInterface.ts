@@ -71,7 +71,7 @@ export default class TwitchChatInterface {
                     results.joined += 1;
                 })
                 .catch((err) => {
-                    Logger.failure(
+                    Logger.error(
                         'joinChannels',
                         'failed to join: ' + channels[i],
                         err as string,
@@ -126,7 +126,7 @@ export default class TwitchChatInterface {
                     results.left += 1;
                 })
                 .catch((err) => {
-                    Logger.failure(
+                    Logger.error(
                         'leavingChannels',
                         'failed to join: ' + channels[i],
                         err as string,

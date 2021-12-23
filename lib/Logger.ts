@@ -34,7 +34,7 @@ export default class Logger {
         result: string,
         errorMessage: string,
     ): void {
-        console.error(
+        console.log(
             '\x1b[33m%s\x1b[0m',
             poi + ':: FAILURE ::' + result + ' :: ' + errorMessage,
         );

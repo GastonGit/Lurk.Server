@@ -90,6 +90,90 @@ describe('TwitchRequests suite', () => {
 
             expect(result).to.be.equal(null);
         });
+        it('should not throw if clip creation fails', async () => {
+            fetch.restore();
+            fetch = sinon.stub(Fetcher, 'fetch');
+
+            //
+            // 401
+            //
+            fetch.onCall(0).resolves({
+                ok: true,
+                status: 200,
+                data: [{ id: '1337' }],
+                pagination: undefined,
+            });
+            fetch.onCall(1).resolves({
+                ok: false,
+                status: 401,
+                data: [],
+                pagination: undefined,
+            });
+
+            await expect(
+                TwitchRequests.createClip('this string does not matter here'),
+            ).to.not.be.rejectedWith();
+
+            //
+            // 403
+            //
+            fetch.onCall(2).resolves({
+                ok: true,
+                status: 200,
+                data: [{ id: '1337' }],
+                pagination: undefined,
+            });
+            fetch.onCall(3).resolves({
+                ok: false,
+                status: 403,
+                data: [],
+                pagination: undefined,
+            });
+
+            await expect(
+                TwitchRequests.createClip('this string does not matter here'),
+            ).to.not.be.rejectedWith();
+
+            //
+            // 503
+            //
+            fetch.onCall(4).resolves({
+                ok: true,
+                status: 200,
+                data: [{ id: '1337' }],
+                pagination: undefined,
+            });
+            fetch.onCall(5).resolves({
+                ok: false,
+                status: 503,
+                data: [],
+                pagination: undefined,
+            });
+
+            await expect(
+                TwitchRequests.createClip('this string does not matter here'),
+            ).to.not.be.rejectedWith();
+
+            //
+            // else
+            //
+            fetch.onCall(6).resolves({
+                ok: true,
+                status: 200,
+                data: [{ id: '1337' }],
+                pagination: undefined,
+            });
+            fetch.onCall(7).resolves({
+                ok: false,
+                status: 666,
+                data: [],
+                pagination: undefined,
+            });
+
+            await expect(
+                TwitchRequests.createClip('this string does not matter here'),
+            ).to.not.be.rejectedWith();
+        });
         it('should return strings if streamer is found and clip creation is successful', async () => {
             fetch.restore();
             fetch = sinon.stub(Fetcher, 'fetch');

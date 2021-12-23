@@ -20,11 +20,25 @@ export default class TwitchRequests {
                 Logger.success('createClip', streamer);
                 return fetchResponse.data[0];
             } else {
-                Logger.failure(
-                    'createClip',
-                    streamer,
-                    'fetch was unsuccessful',
-                );
+                if (fetchResponse.status === 401) {
+                    Logger.error('createClip', streamer, 'Bad OAuth token!');
+                } else if (fetchResponse.status === 403) {
+                    Logger.failure(
+                        'createClip',
+                        streamer,
+                        'Restricted clipping',
+                    );
+                } else if (fetchResponse.status === 503) {
+                    Logger.error('createClip', streamer, 'Request failed!');
+                } else {
+                    Logger.error(
+                        'createClip',
+                        streamer,
+                        'fetch failed with unexpected status code: ' +
+                            fetchResponse.status,
+                    );
+                }
+
                 return null;
             }
         } else {

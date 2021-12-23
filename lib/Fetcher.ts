@@ -43,6 +43,10 @@ export default class Fetcher {
         url: string,
         method: string,
     ): Promise<FetcherResponse> {
+        if (method !== 'post' && method !== 'get') {
+            throw Error('fetcherFetch :: INVALID METHOD');
+        }
+
         if (process.env.NODE_ENV === 'development') {
             return {
                 ok: true,
@@ -52,9 +56,6 @@ export default class Fetcher {
         }
 
         try {
-            if (method !== 'post' && method !== 'get') {
-                throw Error('fetcherFetch :: INVALID METHOD');
-            }
             const response = await this.nodeFetchWrapper(url, method);
             const json = await response.json?.();
 

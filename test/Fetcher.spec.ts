@@ -16,6 +16,7 @@ describe('Fetcher suite', function () {
                     pagination: undefined,
                 }),
             ok: true,
+            status: 200,
         });
     });
     afterEach(() => {
@@ -24,7 +25,7 @@ describe('Fetcher suite', function () {
     describe('Fetch', () => {
         it('should return a FetcherResponse', async () => {
             const result = await Fetcher.fetch('test_url', 'post');
-            expect(result).to.have.keys('ok', 'data', 'pagination');
+            expect(result).to.have.keys('ok', 'status', 'data', 'pagination');
         });
         it('should return requested data and pagination', async () => {
             sinon.restore();
@@ -41,6 +42,7 @@ describe('Fetcher suite', function () {
 
             expect(result).to.deep.equal({
                 ok: true,
+                status: 200,
                 data: ['horse', 'cat'],
                 pagination: { cursor: 'dog' },
             });
@@ -63,6 +65,7 @@ describe('Fetcher suite', function () {
 
             expect(result).to.deep.equal({
                 ok: false,
+                status: 401,
                 data: [],
                 pagination: undefined,
             });
@@ -72,6 +75,7 @@ describe('Fetcher suite', function () {
 
             expect(result).to.deep.equal({
                 ok: true,
+                status: 200,
                 data: [],
                 pagination: undefined,
             });
@@ -82,6 +86,7 @@ describe('Fetcher suite', function () {
             const result = await Fetcher.fetch('test_url', 'get');
             expect(result).to.deep.equal({
                 ok: true,
+                status: 200,
                 data: [],
                 pagination: undefined,
             });
@@ -104,6 +109,7 @@ describe('Fetcher suite', function () {
 
             expect(result).to.deep.equal({
                 ok: false,
+                status: 503,
                 data: [],
                 pagination: undefined,
             });

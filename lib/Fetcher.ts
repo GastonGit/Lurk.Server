@@ -50,6 +50,7 @@ export default class Fetcher {
         if (process.env.NODE_ENV === 'development') {
             return {
                 ok: true,
+                status: 200,
                 data: [] as Array<any>,
                 pagination: undefined,
             } as FetcherResponse;
@@ -61,6 +62,7 @@ export default class Fetcher {
 
             return {
                 ok: response.ok,
+                status: response.status,
                 data: json?.data || [],
                 pagination: json?.pagination || undefined,
             };

@@ -55,6 +55,7 @@ export interface Clip {
 
 export interface FetcherResponse {
     ok: boolean;
+    status: number;
     data: Array<any>;
     pagination: { cursor: string } | undefined;
 }

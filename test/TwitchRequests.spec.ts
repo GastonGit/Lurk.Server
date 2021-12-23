@@ -13,6 +13,7 @@ describe('TwitchRequests suite', () => {
     beforeEach(() => {
         fetch = sinon.stub(Fetcher, 'fetch').resolves({
             ok: true,
+            status: 200,
             data: [],
             pagination: undefined,
         });
@@ -42,6 +43,7 @@ describe('TwitchRequests suite', () => {
             fetch.restore();
             fetch = sinon.stub(Fetcher, 'fetch').resolves({
                 ok: true,
+                status: 200,
                 data: [
                     {
                         thumbnail_url:
@@ -62,6 +64,7 @@ describe('TwitchRequests suite', () => {
             fetch.restore();
             fetch = sinon.stub(Fetcher, 'fetch').resolves({
                 ok: true,
+                status: 200,
                 data: [],
                 pagination: undefined,
             });
@@ -77,6 +80,7 @@ describe('TwitchRequests suite', () => {
             fetch.restore();
             fetch = sinon.stub(Fetcher, 'fetch').resolves({
                 ok: false,
+                status: 404,
                 data: [] as Array<any>,
                 pagination: undefined,
             });
@@ -92,11 +96,13 @@ describe('TwitchRequests suite', () => {
 
             fetch.onCall(0).resolves({
                 ok: true,
+                status: 200,
                 data: [{ id: '1337' }] as Array<any>,
                 pagination: undefined,
             });
             fetch.onCall(1).resolves({
                 ok: true,
+                status: 200,
                 data: [{ id: 'test', edit_url: 'test' }] as Array<any>,
                 pagination: undefined,
             });
@@ -113,11 +119,13 @@ describe('TwitchRequests suite', () => {
 
             fetch.onCall(0).resolves({
                 ok: true,
+                status: 200,
                 data: [{ id: '1337' }] as Array<any>,
                 pagination: undefined,
             });
             fetch.onCall(1).resolves({
                 ok: false,
+                status: 503,
                 data: [] as Array<any>,
                 pagination: undefined,
             });

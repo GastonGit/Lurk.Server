@@ -2,6 +2,7 @@ import ClipList from './ClipList';
 import TwitchSupervisor from './TwitchSupervisor';
 import config from 'config';
 import EventIntervals from './EventIntervals';
+import { Stream } from './Interfaces';
 
 export default class HotClipsController {
     private clipList: ClipList;
@@ -71,14 +72,19 @@ export default class HotClipsController {
         const list = [...this.twitchSupervisor.getStreamList()];
 
         for (let i = 0; i < list.length; i++) {
-            if (!list[i].cooldown) {
-                if (list[i].hits >= spike + list[i].viewer_count / 5000) {
-                    this.clipIt(list[i].user_name).catch((err) => {
-                        throw Error('clipIT :: UNABLE TO CLIP IT :: ' + err);
-                    });
-                }
+            if (HotClipsController.spikeFound(list[i], spike)) {
+                this.clipIt(list[i].user_name).catch((err) => {
+                    throw Error('clipIT :: UNABLE TO CLIP IT :: ' + err);
+                });
             }
         }
+    }
+
+    private static spikeFound(streamer: Stream, spike: number): boolean {
+        return (
+            !streamer.cooldown &&
+            streamer.hits >= spike + streamer.viewer_count / 5000
+        );
     }
 
     private async clipIt(streamer: string): Promise<void> {

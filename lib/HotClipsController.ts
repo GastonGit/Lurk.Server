@@ -1,4 +1,5 @@
 import ClipList from './ClipList';
+import Container from './Container';
 import TwitchSupervisor from './TwitchSupervisor';
 import config from 'config';
 import EventIntervals from './EventIntervals';
@@ -6,6 +7,7 @@ import { Stream } from './Interfaces';
 
 export default class HotClipsController {
     private clipList: ClipList;
+    private container: Container;
     private twitchSupervisor: TwitchSupervisor;
     private eventIntervals: EventIntervals;
 
@@ -17,6 +19,7 @@ export default class HotClipsController {
 
     constructor() {
         this.clipList = new ClipList();
+        this.container = new Container(config.get('list'));
         this.eventIntervals = new EventIntervals();
         this.twitchSupervisor = new TwitchSupervisor(
             process.env.BOT_NAME || '',
@@ -39,6 +42,9 @@ export default class HotClipsController {
         const setupSuccess = await this.twitchSupervisor.setupConnection();
 
         if (setupSuccess) {
+            const latestList = await this.container.getList();
+            this.clipList.setList(latestList);
+
             this.eventIntervals.createConstrainedInterval(() => {
                 this.checkForSpikes(this.spikeValue);
             }, parseInt(config.get('spikeTime')));
@@ -54,6 +60,13 @@ export default class HotClipsController {
                     }
                 },
                 parseInt(config.get('removeClipTimeInMinutes')) * 60000,
+            );
+            this.eventIntervals.startIndependentInterval(
+                'updateList',
+                async () => {
+                    await this.container.updateList(this.clipList.getList());
+                },
+                10 * 60000,
             );
 
             this.eventIntervals.startSuperInterval(async () => {

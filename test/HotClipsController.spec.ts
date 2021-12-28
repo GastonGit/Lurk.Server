@@ -9,6 +9,7 @@ import TwitchSupervisor from '../lib/TwitchSupervisor';
 import Logger from '../lib/Logger';
 import { Stream } from '../lib/Interfaces';
 import EventIntervals from '../lib/EventIntervals';
+import Container from '../lib/Container';
 
 let hotClipsController: HotClipsController;
 
@@ -23,6 +24,8 @@ let getList: sinon.SinonStub<[], string[]>;
 
 describe('HotClipsController suite', () => {
     beforeEach(() => {
+        sinon.stub(Container.prototype, 'updateList').resolves();
+        sinon.stub(Container.prototype, 'getList').resolves([]);
         clock = sinon.useFakeTimers();
         hotClipsController = new HotClipsController();
         sinon

@@ -47,8 +47,8 @@ export default class EventIntervals {
     ): void {
         this.independentEvents.push({
             name: name,
-            interval: setInterval(() => {
-                callback();
+            interval: setInterval(async () => {
+                await callback();
             }, timer),
         });
     }

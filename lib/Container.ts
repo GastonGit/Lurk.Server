@@ -10,7 +10,7 @@ export default class Container {
         this.location = path.join(__dirname, '../assets/' + this.fileName);
     }
 
-    async update(list: string[]): Promise<void> {
+    async updateList(list: string[]): Promise<void> {
         const data = JSON.stringify(list);
 
         await fs.writeFile(this.location, data);

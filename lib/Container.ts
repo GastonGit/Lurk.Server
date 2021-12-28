@@ -25,8 +25,13 @@ export default class Container {
     }
 
     async getList(): Promise<string[]> {
-        const data = await fs.readFile(this.location, 'utf-8');
+        try {
+            const data = await fs.readFile(this.location, 'utf-8');
 
-        return JSON.parse(data.toString());
+            return JSON.parse(data.toString());
+        } catch (err) {
+            Logger.error('getList', 'Failed to get list', err as string);
+            return [];
+        }
     }
 }

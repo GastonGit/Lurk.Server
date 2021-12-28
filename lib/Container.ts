@@ -8,9 +8,18 @@ export default class Container {
 
     constructor(fileName: string) {
         this.fileName = fileName;
+        let fileLocation = '';
+
+        /* istanbul ignore if */
+        if (path.dirname(<string>require.main?.filename).includes('/dist/')) {
+            fileLocation = '../../assets/lists/';
+        } else {
+            fileLocation = '../assets/lists/';
+        }
+
         this.location = path.join(
-            __dirname,
-            '../assets/lists/' + this.fileName,
+            path.dirname(<string>require.main?.filename),
+            fileLocation + this.fileName,
         );
     }
 

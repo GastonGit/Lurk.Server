@@ -20,7 +20,11 @@ export default class Container {
         try {
             await fs.writeFile(this.location, data, { flag: 'r+' });
         } catch (err) {
-            Logger.error('updateList', 'Failed to update list', err as string);
+            Logger.error(
+                'updateList',
+                'Failed to update file: ' + this.fileName,
+                err as string,
+            );
         }
     }
 

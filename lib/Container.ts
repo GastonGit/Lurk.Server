@@ -18,6 +18,7 @@ export default class Container {
         const data = JSON.stringify(list);
 
         try {
+            await fs.truncate(this.location, 0);
             await fs.writeFile(this.location, data, { flag: 'r+' });
         } catch (err) {
             Logger.error(

@@ -1,6 +1,10 @@
 export default class ClipList {
     private currentList: string[] = [];
 
+    setList(list: string[]): void {
+        this.currentList = [...list];
+    }
+
     getList(): Array<string> {
         return this.currentList;
     }

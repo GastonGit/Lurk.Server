@@ -1,9 +1,12 @@
 import { assert, expect } from 'chai';
 import ClipList from '../lib/ClipList';
 
-const clipList = new ClipList();
+let clipList = new ClipList();
 
 describe('ClipList suite', function () {
+    beforeEach(() => {
+        clipList = new ClipList();
+    });
     describe('Getting clips from the list', function () {
         it('should return a string array', function () {
             assert.isArray(clipList.getList());
@@ -29,11 +32,32 @@ describe('ClipList suite', function () {
     describe('Removing clips from the list', function () {
         it('should remove the oldest element', function () {
             const oldestElement = 'Mocha';
+            const clips = ['Billy', 'Jinny', 'Terry'];
+
+            clipList.addClip(oldestElement);
+            for (let i = 0; i < clips.length; i++) {
+                clipList.addClip(clips[i]);
+            }
+
             expect(clipList.getList()).to.include(oldestElement);
 
             clipList.removeClip();
 
             expect(clipList.getList()).to.not.include(oldestElement);
+        });
+    });
+    describe('setList', function () {
+        it('should replace elements in the list', function () {
+            clipList.addClip('test1');
+            clipList.addClip('test2');
+
+            clipList.setList(['hey', 'world']);
+
+            expect(clipList.getList()).to.not.include.members([
+                'test1',
+                'test2',
+            ]);
+            expect(clipList.getList()).to.include.members(['hey', 'world']);
         });
     });
 });

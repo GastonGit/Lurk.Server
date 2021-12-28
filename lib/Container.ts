@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import Logger from './Logger';
 
 export default class Container {
     private readonly fileName: string;
@@ -16,7 +17,11 @@ export default class Container {
     async updateList(list: string[]): Promise<void> {
         const data = JSON.stringify(list);
 
-        await fs.writeFile(this.location, data);
+        try {
+            await fs.writeFile(this.location, data, { flag: 'r+' });
+        } catch (err) {
+            Logger.error('updateList', 'Failed to update list', err as string);
+        }
     }
 
     async getList(): Promise<string[]> {

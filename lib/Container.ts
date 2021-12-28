@@ -7,7 +7,10 @@ export default class Container {
 
     constructor(fileName: string) {
         this.fileName = fileName;
-        this.location = path.join(__dirname, '../assets/' + this.fileName);
+        this.location = path.join(
+            __dirname,
+            '../assets/lists/' + this.fileName,
+        );
     }
 
     async updateList(list: string[]): Promise<void> {

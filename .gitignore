@@ -126,3 +126,4 @@ sqlite3
 
 # Production
 /dist
+/assets/lists

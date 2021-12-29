@@ -42,6 +42,7 @@ export default class Container {
     async getList(): Promise<string[]> {
         try {
             const data = await fs.readFile(this.location, 'utf-8');
+            Logger.success('getList', 'Stored clip list loaded');
 
             return JSON.parse(data.toString());
         } catch (err) {

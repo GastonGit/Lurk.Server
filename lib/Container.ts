@@ -29,6 +29,7 @@ export default class Container {
         try {
             await fs.truncate(this.location, 0);
             await fs.writeFile(this.location, data, { flag: 'r+' });
+            Logger.success('updateList', 'List updated');
         } catch (err) {
             Logger.error(
                 'updateList',

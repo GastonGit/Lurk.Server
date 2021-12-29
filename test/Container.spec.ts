@@ -38,6 +38,7 @@ let writeFile: sinon.SinonStub<
 describe('Container suite', () => {
     beforeEach(() => {
         sinon.stub(Logger, 'error');
+        sinon.stub(Logger, 'success');
         sinon.stub(fs, 'truncate').resolves();
         sinon.stub(fs, 'readFile').resolves();
         writeFile = sinon.stub(fs, 'writeFile').resolves();

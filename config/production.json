@@ -1,5 +1,6 @@
 {
   "list": "production.json",
+  "updateListTimeInMinutes": 10,
   "domainOrigin": "http://localhost:3000",
 
   "requestCount": 2,

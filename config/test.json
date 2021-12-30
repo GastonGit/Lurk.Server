@@ -1,5 +1,7 @@
 {
   "list": "test.json",
+  "updateListTimeInMinutes": 10,
+
   "requestCount": 3,
   "validMessages": [
     "LUL",

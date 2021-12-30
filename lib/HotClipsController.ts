@@ -66,7 +66,7 @@ export default class HotClipsController {
                 async () => {
                     await this.container.updateList(this.clipList.getList());
                 },
-                10 * 60000,
+                parseInt(config.get('updateListTimeInMinutes')) * 60000,
             );
 
             this.eventIntervals.startSuperInterval(async () => {

@@ -7,41 +7,43 @@ export default class TwitchRequests {
         streamer: string,
     ): Promise<{ id: string; edit_url: string } | null> {
         const user = await TwitchRequests.getUser(streamer);
-        const userID = user?.id;
 
-        if (typeof userID !== 'undefined') {
-            const fetchResponse = await Fetcher.fetch(
-                'https://api.twitch.tv/helix/clips?broadcaster_id=' +
-                    userID.toLowerCase(),
-                'post',
-            );
+        if (user === null) {
+            return null;
+        }
 
-            if (fetchResponse.ok && typeof fetchResponse.data !== 'undefined') {
-                Logger.success('createClip', streamer);
-                return fetchResponse.data[0];
-            } else {
-                if (fetchResponse.status === 401) {
+        const fetchResponse = await Fetcher.fetch(
+            'https://api.twitch.tv/helix/clips?broadcaster_id=' +
+                user.id.toLowerCase(),
+            'post',
+        );
+
+        if (fetchResponse.ok && typeof fetchResponse.data !== 'undefined') {
+            Logger.success('createClip', streamer);
+            return fetchResponse.data[0];
+        } else {
+            switch (fetchResponse.status) {
+                case 401:
                     Logger.error('createClip', streamer, 'Bad OAuth token!');
-                } else if (fetchResponse.status === 403) {
+                    break;
+                case 403:
                     Logger.failure(
                         'createClip',
                         streamer,
                         'Restricted clipping',
                     );
-                } else if (fetchResponse.status === 503) {
+                    break;
+                case 503:
                     Logger.error('createClip', streamer, 'Request failed!');
-                } else {
+                    break;
+                default:
                     Logger.error(
                         'createClip',
                         streamer,
                         'fetch failed with unexpected status code: ' +
                             fetchResponse.status,
                     );
-                }
-
-                return null;
             }
-        } else {
             return null;
         }
     }

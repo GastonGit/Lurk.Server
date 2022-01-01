@@ -1,9 +1,9 @@
-import tmi, { ChatUserstate } from 'tmi.js';
+import tmi, { Client, ChatUserstate } from 'tmi.js';
 import Logger from './Logger';
 import ExtremeTimer from './ExtremeTimer';
 
 export default class TwitchChatInterface {
-    private readonly client: import('tmi.js').Client;
+    private readonly client: Client;
 
     constructor(username: string, password: string) {
         this.client = new tmi.client({

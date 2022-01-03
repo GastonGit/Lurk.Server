@@ -27,6 +27,7 @@ export default class HotClipsController {
             {
                 requestCount: config.get('requestCount'),
                 validMessages: config.get('validMessages'),
+                blockedStreamers: config.get('blockedStreamers'),
             },
         );
 

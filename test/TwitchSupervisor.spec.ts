@@ -10,6 +10,7 @@ import TwitchRequests from '../lib/TwitchRequests';
 const monitorTwitchChat = new TwitchSupervisor('user', 'pass', {
     requestCount: 2,
     validMessages: ['LUL'],
+    blockedStreamers: ['nymn'],
 });
 
 describe('TwitchSupervisor suite', () => {

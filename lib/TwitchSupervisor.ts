@@ -11,14 +11,21 @@ export default class TwitchSupervisor {
     private streamList: Array<Stream> = [];
     private compactStreamList: Array<string> = [];
 
+    private blockedStreamers: Array<string>;
+
     constructor(
         username: string,
         password: string,
-        options: { requestCount: number; validMessages: string[] },
+        options: {
+            requestCount: number;
+            validMessages: string[];
+            blockedStreamers: string[];
+        },
     ) {
         this.client = new TwitchChatInterface(username, password);
         this.requestCount = options.requestCount;
         this.validMessages = options.validMessages;
+        this.blockedStreamers = options.blockedStreamers;
         this.client.setMessageHandler(this.onMessageHandler.bind(this));
     }
 
@@ -164,9 +171,6 @@ export default class TwitchSupervisor {
     }
 
     private async requestStreams(): Promise<Streams> {
-        // TODO: Temp solution. Add to config.
-        const blockedStreamers = ['nymn'];
-
         const streams: Array<Stream> = [];
         let pagination = undefined;
         let success = true;
@@ -178,10 +182,10 @@ export default class TwitchSupervisor {
             success = requestedStreams.success;
 
             if (success) {
-                fetchedStreams.forEach(function (streamer: FetchedStreams) {
+                fetchedStreams.forEach((streamer: FetchedStreams) => {
                     /* istanbul ignore else */
                     if (
-                        !blockedStreamers.includes(
+                        !this.blockedStreamers.includes(
                             streamer.user_login.toLowerCase(),
                         )
                     ) {

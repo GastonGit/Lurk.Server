@@ -7,7 +7,7 @@ import TwitchSupervisor from '../lib/TwitchSupervisor';
 import TwitchChatInterface from '../lib/TwitchChatInterface';
 import TwitchRequests from '../lib/TwitchRequests';
 
-const monitorTwitchChat = new TwitchSupervisor('user', 'pass', {
+const twitchSupervisor = new TwitchSupervisor('user', 'pass', {
     requestCount: 2,
     validMessages: ['LUL'],
     blockedStreamers: ['nymn'],
@@ -42,7 +42,7 @@ describe('TwitchSupervisor suite', () => {
                 pagination: { cursor: 'testPag2' },
             });
 
-            const result = await monitorTwitchChat.setupConnection();
+            const result = await twitchSupervisor.setupConnection();
             expect(result).to.be.true;
         });
         it('should return false if a updated list cannot be fetched', async () => {
@@ -56,7 +56,7 @@ describe('TwitchSupervisor suite', () => {
                 pagination: undefined,
             });
 
-            const result = await monitorTwitchChat.setupConnection();
+            const result = await twitchSupervisor.setupConnection();
             expect(result).to.be.false;
         });
     });
@@ -75,11 +75,11 @@ describe('TwitchSupervisor suite', () => {
                 .stub(TwitchChatInterface.prototype, 'joinChannels')
                 .resolves(true);
 
-            const result = await monitorTwitchChat.updateChannels();
+            const result = await twitchSupervisor.updateChannels();
             expect(result).to.be.true;
         });
     });
-    describe('descreaseHitsByAmount', () => {
+    describe('decreaseHitsByAmount', () => {
         it('should not throw', async () => {
             sinon.restore();
             sinon
@@ -90,17 +90,17 @@ describe('TwitchSupervisor suite', () => {
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });
-            await monitorTwitchChat.setupConnection();
-            monitorTwitchChat.onMessageHandler('Streamzz', {}, 'LUL', true);
+            await twitchSupervisor.setupConnection();
+            twitchSupervisor.onMessageHandler('Streamzz', {}, 'LUL', true);
 
             expect(() => {
-                monitorTwitchChat.decreaseHitsByAmount(1);
+                twitchSupervisor.decreaseHitsByAmount(1);
             }).to.not.throw();
         });
     });
     describe('getStreamList', () => {
         it('should return an array', () => {
-            expect(monitorTwitchChat.getStreamList()).to.be.an('array');
+            expect(twitchSupervisor.getStreamList()).to.be.an('array');
         });
     });
     describe('cooldownStreamer', () => {
@@ -115,10 +115,10 @@ describe('TwitchSupervisor suite', () => {
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });
-            await monitorTwitchChat.setupConnection();
+            await twitchSupervisor.setupConnection();
 
             expect(() => {
-                monitorTwitchChat.cooldownStreamer('Streamzz', 10);
+                twitchSupervisor.cooldownStreamer('Streamzz', 10);
             }).to.not.throw();
 
             clock.tick(100000);
@@ -136,10 +136,10 @@ describe('TwitchSupervisor suite', () => {
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });
-            await monitorTwitchChat.setupConnection();
+            await twitchSupervisor.setupConnection();
 
             expect(() => {
-                monitorTwitchChat.resetStreamer('Streamzz');
+                twitchSupervisor.resetStreamer('Streamzz');
             }).to.not.throw();
         });
     });
@@ -154,16 +154,11 @@ describe('TwitchSupervisor suite', () => {
                 data: [{ user_login: 'Streamzz', viewer_count: 200 }],
                 pagination: undefined,
             });
-            await monitorTwitchChat.setupConnection();
+            await twitchSupervisor.setupConnection();
 
             expect(() => {
-                monitorTwitchChat.onMessageHandler('Streamzz', {}, 'LUL', true);
-                monitorTwitchChat.onMessageHandler(
-                    'Streamzz',
-                    {},
-                    'test',
-                    true,
-                );
+                twitchSupervisor.onMessageHandler('Streamzz', {}, 'LUL', true);
+                twitchSupervisor.onMessageHandler('Streamzz', {}, 'test', true);
             }).to.not.throw();
         });
     });
@@ -171,7 +166,7 @@ describe('TwitchSupervisor suite', () => {
         it('should return a string if TwitchRequests.getVideoUrl is successful', async () => {
             sinon.restore();
             sinon.stub(TwitchRequests, 'getVideoUrl').resolves('str');
-            const result = await monitorTwitchChat.getVideoUrl(
+            const result = await twitchSupervisor.getVideoUrl(
                 'this string does not matter here',
             );
 
@@ -184,7 +179,7 @@ describe('TwitchSupervisor suite', () => {
             sinon
                 .stub(TwitchRequests, 'createClip')
                 .resolves({ id: 'test', edit_url: 'test' });
-            const result = await monitorTwitchChat.createClip(
+            const result = await twitchSupervisor.createClip(
                 'this string does not matter here',
             );
 

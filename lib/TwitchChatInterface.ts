@@ -9,6 +9,7 @@ export default class TwitchChatInterface {
         this.client = new tmi.client({
             connection: {
                 secure: true,
+                timeout: 71000,
             },
             identity: {
                 username: username,

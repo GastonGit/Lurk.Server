@@ -8,10 +8,7 @@ export default class TwitchChatInterface {
     constructor(username: string, password: string) {
         this.client = new tmi.client({
             connection: {
-                reconnect: true,
                 secure: true,
-                reconnectInterval: 100000,
-                maxReconnectInverval: 120000,
             },
             identity: {
                 username: username,

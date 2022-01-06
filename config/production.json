@@ -3,7 +3,7 @@
   "updateListTimeInMinutes": 10,
   "domainOrigin": "http://localhost:3000",
 
-  "requestCount": 2,
+  "requestCount": 1,
   "validMessages": [
     "OMEGALUL", "LULW", "LUL", "KEKW",
     "PogO", "D:", "PogChamp", "PagMan",
@@ -21,7 +21,7 @@
   "cooldownLengthInSeconds": 120,
   "addClipDelay": 15000,
   "removeClipTimeInMinutes": 1,
-  "updateTimeInMinutes": 180,
+  "updateTimeInMinutes": 120,
 
   "blockedStreamers": ["nymn"]
 }

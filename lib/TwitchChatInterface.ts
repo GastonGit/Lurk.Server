@@ -126,7 +126,7 @@ export default class TwitchChatInterface {
                 .catch((err) => {
                     Logger.error(
                         'leavingChannels',
-                        'failed to join: ' + channels[i],
+                        'failed to leave: ' + channels[i],
                         err as string,
                     );
                 });

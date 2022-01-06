@@ -59,8 +59,8 @@ export default class TwitchChatInterface {
             joined: 0,
         };
 
-        const staggerAmount = 10;
-        const staggerDelay = 10000;
+        const staggerDelay = 800;
+        let timeToJoinInSeconds = (results.total * staggerDelay) / 1000;
 
         for (let i = 0; i < channels.length; i++) {
             this.client
@@ -76,15 +76,17 @@ export default class TwitchChatInterface {
                     );
                 });
 
-            if (i % staggerAmount === 0 && i !== 0) {
+            if (Math.ceil(timeToJoinInSeconds) % 10 === 0 || i == 0) {
                 Logger.info(
                     'TwitchChatInterface',
                     '~' +
-                        Math.ceil((channels.length - i) / 10) * 10 +
+                        Math.ceil(timeToJoinInSeconds / 10) * 10 +
                         ' seconds remaining...',
                 );
-                await ExtremeTimer.timeOut(staggerDelay);
             }
+
+            await ExtremeTimer.timeOut(staggerDelay);
+            timeToJoinInSeconds -= staggerDelay / 1000;
         }
 
         if (results.joined >= 1) {

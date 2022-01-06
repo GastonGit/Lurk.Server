@@ -76,14 +76,7 @@ export default class TwitchChatInterface {
                     );
                 });
 
-            if (Math.ceil(timeToJoinInSeconds) % 10 === 0 || i == 0) {
-                Logger.info(
-                    'TwitchChatInterface',
-                    '~' +
-                        Math.ceil(timeToJoinInSeconds / 10) * 10 +
-                        ' seconds remaining...',
-                );
-            }
+            TwitchChatInterface.logTimeRemaining(timeToJoinInSeconds, i);
 
             await ExtremeTimer.timeOut(staggerDelay);
             timeToJoinInSeconds -= staggerDelay / 1000;
@@ -116,8 +109,9 @@ export default class TwitchChatInterface {
             left: 0,
         };
 
-        const staggerAmount = 10;
-        const staggerDelay = 10000;
+        // Command rate limit: 20 per 30 seconds
+        const staggerDelay = 1800;
+        let timeToLeaveInSeconds = (results.total * staggerDelay) / 1000;
 
         for (let i = 0; i < channels.length; i++) {
             this.client
@@ -133,15 +127,10 @@ export default class TwitchChatInterface {
                     );
                 });
 
-            if (i % staggerAmount === 0 && i !== 0) {
-                Logger.info(
-                    'TwitchChatInterface',
-                    '~' +
-                        Math.ceil((channels.length - i) / 10) * 10 +
-                        ' seconds remaining...',
-                );
-                await ExtremeTimer.timeOut(staggerDelay);
-            }
+            TwitchChatInterface.logTimeRemaining(timeToLeaveInSeconds, i);
+
+            await ExtremeTimer.timeOut(staggerDelay);
+            timeToLeaveInSeconds -= staggerDelay / 1000;
         }
 
         if (results.left >= 1) {
@@ -160,6 +149,15 @@ export default class TwitchChatInterface {
                 '...Could not leave any channels',
             );
             return false;
+        }
+    }
+
+    private static logTimeRemaining(time: number, first: number): void {
+        if (Math.ceil(time) % 10 === 0 || first == 0) {
+            Logger.info(
+                'TwitchChatInterface',
+                '~' + Math.ceil(time / 10) * 10 + ' seconds remaining...',
+            );
         }
     }
 }

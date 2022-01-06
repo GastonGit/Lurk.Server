@@ -21,7 +21,7 @@
   "cooldownLengthInSeconds": 120,
   "addClipDelay": 15000,
   "removeClipTimeInMinutes": 1,
-  "updateTimeInMinutes": 3,
+  "updateTimeInMinutes": 120,
 
   "blockedStreamers": ["nymn"]
 }

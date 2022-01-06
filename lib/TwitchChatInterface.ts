@@ -110,7 +110,7 @@ export default class TwitchChatInterface {
         };
 
         // Command rate limit: 20 per 30 seconds
-        const staggerDelay = 1800;
+        const staggerDelay = 3200;
         let timeToLeaveInSeconds = (results.total * staggerDelay) / 1000;
 
         for (let i = 0; i < channels.length; i++) {

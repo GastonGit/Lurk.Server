@@ -63,7 +63,7 @@ export default class TwitchChatInterface {
         const staggerDelay = 10000;
 
         for (let i = 0; i < channels.length; i++) {
-            await this.client
+            this.client
                 .join(channels[i])
                 .then(() => {
                     results.joined += 1;
@@ -118,7 +118,7 @@ export default class TwitchChatInterface {
         const staggerDelay = 10000;
 
         for (let i = 0; i < channels.length; i++) {
-            await this.client
+            this.client
                 .part(channels[i])
                 .then(() => {
                     results.left += 1;

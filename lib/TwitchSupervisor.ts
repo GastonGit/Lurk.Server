@@ -38,14 +38,26 @@ export default class TwitchSupervisor {
         return updateResult && connectResult;
     }
 
+    private createLeaveList(oldList: string[], newList: string[]): string[] {
+        // in oldList but not in newList
+        return oldList.filter((x) => !newList.includes(x));
+    }
+
+    private createJoinList(oldList: string[], newList: string[]): string[] {
+        // in newList but not in oldList
+        return newList.filter((x) => !oldList.includes(x));
+    }
+
     public async updateChannels(): Promise<boolean> {
-        const leaveChannelsSuccess = await this.client.leaveChannels(
-            this.compactStreamList,
-        );
+        const oldList = [...this.compactStreamList];
         const updateListsSuccess = await this.updateLists();
-        const joinChannelsSuccess = await this.client.joinChannels(
-            this.compactStreamList,
-        );
+        const newList = [...this.compactStreamList];
+
+        const leaveList = this.createLeaveList([...oldList], [...newList]);
+        const joinList = this.createJoinList([...oldList], [...newList]);
+
+        const leaveChannelsSuccess = await this.client.leaveChannels(leaveList);
+        const joinChannelsSuccess = await this.client.joinChannels(joinList);
 
         return (
             leaveChannelsSuccess && updateListsSuccess && joinChannelsSuccess

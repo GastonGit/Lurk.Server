@@ -65,7 +65,28 @@ describe('TwitchSupervisor suite', () => {
             sinon.restore();
             sinon.stub(TwitchRequests, 'request100Streams').resolves({
                 success: true,
-                data: [],
+                data: [
+                    { user_login: 'test1', viewer_count: 44 },
+                    { user_login: 'test2', viewer_count: 100 },
+                ],
+                pagination: undefined,
+            });
+            sinon
+                .stub(TwitchChatInterface.prototype, 'leaveChannels')
+                .resolves(true);
+            sinon
+                .stub(TwitchChatInterface.prototype, 'joinChannels')
+                .resolves(true);
+
+            await twitchSupervisor.updateChannels();
+
+            sinon.restore();
+            sinon.stub(TwitchRequests, 'request100Streams').resolves({
+                success: true,
+                data: [
+                    { user_login: 'test1', viewer_count: 0 },
+                    { user_login: 'test3', viewer_count: 500 },
+                ],
                 pagination: undefined,
             });
             sinon

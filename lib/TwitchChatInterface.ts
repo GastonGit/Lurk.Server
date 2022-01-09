@@ -119,12 +119,9 @@ export default class TwitchChatInterface {
                 .then(() => {
                     results.left += 1;
                 })
-                .catch((err) => {
-                    Logger.error(
-                        'leavingChannels',
-                        'failed to leave: ' + channels[i],
-                        err as string,
-                    );
+                .catch(() => {
+                    // Will succeed eventually
+                    // https://github.com/GastonGit/Lurk.Server/issues/11#issuecomment-1008024713
                 });
 
             TwitchChatInterface.logTimeRemaining(timeToLeaveInSeconds, i);

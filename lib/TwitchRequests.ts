@@ -65,9 +65,6 @@ export default class TwitchRequests {
         };
     }
 
-    /*
-        TODO: MIGHT NEED UPDATED/SPECIAL ACCESS TOKEN DURING FETCHING
-     */
     public static async getUser(name: string): Promise<User | null> {
         const url =
             'https://api.twitch.tv/helix/users?' +

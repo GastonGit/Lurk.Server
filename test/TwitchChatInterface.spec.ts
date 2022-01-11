@@ -81,6 +81,11 @@ describe('TwitchChatInterface suite', () => {
 
             expect(result).to.be.false;
         });
+        it('should return true if array argument is empty', async () => {
+            const result = await twitchClient.joinChannels([]);
+
+            expect(result).to.be.true;
+        });
     });
     describe('leaveChannels', () => {
         it('should return true if all channels are left', async () => {
@@ -108,6 +113,11 @@ describe('TwitchChatInterface suite', () => {
             const result = await twitchClient.leaveChannels(['tester']);
 
             expect(result).to.be.false;
+        });
+        it('should return true if array argument is empty', async () => {
+            const result = await twitchClient.leaveChannels([]);
+
+            expect(result).to.be.true;
         });
     });
 });

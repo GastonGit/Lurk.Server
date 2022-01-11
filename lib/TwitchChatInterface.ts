@@ -52,6 +52,11 @@ export default class TwitchChatInterface {
     }
 
     public async joinChannels(channels: Array<string>): Promise<boolean> {
+        if (channels.length === 0) {
+            Logger.info('TwitchChatInterface', 'No channels to join...');
+            return true;
+        }
+
         Logger.info('TwitchChatInterface', 'Joining channels...');
 
         const results = {
@@ -102,6 +107,11 @@ export default class TwitchChatInterface {
     }
 
     public async leaveChannels(channels: Array<string>): Promise<boolean> {
+        if (channels.length === 0) {
+            Logger.info('TwitchChatInterface', 'No channels to leave...');
+            return true;
+        }
+
         Logger.info('TwitchChatInterface', 'Leaving channels...');
 
         const results = {

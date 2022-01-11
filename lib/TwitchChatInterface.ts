@@ -120,6 +120,7 @@ export default class TwitchChatInterface {
                     results.left += 1;
                 })
                 .catch(() => {
+                    results.left += 1;
                     // Will succeed eventually
                     // https://github.com/GastonGit/Lurk.Server/issues/11#issuecomment-1008024713
                 });

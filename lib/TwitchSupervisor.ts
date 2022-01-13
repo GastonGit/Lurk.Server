@@ -2,6 +2,7 @@ import { FetchedStreams, fetchResult, Stream, Streams } from './Interfaces';
 import TwitchChatInterface from './TwitchChatInterface';
 import TwitchRequests from './TwitchRequests';
 import { ChatUserstate } from 'tmi.js';
+import Logger from './Logger';
 
 export default class TwitchSupervisor {
     private client: TwitchChatInterface;
@@ -89,11 +90,10 @@ export default class TwitchSupervisor {
     }
 
     private increaseHitsByOne(channel: string): void {
-        const result = this.getStreamerIndex(channel);
+        const streamerIndex = this.getStreamerIndex(channel);
 
-        /* istanbul ignore else */
-        if (result.success) {
-            this.streamList[result.streamerIndex].hits += 1;
+        if (streamerIndex !== null) {
+            this.streamList[streamerIndex].hits += 1;
         }
     }
 
@@ -102,51 +102,42 @@ export default class TwitchSupervisor {
     }
 
     public cooldownStreamer(channel: string, timeInSeconds: number): void {
-        const result = this.getStreamerIndex(channel);
+        const streamerIndex = this.getStreamerIndex(channel);
 
-        if (result.success) {
-            this.streamList[result.streamerIndex].cooldown = true;
+        if (streamerIndex !== null) {
+            this.streamList[streamerIndex].cooldown = true;
             setTimeout(() => {
-                this.removeCooldownForStreamer(channel);
+                this.removeCooldownForStreamer(streamerIndex);
             }, timeInSeconds);
         }
     }
 
-    private removeCooldownForStreamer(channel: string): void {
-        const result = this.getStreamerIndex(channel);
-
-        /* istanbul ignore else */
-        if (result.success) {
-            this.streamList[result.streamerIndex].cooldown = false;
-        }
+    private removeCooldownForStreamer(index: number): void {
+        this.streamList[index].cooldown = false;
     }
 
     public resetStreamer(channel: string): void {
-        const result = this.getStreamerIndex(channel);
+        const streamerIndex = this.getStreamerIndex(channel);
 
-        if (result.success) {
-            this.streamList[result.streamerIndex].hits = 0;
+        if (streamerIndex !== null) {
+            this.streamList[streamerIndex].hits = 0;
         }
     }
 
-    private getStreamerIndex(channel: string): {
-        success: boolean;
-        streamerIndex: number;
-    } {
-        const streamerFound: Stream | undefined = this.streamList.find(
+    private getStreamerIndex(channel: string): number | null {
+        const streamerFound = this.streamList.find(
             (streamer: Stream) => streamer.user_name === channel.toLowerCase(),
         );
 
         if (typeof streamerFound !== 'undefined') {
-            return {
-                success: true,
-                streamerIndex: this.streamList.indexOf(streamerFound),
-            };
+            return this.streamList.indexOf(streamerFound);
         } else {
-            return {
-                success: false,
-                streamerIndex: -1,
-            };
+            Logger.error(
+                'getStreamerIndex',
+                'channel: ' + channel,
+                'undefined',
+            );
+            return null;
         }
     }
 

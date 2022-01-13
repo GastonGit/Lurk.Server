@@ -119,6 +119,18 @@ describe('TwitchSupervisor suite', () => {
             }).to.not.throw();
         });
     });
+    describe('increaseHitsByOne', () => {
+        it('should not throw if channel is not in streamList', async () => {
+            expect(() => {
+                twitchSupervisor.onMessageHandler(
+                    'this channel does not exist',
+                    {},
+                    'LUL',
+                    true,
+                );
+            }).to.not.throw();
+        });
+    });
     describe('getStreamList', () => {
         it('should return an array', () => {
             expect(twitchSupervisor.getStreamList()).to.be.an('array');

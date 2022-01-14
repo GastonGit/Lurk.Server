@@ -8,7 +8,7 @@ export default class Container {
 
     constructor(fileName: string) {
         this.fileName = fileName;
-        let fileLocation = '';
+        let fileLocation: string;
 
         /* istanbul ignore if */
         if (path.dirname(<string>require.main?.filename).includes('/dist/')) {

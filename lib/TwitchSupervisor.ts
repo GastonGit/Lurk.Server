@@ -101,14 +101,14 @@ export default class TwitchSupervisor {
         return this.streamList;
     }
 
-    public cooldownStreamer(channel: string, timeInSeconds: number): void {
+    public cooldownStreamer(channel: string, delay: number): void {
         const streamerIndex = this.getStreamerIndex(channel);
 
         if (streamerIndex !== null) {
             this.streamList[streamerIndex].cooldown = true;
             setTimeout(() => {
                 this.removeCooldownForStreamer(streamerIndex);
-            }, timeInSeconds);
+            }, delay);
         }
     }
 

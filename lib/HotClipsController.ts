@@ -11,7 +11,7 @@ export default class HotClipsController {
     private twitchSupervisor: TwitchSupervisor;
     private eventIntervals: EventIntervals;
 
-    private readonly cooldownLengthInSeconds: number;
+    private readonly cooldownLength: number;
     private readonly addClipDelay: number;
 
     private readonly spikeValue: number;
@@ -31,7 +31,7 @@ export default class HotClipsController {
             },
         );
 
-        this.cooldownLengthInSeconds =
+        this.cooldownLength =
             (config.get('cooldownLengthInSeconds') as number) * 1000;
         this.addClipDelay = parseInt(config.get('addClipDelay'));
 
@@ -102,10 +102,7 @@ export default class HotClipsController {
     }
 
     private async clipIt(streamer: string): Promise<void> {
-        this.twitchSupervisor.cooldownStreamer(
-            streamer,
-            this.cooldownLengthInSeconds,
-        );
+        this.twitchSupervisor.cooldownStreamer(streamer, this.cooldownLength);
         this.twitchSupervisor.resetStreamer(streamer);
 
         const clip = await this.twitchSupervisor.createClip(streamer);

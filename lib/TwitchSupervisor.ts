@@ -176,6 +176,12 @@ export default class TwitchSupervisor {
         return result.success;
     }
 
+    private removeBlockedStreamers(list: FetchedStreams[]) {
+        return list.filter(
+            (x) => !this.blockedStreamers.includes(x.user_login.toLowerCase()),
+        );
+    }
+
     private async requestStreams(): Promise<Streams> {
         const streams: Array<Stream> = [];
         let pagination = undefined;
@@ -187,21 +193,16 @@ export default class TwitchSupervisor {
             const fetchedStreams: Array<FetchedStreams> = requestedStreams.data;
             success = requestedStreams.success;
 
+            const streamList = this.removeBlockedStreamers(fetchedStreams);
+
             if (success) {
-                fetchedStreams.forEach((streamer: FetchedStreams) => {
-                    /* istanbul ignore else */
-                    if (
-                        !this.blockedStreamers.includes(
-                            streamer.user_login.toLowerCase(),
-                        )
-                    ) {
-                        streams.push({
-                            user_name: streamer.user_login.toLowerCase(),
-                            viewer_count: streamer.viewer_count,
-                            hits: 0,
-                            cooldown: false,
-                        });
-                    }
+                streamList.forEach((streamer: FetchedStreams) => {
+                    streams.push({
+                        user_name: streamer.user_login.toLowerCase(),
+                        viewer_count: streamer.viewer_count,
+                        hits: 0,
+                        cooldown: false,
+                    });
                 });
 
                 pagination = requestedStreams.pagination?.cursor;

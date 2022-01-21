@@ -20,6 +20,7 @@
   "addClipDelay": 1,
   "removeClipTimeInMinutes": 1,
   "updateTimeInMinutes": 1,
+  "maxClipCount": 20,
 
   "blockedStreamers": ["nymn"]
 }

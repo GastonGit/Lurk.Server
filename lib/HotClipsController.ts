@@ -56,7 +56,10 @@ export default class HotClipsController {
             this.eventIntervals.startIndependentInterval(
                 'removeClip',
                 () => {
-                    if (this.clipList.getList().length > 20) {
+                    if (
+                        this.clipList.getList().length >
+                        parseInt(config.get('maxClipCount'))
+                    ) {
                         this.clipList.removeClip();
                     }
                 },

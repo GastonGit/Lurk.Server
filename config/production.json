@@ -18,7 +18,7 @@
   "reduceValue": 60,
   "reduceTime": 3000,
 
-  "cooldownLengthInSeconds": 120,
+  "cooldownLengthInSeconds": 300,
   "addClipDelay": 15000,
   "removeClipTimeInMinutes": 1,
   "updateTimeInMinutes": 120,

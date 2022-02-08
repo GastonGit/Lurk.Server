@@ -89,7 +89,10 @@ export default class HotClipsController {
         const list = [...this.twitchSupervisor.getStreamList()];
 
         for (let i = 0; i < list.length; i++) {
-            if (HotClipsController.spikeFound(list[i], spike)) {
+            if (
+                !list[i].cooldown &&
+                HotClipsController.spikeFound(list[i], spike)
+            ) {
                 this.clipIt(list[i].user_name).catch((err) => {
                     throw Error('clipIT :: UNABLE TO CLIP IT :: ' + err);
                 });
@@ -98,10 +101,7 @@ export default class HotClipsController {
     }
 
     private static spikeFound(streamer: Stream, spike: number): boolean {
-        return (
-            !streamer.cooldown &&
-            streamer.hits >= spike + streamer.viewer_count / 5000
-        );
+        return streamer.hits >= spike + streamer.viewer_count / 5000;
     }
 
     private async clipIt(streamer: string): Promise<void> {

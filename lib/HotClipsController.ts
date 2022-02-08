@@ -101,7 +101,10 @@ export default class HotClipsController {
     }
 
     private static spikeFound(streamer: Stream, spike: number): boolean {
-        return streamer.hits >= spike + streamer.viewer_count / 5000;
+        const algorithm = streamer.viewer_count / 3200 + 0.6875;
+        const equalizer = algorithm * spike < spike * 5 ? algorithm : 5;
+
+        return streamer.hits >= spike * equalizer;
     }
 
     private async clipIt(streamer: string): Promise<void> {

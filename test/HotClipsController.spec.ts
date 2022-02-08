@@ -124,7 +124,7 @@ describe('HotClipsController suite', () => {
                     await hotClipsController.start();
                 }).to.not.throw();
             });
-            it('should not clip streams that hit the required spike', async () => {
+            it('should not clip streams that do not hit the required spike', async () => {
                 getStreamList.restore();
                 getStreamList = sinon
                     .stub(TwitchSupervisor.prototype, 'getStreamList')
@@ -132,7 +132,7 @@ describe('HotClipsController suite', () => {
                         {
                             cooldown: false,
                             hits: 2,
-                            viewer_count: 2000,
+                            viewer_count: 100000,
                             user_name: 'ugly221',
                         },
                     ]);

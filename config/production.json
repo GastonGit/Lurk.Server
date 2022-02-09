@@ -12,13 +12,13 @@
     "Idiot", "Jackass"
   ],
 
-  "spikeValue": 8,
-  "spikeTime": 600,
+  "spikeValue": 7,
+  "spikeTime": 500,
 
   "reduceValue": 60,
-  "reduceTime": 2500,
+  "reduceTime": 5300,
 
-  "cooldownLengthInSeconds": 300,
+  "cooldownLengthInSeconds": 600,
   "addClipDelay": 15000,
   "removeClipTimeInMinutes": 1,
   "updateTimeInMinutes": 120,

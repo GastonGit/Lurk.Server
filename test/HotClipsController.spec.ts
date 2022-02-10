@@ -59,6 +59,7 @@ describe('HotClipsController suite', () => {
             .stub(TwitchSupervisor.prototype, 'getVideoUrl')
             .resolves('videoUrl');
         sinon.stub(Logger, 'error');
+        sinon.stub(Logger, 'info');
     });
     afterEach(() => {
         clock.restore();

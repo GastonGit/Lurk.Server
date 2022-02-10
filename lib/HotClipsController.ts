@@ -4,6 +4,7 @@ import TwitchSupervisor from './TwitchSupervisor';
 import config from 'config';
 import EventIntervals from './EventIntervals';
 import { Stream } from './Interfaces';
+import Logger from './Logger';
 
 export default class HotClipsController {
     private clipList: ClipList;
@@ -93,6 +94,17 @@ export default class HotClipsController {
                 !list[i].cooldown &&
                 HotClipsController.spikeFound(list[i], spike)
             ) {
+                Logger.info(
+                    'createClip',
+                    'Spike found: user(' +
+                        list[i].user_name +
+                        '), ' +
+                        'viewers(' +
+                        list[i].viewer_count +
+                        '), hits(' +
+                        list[i].hits +
+                        ')',
+                );
                 this.clipIt(list[i].user_name).catch((err) => {
                     throw Error('clipIT :: UNABLE TO CLIP IT :: ' + err);
                 });

@@ -13,7 +13,7 @@
   "spikeValue": 7,
   "spikeTime": 600,
 
-  "reduceValue": 60,
+  "reduceValue": 75,
   "reduceTime": 3000,
 
   "cooldownLengthInSeconds": 120,

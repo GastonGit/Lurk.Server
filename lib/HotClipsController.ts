@@ -112,9 +112,9 @@ export default class HotClipsController {
         }
     }
 
-    private static spikeFound(streamer: Stream, spike: number): boolean {
+    public static spikeFound(streamer: Stream, spike: number): boolean {
         const algorithm = streamer.viewer_count / 3200 + 0.6875;
-        const equalizer = algorithm * spike < spike * 5 ? algorithm : 5;
+        const equalizer = algorithm * spike < spike * 6 ? algorithm : 6;
 
         return streamer.hits >= spike * equalizer;
     }

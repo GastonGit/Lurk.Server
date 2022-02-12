@@ -125,22 +125,75 @@ describe('HotClipsController suite', () => {
                     await hotClipsController.start();
                 }).to.not.throw();
             });
-            it('should not clip streams that do not hit the required spike', async () => {
-                getStreamList.restore();
-                getStreamList = sinon
-                    .stub(TwitchSupervisor.prototype, 'getStreamList')
-                    .returns([
+            it('should clip streams that hit the required spike', async () => {
+                expect(
+                    HotClipsController.spikeFound(
                         {
                             cooldown: false,
-                            hits: 2,
-                            viewer_count: 100000,
+                            hits: 9,
+                            viewer_count: 1556,
                             user_name: 'ugly221',
                         },
-                    ]);
-
-                expect(async () => {
-                    await hotClipsController.start();
-                }).to.not.throw();
+                        7,
+                    ),
+                ).to.be.true;
+                expect(
+                    HotClipsController.spikeFound(
+                        {
+                            cooldown: false,
+                            hits: 7,
+                            viewer_count: 705,
+                            user_name: 'ugly221',
+                        },
+                        7,
+                    ),
+                ).to.be.true;
+                expect(
+                    HotClipsController.spikeFound(
+                        {
+                            cooldown: false,
+                            hits: 31,
+                            viewer_count: 10763,
+                            user_name: 'ugly221',
+                        },
+                        7,
+                    ),
+                ).to.be.true;
+                expect(
+                    HotClipsController.spikeFound(
+                        {
+                            cooldown: false,
+                            hits: 23,
+                            viewer_count: 7508,
+                            user_name: 'ugly221',
+                        },
+                        7,
+                    ),
+                ).to.be.true;
+            });
+            it('should not clip streams that do not hit the required spike', async () => {
+                expect(
+                    HotClipsController.spikeFound(
+                        {
+                            cooldown: false,
+                            hits: 35,
+                            viewer_count: 73454,
+                            user_name: 'ugly221',
+                        },
+                        7,
+                    ),
+                ).to.be.false;
+                expect(
+                    HotClipsController.spikeFound(
+                        {
+                            cooldown: false,
+                            hits: 36,
+                            viewer_count: 74943,
+                            user_name: 'ugly221',
+                        },
+                        7,
+                    ),
+                ).to.be.false;
             });
             it('should throw if clipIt fails', async () => {
                 createClip.restore();

@@ -13,8 +13,8 @@
   "spikeValue": 7,
   "spikeTime": 500,
 
-  "reduceValue": 60,
-  "reduceTime": 5300,
+  "reduceValue": 100,
+  "reduceTime": 3700,
 
   "cooldownLengthInSeconds": 600,
   "addClipDelay": 15000,

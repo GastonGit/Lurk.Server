@@ -29,7 +29,7 @@ export default class Container {
         try {
             await fs.truncate(this.location, 0);
             await fs.writeFile(this.location, data, { flag: 'r+' });
-            Logger.success('updateList', 'List updated');
+            Logger.info('updateList', 'List updated');
         } catch (err) {
             Logger.error(
                 'updateList',
@@ -42,7 +42,7 @@ export default class Container {
     async getList(): Promise<string[]> {
         try {
             const data = await fs.readFile(this.location, 'utf-8');
-            Logger.success('getList', 'Stored clip list loaded');
+            Logger.info('getList', 'Stored clip list loaded');
 
             return JSON.parse(data.toString());
         } catch (err) {

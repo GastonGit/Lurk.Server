@@ -23,5 +23,8 @@
   "updateTimeInMinutes": 120,
   "maxClipCount": 30,
 
-  "blockedStreamers": ["nymn"]
+  "blockedStreamers": [
+    "nymn", "m0e_tv", "trainwreckstv", "taxi2g", "greekgodx",
+    "lol_nemesis", "iwilldominate", "p4wnyhof"
+  ]
 }

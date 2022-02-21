@@ -19,6 +19,7 @@
 
   "cooldownLengthInSeconds": 600,
   "addClipDelay": 15000,
+  "createClipDelay": 5000,
   "removeClipTimeInMinutes": 1,
   "updateTimeInMinutes": 120,
   "maxClipCount": 30,

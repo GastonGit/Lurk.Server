@@ -14,6 +14,7 @@ export default class HotClipsController {
 
     private readonly cooldownLength: number;
     private readonly addClipDelay: number;
+    private readonly createClipDelay: number;
 
     private readonly spikeValue: number;
     private readonly reduceValue: number;
@@ -35,6 +36,7 @@ export default class HotClipsController {
         this.cooldownLength =
             (config.get('cooldownLengthInSeconds') as number) * 1000;
         this.addClipDelay = parseInt(config.get('addClipDelay'));
+        this.createClipDelay = parseInt(config.get('createClipDelay'));
 
         this.spikeValue = config.get('spikeValue');
         this.reduceValue = config.get('reduceValue');
@@ -105,9 +107,11 @@ export default class HotClipsController {
                         list[i].hits +
                         ')',
                 );
-                this.clipIt(list[i].user_name).catch((err) => {
-                    throw Error('clipIT :: UNABLE TO CLIP IT :: ' + err);
-                });
+                setTimeout(async () => {
+                    this.clipIt(list[i].user_name).catch((err) => {
+                        throw Error('clipIT :: UNABLE TO CLIP IT :: ' + err);
+                    });
+                }, this.createClipDelay);
             }
         }
     }

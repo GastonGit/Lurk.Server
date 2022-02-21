@@ -107,6 +107,7 @@ describe('HotClipsController suite', () => {
                 expect(async () => {
                     await hotClipsController.start();
                 }).to.not.throw();
+                clock.tickAsync(100);
             });
             it('should not clip streams that are on cooldown', async () => {
                 getStreamList.restore();

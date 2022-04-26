@@ -107,6 +107,11 @@ export default class HotClipsController {
                         list[i].hits +
                         ')',
                 );
+                this.twitchSupervisor.cooldownStreamer(
+                    list[i].user_name,
+                    this.cooldownLength,
+                );
+                this.twitchSupervisor.resetStreamer(list[i].user_name);
                 setTimeout(async () => {
                     this.clipIt(list[i].user_name).catch((err) => {
                         throw Error('clipIT :: UNABLE TO CLIP IT :: ' + err);
@@ -124,9 +129,6 @@ export default class HotClipsController {
     }
 
     private async clipIt(streamer: string): Promise<void> {
-        this.twitchSupervisor.cooldownStreamer(streamer, this.cooldownLength);
-        this.twitchSupervisor.resetStreamer(streamer);
-
         const clip = await this.twitchSupervisor.createClip(streamer);
 
         if (clip !== null) {

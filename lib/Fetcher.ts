@@ -65,4 +65,24 @@ export default class Fetcher {
             throw Error('fetcherFetch :: UNABLE TO COMPLETE FETCH :: ' + err);
         }
     }
+
+    public static async updateAppAccessToken(): Promise<void> {
+        const url =
+            'https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=' +
+            process.env.CLIENT_REFRESH +
+            '&client_id=' +
+            process.env.CLIENT_ID +
+            '&client_secret=' +
+            process.env.CLIENT_SECRET;
+        const response = await nodeFetch(url, {
+            method: 'post',
+        });
+        const json = await response.json?.();
+
+        if (typeof json?.access_token !== 'string') {
+            throw Error('fetcherFetch :: UNABLE TO UPDATE APP ACCESS TOKEN');
+        }
+
+        process.env.CLIENT_APP_ACCESS_TOKEN = json.access_token;
+    }
 }

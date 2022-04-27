@@ -128,4 +128,42 @@ describe('Fetcher suite', function () {
             );
         });
     });
+    describe('updateAppAccessToken', () => {
+        it('should update CLIENT_APP_ACCESS_TOKEN environment variable', async () => {
+            const defaultValue = process.env.CLIENT_APP_ACCESS_TOKEN;
+            sinon.restore();
+            sinon.stub(fetch, 'Promise' as never).resolves({
+                json: () =>
+                    Promise.resolve({
+                        access_token: 'good access token',
+                    }),
+                status: 200,
+            });
+
+            await Fetcher.updateAppAccessToken();
+            expect(defaultValue).to.not.equal(
+                process.env.CLIENT_APP_ACCESS_TOKEN,
+            );
+
+            process.env.CLIENT_APP_ACCESS_TOKEN = defaultValue;
+        });
+        it('should throw if request fails', async () => {
+            sinon.restore();
+            sinon.stub(fetch, 'Promise' as never).resolves({
+                json: () => Promise.resolve({}),
+                status: 500,
+            });
+            await expect(Fetcher.updateAppAccessToken()).to.be.rejectedWith(
+                'fetcherFetch :: UNABLE TO UPDATE APP ACCESS TOKEN',
+            );
+
+            sinon.restore();
+            sinon.stub(fetch, 'Promise' as never).resolves({
+                status: 500,
+            });
+            await expect(Fetcher.updateAppAccessToken()).to.be.rejectedWith(
+                'fetcherFetch :: UNABLE TO UPDATE APP ACCESS TOKEN',
+            );
+        });
+    });
 });

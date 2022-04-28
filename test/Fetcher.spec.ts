@@ -50,7 +50,7 @@ describe('Fetcher suite', function () {
         it('should not throw if request does not contain a json payload', async () => {
             sinon.restore();
             sinon.stub(fetch, 'Promise' as never).resolves({
-                status: 401,
+                status: 500,
                 ok: false,
             });
             await expect(Fetcher.fetch('goodUrl', 'get')).to.not.rejectedWith();
@@ -58,14 +58,14 @@ describe('Fetcher suite', function () {
         it('should return false if request does not contain a json payload', async () => {
             sinon.restore();
             sinon.stub(fetch, 'Promise' as never).resolves({
-                status: 401,
+                status: 500,
                 ok: false,
             });
             const result = await Fetcher.fetch('goodUrl', 'get');
 
             expect(result).to.deep.equal({
                 ok: false,
-                status: 401,
+                status: 500,
                 data: [],
                 pagination: undefined,
             });
@@ -126,6 +126,52 @@ describe('Fetcher suite', function () {
             await expect(Fetcher.fetch('test_url', 'test')).to.be.rejectedWith(
                 'fetcherFetch :: INVALID METHOD',
             );
+        });
+        it('should update client app access token if it has expired', async () => {
+            sinon.restore();
+
+            const expiredToken = 'expired';
+            const freshToken = 'fresh';
+            process.env.CLIENT_APP_ACCESS_TOKEN = expiredToken;
+            const url = 'test_url';
+            const method = 'get';
+
+            sinon
+                .stub(fetch, 'Promise' as never)
+                .onFirstCall()
+                .resolves({
+                    error: 'Unauthorized',
+                    status: 401,
+                    message: 'Invalid OAuth token',
+                })
+                .onSecondCall()
+                .resolves({
+                    json: () =>
+                        Promise.resolve({
+                            access_token: freshToken,
+                        }),
+                    status: 200,
+                    ok: true,
+                })
+                .onThirdCall()
+                .resolves({
+                    json: () =>
+                        Promise.resolve({
+                            data: ['horse', 'cat'],
+                            pagination: { cursor: 'dog' },
+                        }),
+                    status: 200,
+                    ok: true,
+                });
+
+            const result = await Fetcher.fetch(url, method);
+
+            expect(result).to.deep.equal({
+                ok: true,
+                status: 200,
+                data: ['horse', 'cat'],
+                pagination: { cursor: 'dog' },
+            });
         });
     });
     describe('updateAppAccessToken', () => {

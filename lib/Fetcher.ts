@@ -25,13 +25,26 @@ export default class Fetcher {
             accessToken = accessJSON.access_token;
         }
 
-        return await nodeFetch(url, {
+        const initialResponse = await nodeFetch(url, {
             method: method,
             headers: {
                 'Client-ID': process.env.CLIENT_ID || '',
                 Authorization: ' Bearer ' + accessToken,
             },
         });
+
+        if (initialResponse.status === 401) {
+            await this.updateAppAccessToken();
+            return await nodeFetch(url, {
+                method: method,
+                headers: {
+                    'Client-ID': process.env.CLIENT_ID || '',
+                    Authorization: ' Bearer ' + accessToken,
+                },
+            });
+        } else {
+            return initialResponse;
+        }
     }
 
     public static async fetch(
@@ -77,12 +90,11 @@ export default class Fetcher {
         const response = await nodeFetch(url, {
             method: 'post',
         });
-        const json = await response.json?.();
 
+        const json = await response.json?.();
         if (typeof json?.access_token !== 'string') {
             throw Error('fetcherFetch :: UNABLE TO UPDATE APP ACCESS TOKEN');
         }
-
         process.env.CLIENT_APP_ACCESS_TOKEN = json.access_token;
     }
 }

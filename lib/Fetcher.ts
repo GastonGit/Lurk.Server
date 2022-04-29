@@ -39,7 +39,8 @@ export default class Fetcher {
                 method: method,
                 headers: {
                     'Client-ID': process.env.CLIENT_ID || '',
-                    Authorization: ' Bearer ' + accessToken,
+                    Authorization:
+                        ' Bearer ' + process.env.CLIENT_APP_ACCESS_TOKEN,
                 },
             });
         } else {

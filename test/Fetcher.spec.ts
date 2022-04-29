@@ -1,11 +1,12 @@
 import * as chai from 'chai';
 import { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-chai.use(chaiAsPromised);
 import sinon from 'sinon';
-import fetch from 'node-fetch';
+import fetch, * as fetches from 'node-fetch';
 import Fetcher from '../lib/Fetcher';
 import Logger from '../lib/Logger';
+
+chai.use(chaiAsPromised);
 
 describe('Fetcher suite', function () {
     beforeEach(() => {
@@ -130,39 +131,44 @@ describe('Fetcher suite', function () {
         it('should update client app access token if it has expired', async () => {
             sinon.restore();
 
-            const expiredToken = 'expired';
             const freshToken = 'fresh';
-            process.env.CLIENT_APP_ACCESS_TOKEN = expiredToken;
+            process.env.CLIENT_APP_ACCESS_TOKEN = 'expired';
             const url = 'test_url';
             const method = 'get';
 
-            sinon
-                .stub(fetch, 'Promise' as never)
-                .onFirstCall()
-                .resolves({
-                    error: 'Unauthorized',
-                    status: 401,
-                    message: 'Invalid OAuth token',
-                })
-                .onSecondCall()
-                .resolves({
-                    json: () =>
-                        Promise.resolve({
-                            access_token: freshToken,
-                        }),
-                    status: 200,
-                    ok: true,
-                })
-                .onThirdCall()
-                .resolves({
-                    json: () =>
-                        Promise.resolve({
-                            data: ['horse', 'cat'],
-                            pagination: { cursor: 'dog' },
-                        }),
-                    status: 200,
-                    ok: true,
-                });
+            sinon.stub(Fetcher, 'updateAppAccessToken').callsFake(async () => {
+                process.env.CLIENT_APP_ACCESS_TOKEN = freshToken;
+            });
+
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            sinon.stub(fetches, 'default').callsFake(async (_url, init?) => {
+                const OAuth =
+                    JSON.parse(JSON.stringify(init?.headers)).Authorization ||
+                    '';
+
+                if (OAuth === ` Bearer ${freshToken}`) {
+                    return {
+                        json: () =>
+                            Promise.resolve({
+                                data: ['horse', 'cat'],
+                                pagination: { cursor: 'dog' },
+                            }),
+                        status: 200,
+                        ok: true,
+                    };
+                } else {
+                    return {
+                        json: () =>
+                            Promise.resolve({
+                                data: undefined,
+                                pagination: undefined,
+                            }),
+                        status: 401,
+                        ok: false,
+                    };
+                }
+            });
 
             const result = await Fetcher.fetch(url, method);
 

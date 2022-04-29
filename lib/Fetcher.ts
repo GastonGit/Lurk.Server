@@ -6,30 +6,11 @@ export default class Fetcher {
         url: string,
         method: string,
     ): Promise<Response> {
-        let accessToken = process.env.CLIENT_APP_ACCESS_TOKEN;
-
-        if (method === 'post') {
-            const getAccessToken = await nodeFetch(
-                'https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=' +
-                    process.env.CLIENT_REFRESH +
-                    '&client_id=' +
-                    process.env.CLIENT_ID +
-                    '&client_secret=' +
-                    process.env.CLIENT_SECRET,
-                {
-                    method: 'post',
-                },
-            );
-            const accessJSON = await getAccessToken.json();
-
-            accessToken = accessJSON.access_token;
-        }
-
         const initialResponse = await nodeFetch(url, {
             method: method,
             headers: {
                 'Client-ID': process.env.CLIENT_ID || '',
-                Authorization: ' Bearer ' + accessToken,
+                Authorization: ' Bearer ' + process.env.CLIENT_APP_ACCESS_TOKEN,
             },
         });
 

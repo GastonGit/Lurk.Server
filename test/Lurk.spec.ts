@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 import sinon from 'sinon';
-import HotClipsController from '../lib/HotClipsController';
+import Lurk from '../lib/Lurk';
 import ClipList from '../lib/ClipList';
 import TwitchSupervisor from '../lib/TwitchSupervisor';
 import Logger from '../lib/Logger';
@@ -11,7 +11,7 @@ import { Stream } from '../lib/Interfaces';
 import EventIntervals from '../lib/EventIntervals';
 import Container from '../lib/Container';
 
-let hotClipsController: HotClipsController;
+let lurk: Lurk;
 
 let clock: sinon.SinonFakeTimers;
 let getVideoUrl: sinon.SinonStub<[string], Promise<string | null>>;
@@ -22,12 +22,12 @@ let createClip: sinon.SinonStub<
 let getStreamList: sinon.SinonStub<[], Stream[]>;
 let getList: sinon.SinonStub<[], string[]>;
 
-describe('HotClipsController suite', () => {
+describe('Lurk suite', () => {
     beforeEach(() => {
         sinon.stub(Container.prototype, 'updateList').resolves();
         sinon.stub(Container.prototype, 'getList').resolves([]);
         clock = sinon.useFakeTimers();
-        hotClipsController = new HotClipsController();
+        lurk = new Lurk();
         sinon
             .stub(TwitchSupervisor.prototype, 'setupConnection')
             .resolves(true);
@@ -67,13 +67,13 @@ describe('HotClipsController suite', () => {
     });
     describe('Getting the clip list', () => {
         it('should return a string array', () => {
-            expect(hotClipsController.getList()).to.be.an('array');
+            expect(lurk.getList()).to.be.an('array');
         });
     });
     describe('Starting the monitoring', () => {
         it('should not throw if monitoring setup is successful', async () => {
             expect(async () => {
-                await hotClipsController.start();
+                await lurk.start();
             }).to.not.throw();
         });
         it('should throw if monitoring setup is unsuccessful', async () => {
@@ -81,7 +81,7 @@ describe('HotClipsController suite', () => {
             sinon
                 .stub(TwitchSupervisor.prototype, 'setupConnection')
                 .resolves(false);
-            await expect(hotClipsController.start()).to.be.rejectedWith(
+            await expect(lurk.start()).to.be.rejectedWith(
                 'Connection setup failed',
             );
         });
@@ -93,7 +93,7 @@ describe('HotClipsController suite', () => {
                 getList = sinon.stub(ClipList.prototype, 'getList').returns([]);
 
                 expect(async () => {
-                    await hotClipsController.start();
+                    await lurk.start();
                 }).to.not.throw();
             });
         });
@@ -105,7 +105,7 @@ describe('HotClipsController suite', () => {
                     .throws();
 
                 expect(async () => {
-                    await hotClipsController.start();
+                    await lurk.start();
                 }).to.not.throw();
                 clock.tickAsync(100);
             });
@@ -123,12 +123,12 @@ describe('HotClipsController suite', () => {
                     ]);
 
                 expect(async () => {
-                    await hotClipsController.start();
+                    await lurk.start();
                 }).to.not.throw();
             });
             it('should clip streams that hit the required spike', async () => {
                 expect(
-                    HotClipsController.spikeFound(
+                    Lurk.spikeFound(
                         {
                             cooldown: false,
                             hits: 9,
@@ -139,7 +139,7 @@ describe('HotClipsController suite', () => {
                     ),
                 ).to.be.true;
                 expect(
-                    HotClipsController.spikeFound(
+                    Lurk.spikeFound(
                         {
                             cooldown: false,
                             hits: 7,
@@ -150,7 +150,7 @@ describe('HotClipsController suite', () => {
                     ),
                 ).to.be.true;
                 expect(
-                    HotClipsController.spikeFound(
+                    Lurk.spikeFound(
                         {
                             cooldown: false,
                             hits: 31,
@@ -161,7 +161,7 @@ describe('HotClipsController suite', () => {
                     ),
                 ).to.be.true;
                 expect(
-                    HotClipsController.spikeFound(
+                    Lurk.spikeFound(
                         {
                             cooldown: false,
                             hits: 23,
@@ -174,7 +174,7 @@ describe('HotClipsController suite', () => {
             });
             it('should not clip streams that do not hit the required spike', async () => {
                 expect(
-                    HotClipsController.spikeFound(
+                    Lurk.spikeFound(
                         {
                             cooldown: false,
                             hits: 35,
@@ -185,7 +185,7 @@ describe('HotClipsController suite', () => {
                     ),
                 ).to.be.false;
                 expect(
-                    HotClipsController.spikeFound(
+                    Lurk.spikeFound(
                         {
                             cooldown: false,
                             hits: 36,
@@ -203,7 +203,7 @@ describe('HotClipsController suite', () => {
                     .throws();
 
                 expect(async () => {
-                    await hotClipsController.start();
+                    await lurk.start();
                 }).to.not.throw();
             });
         });
@@ -214,15 +214,13 @@ describe('HotClipsController suite', () => {
                     .stub(TwitchSupervisor.prototype, 'createClip')
                     .resolves(null);
 
-                await expect(
-                    hotClipsController.start(),
-                ).to.not.be.rejectedWith();
+                await expect(lurk.start()).to.not.be.rejectedWith();
                 clock.tick(100);
             });
         });
         describe('addClipWithDelay', () => {
             it('should add defined clips', async () => {
-                await hotClipsController.start();
+                await lurk.start();
                 await expect(clock.tickAsync(10000)).to.not.be.rejectedWith();
             });
             it('should not throw if video url is null', async () => {
@@ -231,7 +229,7 @@ describe('HotClipsController suite', () => {
                     .stub(TwitchSupervisor.prototype, 'getVideoUrl')
                     .resolves(null);
 
-                await hotClipsController.start();
+                await lurk.start();
                 await expect(clock.tickAsync(100)).to.not.be.rejectedWith();
             });
         });

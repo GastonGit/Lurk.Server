@@ -6,7 +6,7 @@ import EventIntervals from './EventIntervals';
 import { Stream } from './Interfaces';
 import Logger from './Logger';
 
-export default class HotClipsController {
+export default class Lurk {
     private clipList: ClipList;
     private container: Container;
     private twitchSupervisor: TwitchSupervisor;
@@ -92,10 +92,7 @@ export default class HotClipsController {
         const list = [...this.twitchSupervisor.getStreamList()];
 
         for (let i = 0; i < list.length; i++) {
-            if (
-                !list[i].cooldown &&
-                HotClipsController.spikeFound(list[i], spike)
-            ) {
+            if (!list[i].cooldown && Lurk.spikeFound(list[i], spike)) {
                 Logger.info(
                     'createClip',
                     'Spike found: user(' +

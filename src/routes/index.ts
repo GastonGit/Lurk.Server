@@ -1,12 +1,12 @@
-import HotClipsController from '../../lib/HotClipsController';
+import Lurk from '../../lib/Lurk';
 import { Router, Request, Response } from 'express';
 const indexRouter = Router();
 
-const hotClips = new HotClipsController();
-hotClips.start();
+const lurk = new Lurk();
+lurk.start();
 
 indexRouter.get('/', (_req: Request, res: Response) => {
-    res.send(hotClips.getList());
+    res.send(lurk.getList());
 });
 
 export default indexRouter;
